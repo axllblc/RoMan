@@ -1,18 +1,14 @@
 package fr.roman.modeles;
 
 /**
-* Représente le véhicule d'un producteur.
-*/
+ * Représente le véhicule d'un producteur.
+ */
 public class Vehicule {
 
   private int idVehicule;
-
   private String immatriculation;
-
   private double poidsMax;
-
   private String libelle;
-
   private Producteur producteur;
 
   /**
@@ -20,11 +16,12 @@ public class Vehicule {
    *
    * @param idVehicule L'identifiant du véhicule
    * @param immatriculation L'immatriculation du véhicule
-   * @param poidsMax Le poids maximal de chargement du véhicule
+   * @param poidsMax Le poids maximal de chargement du véhicule (en kg)
    * @param libelle Le libellé du véhicule.
    * @param producteur Le producteur propriétaire du véhicule.
    */
-  public Vehicule(int idVehicule, String immatriculation, double poidsMax, String libelle, Producteur producteur) {
+  public Vehicule(int idVehicule, String immatriculation, double poidsMax,
+                  String libelle, Producteur producteur) {
     this.idVehicule = idVehicule;
     this.immatriculation = immatriculation;
     this.poidsMax = poidsMax;
@@ -35,25 +32,42 @@ public class Vehicule {
   /**
    * Le constructeur par défaut de la classe Vehicule.
    */
-  public Vehicule() {}
+  public Vehicule() {
+  }
 
-  public int getIdVehicule() { return idVehicule; }
+  public int getIdVehicule() {
+    return idVehicule;
+  }
 
-  public String getImmatriculation() { return immatriculation; }
+  public String getImmatriculation() {
+    return immatriculation;
+  }
 
-  public double getPoidsMax() { return poidsMax; }
+  public void setImmatriculation(String immatriculation) {
+    this.immatriculation = immatriculation;
+  }
 
-  public String getLibelle() { return libelle; }
+  public double getPoidsMax() {
+    return poidsMax;
+  }
 
-  public Producteur getProducteur() { return producteur; }
+  public void setPoidsMax(double poidsMax) {
+    this.poidsMax = poidsMax;
+  }
 
+  public String getLibelle() {
+    return libelle;
+  }
 
-  public void setImmatriculation(String immatriculation) { this.immatriculation = immatriculation; }
+  public void setLibelle(String libelle) {
+    this.libelle = libelle;
+  }
 
-  public void setPoidsMax(double poidsMax) { this.poidsMax = poidsMax; }
+  public Producteur getProducteur() {
+    return producteur;
+  }
 
-  public void setLibelle(String libelle) { this.libelle = libelle; }
-
-  public void setProducteur(Producteur producteur) { this.producteur = producteur; }
-
+  public void setProducteur(Producteur producteur) {
+    this.producteur = producteur;
+  }
 }

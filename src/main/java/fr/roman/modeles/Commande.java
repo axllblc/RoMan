@@ -6,27 +6,16 @@ package fr.roman.modeles;
 public class Commande {
 
   private int idCommande;
-
   private String libelle;
-
   private double poids;
-
   private String horaireDebut;
-
   private String horaireFin;
-
   private String note;
-
   private boolean defaultLivraison;
-
   private String dateInitiale;
-
   private String dateLivraison;
-
   private Producteur producteur;
-
   public Client client;
-
   public Tournee tournee;
 
   /**
@@ -66,53 +55,98 @@ public class Commande {
   /**
    * Le constructeur par défaut de la classe Commande.
    */
-  public Commande() {}
+  public Commande() {
+  }
 
-  public int getIdCommande() { return idCommande; }
+  public int getIdCommande() {
+    return idCommande;
+  }
 
-  public String getLibelle() { return libelle; }
+  public String getLibelle() {
+    return libelle;
+  }
 
-  public double getPoids() { return poids; }
+  public void setLibelle(String libelle) {
+    this.libelle = libelle;
+  }
 
-  public String getHoraireDebut() { return horaireDebut; }
+  public double getPoids() {
+    return poids;
+  }
 
-  public String getHoraireFin() { return horaireFin; }
+  public void setPoids(double poids) {
+    this.poids = poids;
+  }
 
-  public String getNote() { return note; }
+  public String getHoraireDebut() {
+    return horaireDebut;
+  }
 
-  public boolean isDefaultLivraison() { return defaultLivraison; }
+  public void setHoraireDebut(String horaireDebut) {
+    this.horaireDebut = horaireDebut;
+  }
 
-  public String getDateInitiale() { return dateInitiale; }
+  public String getHoraireFin() {
+    return horaireFin;
+  }
 
-  public String getDateLivraison() { return dateLivraison; }
+  public void setHoraireFin(String horaireFin) {
+    this.horaireFin = horaireFin;
+  }
 
-  public Producteur getProducteur() { return producteur; }
+  public String getNote() {
+    return note;
+  }
 
-  public Client getClient() { return client; }
+  public void setNote(String note) {
+    this.note = note;
+  }
 
-  public Tournee getTournee() { return tournee; }
+  public boolean isDefaultLivraison() {
+    return defaultLivraison;
+  }
 
+  public void setDefaultLivraison(boolean defaultLivraison) {
+    this.defaultLivraison = defaultLivraison;
+  }
 
-  public void setLibelle(String libelle) { this.libelle = libelle; }
+  public String getDateInitiale() {
+    return dateInitiale;
+  }
 
-  public void setPoids(double poids) { this.poids = poids; }
+  public void setDateInitiale(String dateInitiale) {
+    this.dateInitiale = dateInitiale;
+  }
 
-  public void setHoraireDebut(String horaireDebut) { this.horaireDebut = horaireDebut; }
+  public String getDateLivraison() {
+    return dateLivraison;
+  }
 
-  public void setHoraireFin(String horaireFin) { this.horaireFin = horaireFin; }
+  public void setDateLivraison(String dateLivraison) {
+    this.dateLivraison = dateLivraison;
+  }
 
-  public void setNote(String note) { this.note = note; }
+  public Producteur getProducteur() {
+    return producteur;
+  }
 
-  public void setDefaultLivraison(boolean defaultLivraison) { this.defaultLivraison = defaultLivraison; }
+  public void setProducteur(Producteur producteur) {
+    this.producteur = producteur;
+  }
 
-  public void setDateInitiale(String dateInitiale) { this.dateInitiale = dateInitiale;  }
+  public Client getClient() {
+    return client;
+  }
 
-  public void setDateLivraison(String dateLivraison) { this.dateLivraison = dateLivraison; }
+  public void setClient(Client client) {
+    this.client = client;
+  }
 
-  public void setProducteur(Producteur producteur) { this.producteur = producteur; }
+  public Tournee getTournee() {
+    return tournee;
+  }
 
-  public void setClient(Client client) { this.client = client; }
-
-  public void setTournee(Tournee tournee) { this.tournee = tournee; }
-
+  public void setTournee(Tournee tournee) {
+    this.tournee = tournee;
+  }
 }

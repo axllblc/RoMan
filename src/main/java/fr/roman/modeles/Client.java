@@ -6,25 +6,19 @@ package fr.roman.modeles;
 public class Client {
 
   private int idClient;
-
   private String nom;
-
   private String prenom;
-
   private String tel;
-
   private String mail;
-
   private int siret;
-
   private boolean particulier;
-
   private Adresse adresse;
 
   /**
    * Constructeur par défaut de la classe Client.
    */
-  public Client() {}
+  public Client() {
+  }
 
   /**
    * Constructeur de la classe Client.
@@ -48,34 +42,63 @@ public class Client {
     this.adresse = adresse;
   }
 
-  public int getIdClient() { return idClient; }
+  public int getIdClient() {
+    return idClient;
+  }
 
-  public String getNom() { return nom; }
+  public String getNom() {
+    return nom;
+  }
 
-  public String getPrenom() { return prenom; }
+  public void setNom(String nom) {
+    this.nom = nom;
+  }
 
-  public String getTel() { return tel; }
+  public String getPrenom() {
+    return prenom;
+  }
 
-  public String getMail() { return mail; }
+  public void setPrenom(String prenom) {
+    this.prenom = prenom;
+  }
 
-  public int getSiret() { return siret; }
+  public String getTel() {
+    return tel;
+  }
 
-  public boolean isParticulier() { return particulier; }
+  public void setTel(String tel) {
+    this.tel = tel;
+  }
 
+  public String getMail() {
+    return mail;
+  }
 
-  public Adresse getAdresse() { return adresse; }
+  public void setMail(String mail) {
+    this.mail = mail;
+  }
 
-  public void setNom(String nom) { this.nom = nom; }
+  public int getSiret() {
+    return siret;
+  }
 
-  public void setPrenom(String prenom) { this.prenom = prenom; }
+  public void setSiret(int siret) {
+    this.siret = siret;
+  }
 
-  public void setTel(String tel) { this.tel = tel; }
+  public boolean isParticulier() {
+    return particulier;
+  }
 
-  public void setMail(String mail) { this.mail = mail; }
+  public void setParticulier(boolean particulier) {
+    this.particulier = particulier;
+  }
 
-  public void setSiret(int siret) { this.siret = siret; }
+  public Adresse getAdresse() {
+    return adresse;
+  }
 
-  public void setParticulier(boolean particulier) { this.particulier = particulier; }
-
-  public void setAdresse(Adresse adresse) { this.adresse = adresse; }
+  public void setAdresse(Adresse adresse) {
+    this.adresse = adresse;
+  }
 }

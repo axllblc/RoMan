@@ -6,19 +6,12 @@ package fr.roman.modeles;
 public class Tournee {
 
   private int idTournee;
-
   private String horaireDebut;
-
   private String horaireFin;
-
   private String dureeEstimee;
-
   private String note;
-
   private boolean valide;
-
   private Producteur producteur;
-
   private Vehicule vehicule;
 
   /**
@@ -49,37 +42,66 @@ public class Tournee {
   /**
    * Le constructeur par défaut de la classe Tournee.
    */
-  public Tournee() {}
+  public Tournee() {
+  }
 
-  public int getIdTournee() { return idTournee; }
+  public int getIdTournee() {
+    return idTournee;
+  }
 
-  public String getHoraireDebut() { return horaireDebut; }
+  public String getHoraireDebut() {
+    return horaireDebut;
+  }
 
-  public String getHoraireFin() { return horaireFin; }
+  public void setHoraireDebut(String horaireDebut) {
+    this.horaireDebut = horaireDebut;
+  }
 
-  public String getDureeEstimee() { return dureeEstimee; }
+  public String getHoraireFin() {
+    return horaireFin;
+  }
 
-  public String getNote() { return note; }
+  public void setHoraireFin(String horaireFin) {
+    this.horaireFin = horaireFin;
+  }
 
-  public boolean isValide() { return valide; }
+  public String getDureeEstimee() {
+    return dureeEstimee;
+  }
 
-  public Producteur getProducteur() { return producteur; }
+  public void setDureeEstimee(String dureeEstimee) {
+    this.dureeEstimee = dureeEstimee;
+  }
 
-  public Vehicule getVehicule() { return vehicule; }
+  public String getNote() {
+    return note;
+  }
 
+  public void setNote(String note) {
+    this.note = note;
+  }
 
-  public void setHoraireDebut(String horaireDebut) { this.horaireDebut = horaireDebut; }
+  public boolean isValide() {
+    return valide;
+  }
 
-  public void setHoraireFin(String horaireFin) { this.horaireFin = horaireFin; }
+  public void setValide(boolean valide) {
+    this.valide = valide;
+  }
 
-  public void setDureeEstimee(String dureeEstimee) { this.dureeEstimee = dureeEstimee; }
+  public Producteur getProducteur() {
+    return producteur;
+  }
 
-  public void setNote(String note) { this.note = note; }
+  public void setProducteur(Producteur producteur) {
+    this.producteur = producteur;
+  }
 
-  public void setValide(boolean valide) { this.valide = valide; }
+  public Vehicule getVehicule() {
+    return vehicule;
+  }
 
-  public void setProducteur(Producteur producteur) { this.producteur = producteur; }
-
-  public void setVehicule(Vehicule vehicule) { this.vehicule = vehicule; }
-
+  public void setVehicule(Vehicule vehicule) {
+    this.vehicule = vehicule;
+  }
 }

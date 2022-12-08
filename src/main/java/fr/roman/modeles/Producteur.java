@@ -6,13 +6,9 @@ package fr.roman.modeles;
 public class Producteur {
 
   private int idProducteur;
-
   private int siret;
-
   private String tel;
-
   private Adresse adresse;
-
   private Utilisateur utilisateur;
 
   /**
@@ -35,25 +31,42 @@ public class Producteur {
   /**
    * Le constructeur par défaut de la classe Producteur.
    */
-  public Producteur() {}
+  public Producteur() {
+  }
 
-  public int getIdProducteur() { return idProducteur; }
+  public int getIdProducteur() {
+    return idProducteur;
+  }
 
-  public int getSiret() { return siret; }
+  public int getSiret() {
+    return siret;
+  }
 
-  public String getTel() { return tel; }
+  public void setSiret(int siret) {
+    this.siret = siret;
+  }
 
-  public Adresse getAdresse() { return adresse; }
+  public String getTel() {
+    return tel;
+  }
 
-  public Utilisateur getUtilisateur() { return utilisateur; }
+  public void setTel(String tel) {
+    this.tel = tel;
+  }
 
+  public Adresse getAdresse() {
+    return adresse;
+  }
 
-  public void setSiret(int siret) { this.siret = siret; }
+  public void setAdresse(Adresse adresse) {
+    this.adresse = adresse;
+  }
 
-  public void setTel(String tel) { this.tel = tel; }
+  public Utilisateur getUtilisateur() {
+    return utilisateur;
+  }
 
-  public void setAdresse(Adresse adresse) { this.adresse = adresse; }
-
-  public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
-
+  public void setUtilisateur(Utilisateur utilisateur) {
+    this.utilisateur = utilisateur;
+  }
 }

@@ -15,11 +15,11 @@ public class Adresse {
   private int codePostal;
   private String ville;
 
-
   /**
    * Le constructeur par défaut de la classe Adresse.
    */
-  public Adresse() {}
+  public Adresse() {
+  }
 
   /**
    * Constructeur de la classe Adresse.
@@ -46,37 +46,71 @@ public class Adresse {
     this.ville = ville;
   }
 
-  public int getIdAdresse() { return idAdresse; }
+  public int getIdAdresse() {
+    return idAdresse;
+  }
 
-  public double[] getCoordonneesGPS() { return coordonneesGPS; }
+  public double[] getCoordonneesGPS() {
+    return coordonneesGPS;
+  }
 
-  public String getLibelle() { return libelle; }
+  public void setCoordonneesGPS(double[] coordonneesGPS) {
+    this.coordonneesGPS = coordonneesGPS;
+  }
 
-  public int getNumeroVoie() { return numeroVoie; }
+  public String getLibelle() {
+    return libelle;
+  }
 
-  public String getComplementNumero() { return complementNumero; }
+  public void setLibelle(String libelle) {
+    this.libelle = libelle;
+  }
 
-  public String getVoie() { return voie; }
+  public int getNumeroVoie() {
+    return numeroVoie;
+  }
 
-  public String getComplementAdresse() { return complementAdresse; }
+  public void setNumeroVoie(int numeroVoie) {
+    this.numeroVoie = numeroVoie;
+  }
 
-  public int getCodePostal() { return codePostal; }
+  public String getComplementNumero() {
+    return complementNumero;
+  }
 
-  public String getVille() { return ville; }
+  public void setComplementNumero(String complementNumero) {
+    this.complementNumero = complementNumero;
+  }
 
+  public String getVoie() {
+    return voie;
+  }
 
-  public void setLibelle(String libelle) { this.libelle = libelle; }
+  public void setVoie(String voie) {
+    this.voie = voie;
+  }
 
-  public void setNumeroVoie(int numeroVoie) { this.numeroVoie = numeroVoie; }
+  public String getComplementAdresse() {
+    return complementAdresse;
+  }
 
-  public void setComplementNumero(String complementNumero) { this.complementNumero = complementNumero; }
+  public void setComplementAdresse(String complementAdresse) {
+    this.complementAdresse = complementAdresse;
+  }
 
-  public void setVoie(String voie) { this.voie = voie; }
+  public int getCodePostal() {
+    return codePostal;
+  }
 
-  public void setComplementAdresse(String complementAdresse) { this.complementAdresse = complementAdresse; }
+  public void setCodePostal(int codePostal) {
+    this.codePostal = codePostal;
+  }
 
-  public void setCodePostal(int codePostal) { this.codePostal = codePostal; }
+  public String getVille() {
+    return ville;
+  }
 
-  public void setVille(String ville) { this.ville = ville; }
-
+  public void setVille(String ville) {
+    this.ville = ville;
+  }
 }
