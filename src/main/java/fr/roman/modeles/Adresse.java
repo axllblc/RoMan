@@ -3,7 +3,7 @@ package fr.roman.modeles;
 /**
 * Représente une adresse d'un producteur ou d'un client.
 */
-public class Adresse {
+public class Adresse extends Modele {
 
   private int idAdresse;
   private double[] coordonneesGPS;

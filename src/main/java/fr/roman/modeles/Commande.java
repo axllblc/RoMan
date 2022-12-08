@@ -3,7 +3,7 @@ package fr.roman.modeles;
 /**
 * Représente une commande d'un client à un producteur.
 */
-public class Commande {
+public class Commande extends Modele {
 
   private int idCommande;
   private String libelle;

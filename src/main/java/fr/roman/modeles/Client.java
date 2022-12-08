@@ -3,7 +3,7 @@ package fr.roman.modeles;
 /**
 * Représente un client de producteurs.
 */
-public class Client {
+public class Client extends Modele {
 
   private int idClient;
   private String nom;

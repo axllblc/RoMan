@@ -3,7 +3,7 @@ package fr.roman.modeles;
 /**
 * Représente un producteur.
 */
-public class Producteur {
+public class Producteur extends Modele {
 
   private int idProducteur;
   private int siret;

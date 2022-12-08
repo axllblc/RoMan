@@ -3,7 +3,7 @@ package fr.roman.modeles;
 /**
  * Représente le véhicule d'un producteur.
  */
-public class Vehicule {
+public class Vehicule extends Modele {
 
   private int idVehicule;
   private String immatriculation;

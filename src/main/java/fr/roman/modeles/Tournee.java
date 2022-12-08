@@ -3,7 +3,7 @@ package fr.roman.modeles;
 /**
 * Représente la tournée d'un producteur.
 */
-public class Tournee {
+public class Tournee extends Modele {
 
   private int idTournee;
   private String horaireDebut;

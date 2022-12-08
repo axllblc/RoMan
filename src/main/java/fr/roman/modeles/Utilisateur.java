@@ -3,7 +3,7 @@ package fr.roman.modeles;
 /**
 * Représente l'utilisateur de l'application.
 */
-public class Utilisateur {
+public class Utilisateur extends Modele {
 
   private int idUtilisateur;
   private String nomUtilisateur;
