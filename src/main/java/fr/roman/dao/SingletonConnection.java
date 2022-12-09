@@ -13,12 +13,12 @@ import java.util.HashMap;
  */
 public class SingletonConnection {
 
+  private static Connection co;
   /**
    * Fichier de connection à la base de donnée.
    * A comme séparateur '=', et contient au minimum 3 champs : "url", "login" et "password".
    */
-  final static File FICHIER_CONNECTION = new File("src/main/ressources/connectionBDD.txt");
-  private static Connection co;
+  private final File FICHIER_CONNECTION = new File("src/main/ressources/connectionBDD.txt");
   private final String url;
   private final String login;
   private final String password;
