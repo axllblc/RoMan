@@ -13,6 +13,11 @@ import java.util.HashMap;
  */
 public class SingletonConnection {
 
+  /**
+   * Fichier de connection à la base de donnée.
+   * A comme séparateur '=', et contient au minimum 3 champs : "url", "login" et "password".
+   */
+  final static File FICHIER_CONNECTION = new File("src/main/ressources/connectionBDD.txt");
   private static Connection co;
   private final String url;
   private final String login;
@@ -48,7 +53,7 @@ public class SingletonConnection {
    * @throws IOException Si le fichier n'est pas lisible
    */
   private HashMap<String, String> getDonneesConnection() throws IOException {
-    BufferedReader br = new BufferedReader(new FileReader(getFichierConnection()));
+    BufferedReader br = new BufferedReader(new FileReader(FICHIER_CONNECTION));
     HashMap<String, String> donnees = new HashMap<String, String>();
     int indiceLigne = 0;
     String ligne = br.readLine();
@@ -61,15 +66,6 @@ public class SingletonConnection {
     }
     br.close();
     return donnees;
-  }
-
-  /**
-   * Méthode servant à récupérer le fichier contenant les informations de connection.
-   *
-   * @return Un objet File contenant les informations du fichier.
-   */
-  private File getFichierConnection() {
-    return new File("src/main/ressources/connectionBDD.txt");
   }
 
   /**
