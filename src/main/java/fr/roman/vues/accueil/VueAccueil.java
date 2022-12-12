@@ -1,9 +1,18 @@
 package fr.roman.vues.accueil;
 
+import fr.roman.controleurs.accueil.CtrlAccueil;
+import fr.roman.modeles.ModuleAccueil;
 import fr.roman.modeles.Utilisateur;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -13,8 +22,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
- * Vue de base pour l'accueil. Celle-ci accueille un ensemble d'onglets, dépendamment du rôle de
+ * Vue de base pour l'accueil. Celle-ci accueille un ensemble d'onglets, défini selon le rôle de
  * l'utilisateur.
+ *
+ * @see fr.roman.modeles.ModuleAccueil
+ * @see fr.roman.controleurs.accueil.CtrlAccueil
  *
  * @author Axel Leblanc
  */
@@ -22,13 +34,10 @@ public class VueAccueil {
   /**
    * Icône représentant un compte utilisateur.
    */
-  private static final Image icCompte =
+  private static final Image IC_COMPTE =
       new Image("file:src/main/resources/icons/account_circle_24.png");
 
-  /**
-   * Utilisateur de l'application. Permet d'adapter le contenu de l'accueil à ses informations.
-   */
-  private final Utilisateur utilisateur;
+  private CtrlAccueil ctrl = null;
 
   private final Scene scene;
   private Stage stage;
@@ -54,17 +63,22 @@ public class VueAccueil {
    */
   private final TabPane tabPane;
 
-  public VueAccueil(Utilisateur utilisateur) {
-    this.utilisateur = utilisateur;
+  /**
+   * Modules affichés sur l'accueil, associés à l'onglet qui leur correspond.
+   */
+  private final Map<ModuleAccueil, Tab> ongletsAccueil;
 
-    String texteTitre =
-        "Bonjour %s %s !".formatted(utilisateur.getPrenom(), utilisateur.getNom());
+  /**
+   * Construire la vue <i>Accueil</i>.
+   */
+  public VueAccueil() {
+    ongletsAccueil = new HashMap<>();
 
     // Définition des éléments de la vue
     conteneur = new BorderPane();
     entete = new BorderPane();
-    titre = new Label(texteTitre);
-    btnCompte = new Button("Mon compte", new ImageView(icCompte));
+    titre = new Label("Bonjour !");
+    btnCompte = new Button("Mon compte", new ImageView(IC_COMPTE));
     tabPane = new TabPane();
 
     scene = new Scene(conteneur);
@@ -83,9 +97,6 @@ public class VueAccueil {
     conteneur.setTop(entete);
     conteneur.setCenter(tabPane);
 
-    // Ajout des onglets
-    listeOnglets();
-
     // Marges, espacement, alignement
     conteneur.setPadding(new Insets(15));
     entete.setPadding(new Insets(0, 0, 10, 0));
@@ -95,36 +106,60 @@ public class VueAccueil {
     btnCompte.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     btnCompte.setBackground(Background.EMPTY);
     btnCompte.setTooltip(new Tooltip("Mon compte"));
-  }
-
-  /**
-   * Établir la liste des onglets affichés dans la vue <i>Accueil</i>, en fonction du rôle de
-   * l'utilisateur.
-   */
-  private void listeOnglets() {
-    switch (utilisateur.getRole()) {
-      case ROOT:
-        tabPane.getTabs().addAll(
-            new Tab("Gestion des administrateurs")
-        );
-        // L'utilisateur ROOT hérite des privilèges administrateur standard
-      case ADMINISTRATEUR:
-        tabPane.getTabs().addAll(
-            new Tab("Producteurs"),
-            new Tab("Clients")
-        );
-        break;
-      case PRODUCTEUR:
-        tabPane.getTabs().addAll(
-            new Tab("Tableau de bord"),
-            new Tab("Commandes"),
-            new Tab("Tournées")
-        );
-        break;
-    }
 
     // Empêcher la fermeture des onglets
     tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+  }
+
+  /**
+   * Affectation du contrôleur de la vue.
+   *
+   * @param ctrl Contrôleur à affecter
+   */
+  public void setCtrl(CtrlAccueil ctrl) {
+    this.ctrl = ctrl;
+  }
+
+  /**
+   * Définir l'utilisateur dont les informations doivent être affichées dans la vue. L'objet
+   * métier {@link Utilisateur} n'est utilisé qu'à des fins d'affichage (interrogation uniquement).
+   *
+   * @param utilisateur Utilisateur dont les informations doivent être affichées
+   */
+  public void afficherInfosUtilisateur(Utilisateur utilisateur) {
+    // Titre affiché en haut de la vue
+    titre.setText("Bonjour %s %s !".formatted(utilisateur.getPrenom(), utilisateur.getNom()));
+  }
+
+  /**
+   * Définir les modules qui seront affichés (sous la forme d'onglets), associés à la vue
+   * qui leur correspond.
+   */
+  public void afficherModules(Map<ModuleAccueil, VueModuleAccueil> mapModuleVue) {
+    for (ModuleAccueil module : mapModuleVue.keySet()) {
+      Tab onglet = new Tab(module.getTitre(), mapModuleVue.get(module).getNode());
+      onglet.setTooltip(new Tooltip(module.getDescription()));
+
+      ongletsAccueil.put(module, onglet);
+
+      tabPane.getTabs().add(onglet);
+    }
+  }
+
+  /**
+   * Basculer vers l'onglet de la vue <i>Accueil</i> correspondant au module passé en paramètre.
+   *
+   * <p><b>Exemple :</b> {@code selectionnerModule(ModuleAccueil.COMMANDES)} permet de sélectionner
+   * l'onglet du module de gestion des commandes.</p>
+   *
+   * <p>Si le module n'est pas disponible, la méthode ne fait rien.</p>
+   *
+   * @param module Module correspondant à l'onglet à afficher
+   */
+  public void afficherOnglet(ModuleAccueil module) {
+    if (ongletsAccueil.containsKey(module)) {
+      tabPane.getSelectionModel().select(ongletsAccueil.get(module));
+    }
   }
 
   /**
@@ -142,7 +177,7 @@ public class VueAccueil {
   }
 
   /**
-   * Fermer le {@code Stage} contenant la vue <i>Accueil</i>
+   * Fermer le {@code Stage} contenant la vue <i>Accueil</i>.
    */
   public void close() {
     stage.close();
