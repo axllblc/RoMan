@@ -35,9 +35,9 @@ public abstract class DAO<M, C extends Enum<C>> {
    * Entrée d'une ligne dans la table.
    *
    * @param o Un objet métier.
-   * @return L'identifiant de la ligne ajoutée. -1 en cas d'échec.
+   * @return L'objet métier avec son identifiant ou null si l'insertion n'a pas eu lieu.
    */
-  public abstract int insert(M o);
+  public abstract M insert(M o);
 
   /**
    * Mise à jour d'une ligne dans une table de la base.
@@ -79,4 +79,13 @@ public abstract class DAO<M, C extends Enum<C>> {
    * @return Une collection d'objets de l'ensemble des données de la table.
    */
   public abstract Collection<M> findAll();
+
+  String criteresPourWHERE(HashMap<C, String> criteres){
+
+    return criteres.entrySet()
+            .stream()
+            .filter(c -> !c.getValue().isBlank())
+            .map(c -> " AND " + c.getKey() + " LIKE '" + c.getValue() + "'")
+            .collect(Collectors.joining());
+  }
 }
