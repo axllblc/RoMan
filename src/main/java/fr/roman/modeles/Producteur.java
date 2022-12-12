@@ -7,6 +7,7 @@ public class Producteur extends Modele {
 
   private int idProducteur;
   private int siret;
+  private String nomEtablissement;
   private String tel;
   private Adresse adresse;
   private Utilisateur utilisateur;
@@ -16,13 +17,15 @@ public class Producteur extends Modele {
    *
    * @param idProducteur L'identifiant du producteur dans la base.
    * @param siret Le SIRET du producteur.
+   * @param nomEtablissement Le nom de l'établissement du producteur.
    * @param tel Le numéro de téléphone du producteur.
    * @param adresse L'adresse du producteur.
    * @param utilisateur L'utilisateur associé au producteur.
    */
-  public Producteur(int idProducteur, int siret, String tel, Adresse adresse, Utilisateur utilisateur) {
+  public Producteur(int idProducteur, int siret, String nomEtablissement, String tel, Adresse adresse, Utilisateur utilisateur) {
     this.idProducteur = idProducteur;
     this.siret = siret;
+    this.nomEtablissement = nomEtablissement;
     this.tel = tel;
     this.adresse = adresse;
     this.utilisateur = utilisateur;
@@ -44,6 +47,14 @@ public class Producteur extends Modele {
 
   public void setSiret(int siret) {
     this.siret = siret;
+  }
+
+  public String getNomEtablissement() {
+    return nomEtablissement;
+  }
+
+  public void setNomEtablissement(String nomEtablissement) {
+    this.nomEtablissement = nomEtablissement;
   }
 
   public String getTel() {
@@ -70,5 +81,5 @@ public class Producteur extends Modele {
     this.utilisateur = utilisateur;
   }
 
-  public enum Champs {idProducteur, siret, tel, idUtilisateur, idAdresse}
+  public enum Champs {idProducteur, siret, nomEtablissement, tel, idUtilisateur, idAdresse}
 }
