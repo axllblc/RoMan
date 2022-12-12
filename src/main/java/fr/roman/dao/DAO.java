@@ -4,13 +4,16 @@ import fr.roman.modeles.Modele;
 
 import java.sql.Connection;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * Classe abstraite DAO qui définie les principales méthodes des classes filles.
  * Possède un attribut Connection pour la liaison avec la base de donnée.
- * Est paramétré d'un modèle de l'application.
+ * Est paramétré d'un modèle (M) de l'application et de l'énumération de ses attributs/champs (C).
  */
-public abstract class DAO<M extends Modele> {
+public abstract class DAO<M, C extends Enum<C>> {
 
   private Connection co;
 
@@ -55,10 +58,11 @@ public abstract class DAO<M extends Modele> {
   /**
    * Recherche de données dans une table de la base avec les attributs renseignés de l'objet métier.
    *
-   * @param o Un objet métier.
+   * @param criteres Un objet HashMap<C, String> où la clé est le nom du critère
+   *                 (énumération des champs dans l'objet métier) et la valeur est celle du critère.
    * @return Une collection d'objets qui correspond aux critères mis en paramètre.
    */
-  public abstract Collection<M> find(M o);
+  public abstract Collection<M> find(HashMap<C, String> criteres);
 
   /**
    * Recherche d'une ligne dans une table de la base à partir de sa clé primaire

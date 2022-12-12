@@ -113,4 +113,7 @@ public class Adresse extends Modele {
   public void setVille(String ville) {
     this.ville = ville;
   }
+
+  public enum Champs {complementAdresse, complementNumero, coordonneesGPS,
+    idAdresse, libelle, numeroVoie, ville, voie, codePostal};
 }

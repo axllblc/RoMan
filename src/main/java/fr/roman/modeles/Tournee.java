@@ -104,4 +104,6 @@ public class Tournee extends Modele {
   public void setVehicule(Vehicule vehicule) {
     this.vehicule = vehicule;
   }
+
+  public enum Champs {horaireDebut, horaireFin, idTournee, note, idProducteur, valide, idVehicule, dureeEstimee}
 }

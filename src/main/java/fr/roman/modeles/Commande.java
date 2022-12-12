@@ -149,4 +149,7 @@ public class Commande extends Modele {
   public void setTournee(Tournee tournee) {
     this.tournee = tournee;
   }
+
+  public enum Champs {dateInitiale, dateLivraison, defaultLivraison, horaireDebut, horaireFin,
+    idCommande, libelle, note, poids, idProducteur, idTournee, idClient}
 }

@@ -70,4 +70,6 @@ public class Vehicule extends Modele {
   public void setProducteur(Producteur producteur) {
     this.producteur = producteur;
   }
+
+  public enum Champs {immatriculation, libelle, poidsMax, icProducteur, idVehicule}
 }

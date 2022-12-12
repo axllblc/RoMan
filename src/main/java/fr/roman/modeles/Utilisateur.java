@@ -10,7 +10,7 @@ public class Utilisateur extends Modele {
   private String mdp;
   private String nom;
   private String prenom;
-  private String mail;
+  private String email;
   private Role role;
 
   /**
@@ -21,17 +21,17 @@ public class Utilisateur extends Modele {
    * @param mdp Le mot de passe de l'utilisateur.
    * @param nom Le nom de famille de l'utilisateur.
    * @param prenom Le prénom de l'utilisateur.
-   * @param mail L'adresse mail de l'utilisateur.
+   * @param email L'adresse mail de l'utilisateur.
    * @param role Le rôle de l'utilisateur.
    */
   public Utilisateur(int idUtilisateur, String nomUtilisateur, String mdp,String nom,
-                     String prenom, String mail, Role role) {
+                     String prenom, String email, Role role) {
     this.idUtilisateur = idUtilisateur;
     this.nomUtilisateur = nomUtilisateur;
     this.mdp = mdp;
     this.nom = nom;
     this.prenom = prenom;
-    this.mail = mail;
+    this.email = email;
     this.role = role;
   }
 
@@ -77,12 +77,12 @@ public class Utilisateur extends Modele {
     this.prenom = prenom;
   }
 
-  public String getMail() {
-    return mail;
+  public String getEmail() {
+    return email;
   }
 
-  public void setMail(String mail) {
-    this.mail = mail;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public Role getRole() {
@@ -92,4 +92,18 @@ public class Utilisateur extends Modele {
   public void setRole(Role role) {
     this.role = role;
   }
+
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "idUtilisateur=" + idUtilisateur +
+                ", nomUtilisateur='" + nomUtilisateur + '\'' +
+                ", mdp='" + mdp + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                '}';
+    }
+  public enum Champs {email, mdp, nom, nomUtilisateur, prenom, role, idUtilisateur};
 }

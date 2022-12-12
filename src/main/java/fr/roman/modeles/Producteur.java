@@ -69,4 +69,6 @@ public class Producteur extends Modele {
   public void setUtilisateur(Utilisateur utilisateur) {
     this.utilisateur = utilisateur;
   }
+
+  public enum Champs {idProducteur, siret, tel, idUtilisateur, idAdresse}
 }

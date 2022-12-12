@@ -101,4 +101,6 @@ public class Client extends Modele {
   public void setAdresse(Adresse adresse) {
     this.adresse = adresse;
   }
+
+  public enum Champs {idClient, mail, nom, particulier, prenom, siret, tel, idAdresse}
 }
