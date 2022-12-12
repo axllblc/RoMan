@@ -1,10 +1,7 @@
 package fr.roman.dao;
 
-import fr.roman.modeles.Modele;
-
 import java.sql.Connection;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -78,7 +75,10 @@ public abstract class DAO<M, C extends Enum<C>> {
    *
    * @return Une collection d'objets de l'ensemble des données de la table.
    */
-  public abstract Collection<M> findAll();
+  public Collection<M> findAll(){
+    // On réutilise la méthode find avec aucun critère comme paramètre
+    return find(new HashMap<C, String>());
+  }
 
   String criteresPourWHERE(HashMap<C, String> criteres){
 
