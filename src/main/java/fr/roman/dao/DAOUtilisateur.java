@@ -1,8 +1,11 @@
 package fr.roman.dao;
 
+import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
+import javafx.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -15,10 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 import static java.util.BitSet.valueOf;
 
@@ -38,23 +38,19 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   }
 
   /**
-   * Entrée d'une ligne dans la table.
+   * Ajout d'un utilisateur qui est un administrateur
    *
-   * @param u L'utilisateur à ajouter à la base.
+   * @param u L'utilisateur administrateur à ajouter à la base.
    * @return Un objet Utilisateur avec son identifiant, null s'il n'a pas pu être ajouté.
    */
   @Override
   public Utilisateur insert(Utilisateur u) {
     try {
       if(u.getNomUtilisateur() == null || u.getMdp() == null
-              || findByNomUtilisateur(u.getNomUtilisateur()) != null){
+              || findByNomUtilisateur(u.getNomUtilisateur()) != null
+              || u.getRole() != Role.ADMINISTRATEUR){
         return null;
       }
-
-      // TODO: 12/12/2022 Dans le cas où l'utilisateur ajouté est un producteur il est nécessaire de
-      //  faire une transaction car l'ajout du producteur doit se faire après l'ajout de l'utilisateur.
-      //  \Sinon, en cas de coupure entre les deux ajouts,le producteur risque d'être considéré
-      //  comme un administrateur.
 
       // La requête
       PreparedStatement req = this.getCo().prepareStatement("INSERT INTO utilisateurs " +
@@ -81,6 +77,27 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     } catch (Exception e) { // En cas d'échec de la requête on ne renvoie rien
       return null;
     }
+  }
+
+  /**
+   * Ajout d'un utilisateur producteur dans la base.
+   *
+   * @param p Le producteur à ajouter à la base, qui contient entre autre un objet Utilisateur.
+   * @return
+   */
+  public Producteur insert(Producteur p){
+
+    if(p.getUtilisateur() == null){
+      // Si on n'a pas associé le producteur à un utilisateur à ajouter,
+      // on annule la création de compte
+      return null;
+    }
+
+    // TODO: 12/12/2022 Dans le cas où l'utilisateur ajouté est un producteur il est nécessaire de
+    //  faire une transaction car l'ajout du producteur doit se faire après l'ajout de l'utilisateur.
+    //  \Sinon, en cas de coupure entre les deux ajouts,le producteur risque d'être considéré
+    //  comme un administrateur.
+    return new Producteur();
   }
 
   /**
@@ -129,15 +146,16 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       }
       PreparedStatement req = this.getCo().prepareStatement("DELETE FROM utilisateurs WHERE idUtilisateur = ?");
       req.setInt(1, id);
-      if (req.executeUpdate() ==1) {
-        // Si l'entrée a été suprimée, on retrourne true
+      if (req.executeUpdate() == 1) {
+        // Si l'entrée a été supprimée, on retourne true
         return true;
       }
-      // Sinon, on retourne faux
+      // Sinon, on retourne false
       return false;
     } catch (SQLException e) {
-      e.printStackTrace();
       return false;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -181,26 +199,26 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    * @return Le rôle de l'utilisateur
    * @throws Exception Si la requête n'a pas pu avoir lieu, on renvoie une exception
    */
-  private static Role getRole(int idUtilisateur) throws Exception {
+  private Role getRole(int idUtilisateur) throws Exception {
     if(idUtilisateur == 1){
       // Le root ou super-administrateur a l'identifiant 1
       return Role.ROOT;
     }
-
     // Pour retrouver on recherche la présence de l'identifiant dans la table producteur
-    HashMap<Producteur.Champs, String> critereVerifRole = new HashMap<Producteur.Champs, String>();
-    DAOProducteur daoProducteur;
-    Role role;
-    daoProducteur = new DAOProducteur(SingletonConnection.getInstance());
-    critereVerifRole.put(Producteur.Champs.idUtilisateur, String.valueOf(idUtilisateur));
-    if (!daoProducteur.find(critereVerifRole).isEmpty()) {
-      // Si l'identifiant est associé à un producteur, l'utilisateur est producteur
-      role = Role.PRODUCTEUR;
-    } else {
-      // Sinon c'est un administrateur
-      role = Role.ADMINISTRATEUR;
+    HashMap<Utilisateur.Champs, String> criteres = new HashMap<Utilisateur.Champs, String>();
+    criteres.put(Utilisateur.Champs.idUtilisateur, String.valueOf(idUtilisateur));
+    PreparedStatement req;
+    // On faut une requête avec les critères de recherche
+    req = this.getCo().prepareStatement("SELECT idUtilisateur FROM producteurs WHERE 1=1 " +
+            criteresPourWHERE(criteres));
+    // On récupère le résultat
+    ResultSet rs = req.executeQuery();
+    if (rs.next()) {
+      return Role.PRODUCTEUR;
     }
-    return role;
+    else{
+      return Role.ADMINISTRATEUR;
+    }
   }
 
   /**
@@ -222,17 +240,6 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   }
 
   /**
-   * Recherche de l'ensemble des données de la table Utilisateur.
-   *
-   * @return Une collection d'objets de l'ensemble des utilisateurs de l'application.
-   */
-  @Override
-  public Collection<Utilisateur> findAll() {
-    // On réutilise la méthode find avec aucun critère comme paramètre
-    return find(new HashMap<Utilisateur.Champs, String>());
-  }
-
-  /**
    * Recherche la présence d'un utilisateur dans la base
    * @param nomUtilisateur Le nom d'utilisateur recherché
    * @return Un objet Utilisateur contenant les informations de l'utilisateur trouvé, null sinon
@@ -241,8 +248,10 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     // On réutilise la méthode find avec comme seul critère le nom d'utilisateur
     HashMap<Utilisateur.Champs, String> criteres = new HashMap<Utilisateur.Champs, String>();
     criteres.put(Utilisateur.Champs.nomUtilisateur, String.valueOf(nomUtilisateur));
+    // On récupère le résultat
     ArrayList<Utilisateur> resultatRecherche = find(criteres);
     if(resultatRecherche.isEmpty()){
+      // Si l'utilisateur n'a pas été trouvé avec ce nom d'utilisateur, on renvoie null
       return null;
     }
     return resultatRecherche.get(0);
@@ -256,7 +265,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    * @param mdp Le mot de passe renseigné par l'utilisateur.
    * @return Le mot de passe chiffré.
    */
-  private byte[] chiffrerMDP(String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
+  private byte[] chiffrerMDP(@NotNull String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
     SecureRandom random = new SecureRandom(); // On utilise un générateur d'octets.
     // On utilise un salage sur 16 octets
     byte[] salt = "FHPCUUhfjçNVIYPEH23435G3JKEG53BKgkjbtGH3V34HktkbIfghVTB6".getBytes();
