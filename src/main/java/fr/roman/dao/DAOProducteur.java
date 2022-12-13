@@ -30,10 +30,15 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
    * Entrée d'un producteur dans la table (et par extension un compte Utilisateur).
    *
    * @param p Un objet Producteur, qui doit contenir un objet Utilisateur.
-   * @return L'identifiant du producteur ajouté. null en cas d'échec.
+   * @return Un objet Producteur avec son identifiant, null s'il n'a pas pu être ajouté.
    */
   public Producteur insert(Producteur p) {
-    return null;
+    try {
+      DAOUtilisateur daoU = new DAOUtilisateur(SingletonConnection.getInstance());
+      return daoU.insert(p);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -94,23 +99,20 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
   public ArrayList<Producteur> find(HashMap<Producteur.Champs, String> criteres) {
     PreparedStatement req;
     try {
-      // On faut une requête avec les critères de recherche
+      // On fait une requête avec les critères de recherche
       req = this.getCo().prepareStatement("SELECT * FROM utilisateurs WHERE 1=1 " +
               criteresPourWHERE(criteres));
-      System.out.println(req);
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList d'utilisateurs
       ArrayList<Producteur> producteurs = new ArrayList<Producteur>();
       // On aura besoin de créer les objets Adresse et Utilisateur pour chaque producteur trouvé
-      DAOUtilisateur daoU;
-      DAOAdresse daoA;
+      DAOUtilisateur daoU = new DAOUtilisateur(SingletonConnection.getInstance());
+      DAOAdresse daoA = new DAOAdresse(SingletonConnection.getInstance());
       Utilisateur utilisateur;
       Adresse adresse;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        daoU = new DAOUtilisateur(SingletonConnection.getInstance());
-        daoA = new DAOAdresse(SingletonConnection.getInstance());
         utilisateur = daoU.findById(Integer.parseInt(rs.getString("idUtilisateur")));
         adresse = daoA.findById(Integer.parseInt(rs.getString("idUAdresse")));
 

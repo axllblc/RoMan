@@ -25,16 +25,14 @@ public class Client extends Modele {
    *
    * @param idClient L'identifiant du client dans la base.
    * @param nom Le nom du client.
-   * @param prenom Le prénom du client.
    * @param tel Le numéro de téléphone du client.
    * @param mail L'adresse mail du client.
    * @param adresse L'adresse du client.
    */
-  public Client(int idClient, String nom, String prenom, String tel, String mail,
+  public Client(int idClient, String nom, String tel, String mail,
                 int siret, boolean particulier, Adresse adresse) {
     this.idClient = idClient;
     this.nom = nom;
-    this.prenom = prenom;
     this.tel = tel;
     this.mail = mail;
     this.siret = siret;
@@ -52,14 +50,6 @@ public class Client extends Modele {
 
   public void setNom(String nom) {
     this.nom = nom;
-  }
-
-  public String getPrenom() {
-    return prenom;
-  }
-
-  public void setPrenom(String prenom) {
-    this.prenom = prenom;
   }
 
   public String getTel() {
@@ -102,5 +92,5 @@ public class Client extends Modele {
     this.adresse = adresse;
   }
 
-  public enum Champs {idClient, mail, nom, particulier, prenom, siret, tel, idAdresse}
+  public enum Champs {idClient, mail, nom, particulier, siret, tel, idAdresse}
 }

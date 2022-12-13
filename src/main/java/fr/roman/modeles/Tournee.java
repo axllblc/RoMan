@@ -8,7 +8,7 @@ public class Tournee extends Modele {
   private int idTournee;
   private String horaireDebut;
   private String horaireFin;
-  private String dureeEstimee;
+  private String estimationDuree;
   private String note;
   private boolean valide;
   private Producteur producteur;
@@ -20,19 +20,19 @@ public class Tournee extends Modele {
    * @param idTournee L'identifiant de la tournée dans la base.
    * @param horaireDebut Le début de la tournée.
    * @param horaireFin La fin de la tournée.
-   * @param dureeEstimee La durée estimée de la tournée pour être effectuée.
+   * @param estimationDuree La durée estimée de la tournée pour être effectuée.
    * @param note La note associée à la tournée.
    * @param valide La validité de la tournée. Une tournée est valide si les contraintes horaires
    *               et les contraintes de poids sont vérifiées.
    * @param producteur Le producteur responsable de cette tournée.
    * @param vehicule Le véhicule utilisé pour effectuer la tournée.
    */
-  public Tournee(int idTournee, String horaireDebut, String horaireFin, String dureeEstimee,
+  public Tournee(int idTournee, String horaireDebut, String horaireFin, String estimationDuree,
                  String note, boolean valide, Producteur producteur, Vehicule vehicule) {
     this.idTournee = idTournee;
     this.horaireDebut = horaireDebut;
     this.horaireFin = horaireFin;
-    this.dureeEstimee = dureeEstimee;
+    this.estimationDuree = estimationDuree;
     this.note = note;
     this.valide = valide;
     this.producteur = producteur;
@@ -65,12 +65,12 @@ public class Tournee extends Modele {
     this.horaireFin = horaireFin;
   }
 
-  public String getDureeEstimee() {
-    return dureeEstimee;
+  public String getEstimationDuree() {
+    return estimationDuree;
   }
 
-  public void setDureeEstimee(String dureeEstimee) {
-    this.dureeEstimee = dureeEstimee;
+  public void setEstimationDuree(String estimationDuree) {
+    this.estimationDuree = estimationDuree;
   }
 
   public String getNote() {

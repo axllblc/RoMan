@@ -4,7 +4,6 @@ import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
-import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKeyFactory;
@@ -20,7 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static java.util.BitSet.valueOf;
+
 
 /**
  * DAO pour la classe Utilisateur.
@@ -58,7 +57,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
               PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
       req.setString(1, u.getNomUtilisateur());
-      req.setString(2, new String(chiffrerMDP(u.getMdp()), StandardCharsets.UTF_8));
+      req.setString(2, chiffrerMDP(u.getMdp()));
       req.setString(3, u.getNom());
       req.setString(4, u.getPrenom());
       req.setString(5, u.getEmail());
@@ -265,7 +264,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    * @param mdp Le mot de passe renseigné par l'utilisateur.
    * @return Le mot de passe chiffré.
    */
-  private byte[] chiffrerMDP(@NotNull String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
+  private String chiffrerMDP(@NotNull String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
     SecureRandom random = new SecureRandom(); // On utilise un générateur d'octets.
     // On utilise un salage sur 16 octets
     byte[] salt = "FHPCUUhfjçNVIYPEH23435G3JKEG53BKgkjbtGH3V34HktkbIfghVTB6".getBytes();
@@ -274,7 +273,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     // On récupère l'algorithme de chiffrement choisi
     SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
     // On procède au chiffrement du mot de passe et on le retourne
-    return factory.generateSecret(spec).getEncoded();
+    return new String(factory.generateSecret(spec).getEncoded(), StandardCharsets.UTF_8);
   }
 
     /**
@@ -288,7 +287,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     try {
       Utilisateur u = findByNomUtilisateur(nomUtilisateur);
       if (u != null){ // Si le nom d'utilisateur existe
-        if (Arrays.equals( chiffrerMDP(mdp) , u.getMdp().getBytes() )){
+        if (Arrays.equals( chiffrerMDP(mdp).getBytes() , u.getMdp().getBytes() )){
           // Et si le mot de passe est correct, on retourne l'objet Utilisateur
           return u;
         }
