@@ -48,7 +48,7 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.setString(3, c.getHoraireDebut());
       req.setString(4, c.getHoraireFin());
       req.setString(5, c.getNote());
-      req.setBoolean(6, c.isDefaultLivraison());
+      req.setBoolean(6, c.isDefautLivraison());
       req.setString(7, c.getDateInitiale());
       req.setString(8, c.getDateLivraison());
       req.setInt(9, c.getProducteur().getIdProducteur());
@@ -61,13 +61,13 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       if(rs.next()){
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
         return new Commande(rs.getInt(1), c.getLibelle(), c.getPoids(),
-                c.getHoraireDebut(), c.getHoraireFin(), c.getNote(), c.isDefaultLivraison(),
+                c.getHoraireDebut(), c.getHoraireFin(), c.getNote(), c.isDefautLivraison(),
                 c.getDateInitiale(), c.getDateLivraison(), c.getProducteur(), c.getClient(),
                 c.getTournee());
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
-    } catch (Exception e) { // En cas d'échec de la requête on ne renvoie rien
+    } catch (Exception e) { // En cas d'échec de la requête, on ne renvoie rien
       return null;
     }
   }
@@ -90,7 +90,7 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.setString(3, c.getHoraireDebut());
       req.setString(4, c.getHoraireFin());
       req.setString(5, c.getNote());
-      req.setBoolean(6, c.isDefaultLivraison());
+      req.setBoolean(6, c.isDefautLivraison());
       req.setString(7, c.getDateInitiale());
       req.setString(8, c.getDateLivraison());
       req.setInt(9, c.getProducteur().getIdProducteur());

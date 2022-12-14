@@ -8,6 +8,7 @@ public class Utilisateur extends Modele {
   private int idUtilisateur;
   private String nomUtilisateur;
   private String mdp;
+  private byte[] sel;
   private String nom;
   private String prenom;
   private String email;
@@ -19,16 +20,18 @@ public class Utilisateur extends Modele {
    * @param idUtilisateur L'identifiant de l'utilisateur dans la base de donnée.
    * @param nomUtilisateur Le nom d'utilisateur (pour se connecter à l'espace dédié de l'application)
    * @param mdp Le mot de passe de l'utilisateur.
+   * @param sel Le sel utilisé pour chiffrer le mot de passe de l'utilisateur.
    * @param nom Le nom de famille de l'utilisateur.
    * @param prenom Le prénom de l'utilisateur.
    * @param email L'adresse mail de l'utilisateur.
    * @param role Le rôle de l'utilisateur.
    */
-  public Utilisateur(int idUtilisateur, String nomUtilisateur, String mdp,String nom,
-                     String prenom, String email, Role role) {
+  public Utilisateur(int idUtilisateur, String nomUtilisateur, String mdp, byte[] sel,
+                     String nom, String prenom, String email, Role role) {
     this.idUtilisateur = idUtilisateur;
     this.nomUtilisateur = nomUtilisateur;
     this.mdp = mdp;
+    this.sel = sel;
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
@@ -59,6 +62,14 @@ public class Utilisateur extends Modele {
 
   public void setMdp(String mdp) {
     this.mdp = mdp;
+  }
+
+  public byte[] getSel() {
+    return sel;
+  }
+
+  public void setSel(byte[] sel) {
+    this.sel = sel;
   }
 
   public String getNom() {

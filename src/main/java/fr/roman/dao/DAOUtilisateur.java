@@ -1,10 +1,9 @@
 package fr.roman.dao;
 
-import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
-import org.jetbrains.annotations.NotNull;
+import javafx.util.Pair;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -53,14 +52,16 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
 
       // La requête
       PreparedStatement req = this.getCo().prepareStatement("INSERT INTO utilisateurs " +
-              "(nomUtilisateur, mdp, nom, prenom, email) VALUES (?,?,?,?,?)",
+              "(nomUtilisateur, mdp, sel, nom, prenom, email) VALUES (?,?,?,?,?,?)",
               PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
       req.setString(1, u.getNomUtilisateur());
-      req.setString(2, chiffrerMDP(u.getMdp()));
-      req.setString(3, u.getNom());
-      req.setString(4, u.getPrenom());
-      req.setString(5, u.getEmail());
+      Pair<byte[], byte[]> chiffrement = chiffrerMDP(u.getMdp(), genererSel());
+      req.setBytes(2,chiffrement.getKey()); // la clé est le mdp chiffré
+      req.setBytes(3,chiffrement.getValue()); // la valeur est le sel
+      req.setString(4, u.getNom());
+      req.setString(5, u.getPrenom());
+      req.setString(6, u.getEmail());
       // L'exécution de la requête
       req.execute();
       // Récupération de la clé primaire
@@ -68,12 +69,12 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       if(rs.next()){
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
         return new Utilisateur(rs.getInt(1), u.getNomUtilisateur(),
-                "", u.getNom(), u.getPrenom(),
-                u.getEmail(), getRole(rs.getInt(1)));
+                new String(chiffrement.getKey(), StandardCharsets.UTF_8), chiffrement.getValue(),
+                u.getNom(), u.getPrenom(), u.getEmail(), getRole(rs.getInt(1)));
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
-    } catch (Exception e) { // En cas d'échec de la requête on ne renvoie rien
+    } catch (Exception e) { // En cas d'échec de la requête, on ne renvoie rien
       return null;
     }
   }
@@ -109,10 +110,11 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   public boolean update(Utilisateur u) {
     try {
       PreparedStatement req  = this.getCo().prepareStatement("UPDATE utilisateurs " +
-              "SET nomUtilisateur = ?, mdp = ?, nom = ?, prenom = ?, email = ? " +
+              "SET nomUtilisateur = ?, mdp = ?, sel = ?, nom = ?, prenom = ?, email = ? " +
               "WHERE idUtilisateur = ?");
       req.setString(1, u.getNomUtilisateur());
       req.setString(2, u.getMdp());
+      req.setBytes(3, u.getSel());
       req.setString(3, u.getNom());
       req.setString(4, u.getPrenom());
       req.setString(5, u.getEmail());
@@ -169,7 +171,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   public ArrayList<Utilisateur> find(HashMap<Utilisateur.Champs, String> criteres) {
     PreparedStatement req;
     try {
-      // On faut une requête avec les critères de recherche
+      // On fait une requête avec les critères de recherche
       req = this.getCo().prepareStatement("SELECT * FROM utilisateurs WHERE 1=1 " +
                       criteresPourWHERE(criteres));
       // On récupère le résultat
@@ -179,7 +181,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
         utilisateurs.add(new Utilisateur(rs.getInt("idUtilisateur"), rs.getString("nomUtilisateur"),
-                rs.getString("mdp"), rs.getString("nom"), rs.getString("prenom"),
+                rs.getString("mdp"), rs.getBytes("sel"), rs.getString("nom"), rs.getString("prenom"),
                 rs.getString("email"), getRole(rs.getInt("idUtilisateur"))));
       }
       return utilisateurs;
@@ -207,7 +209,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     HashMap<Utilisateur.Champs, String> criteres = new HashMap<Utilisateur.Champs, String>();
     criteres.put(Utilisateur.Champs.idUtilisateur, String.valueOf(idUtilisateur));
     PreparedStatement req;
-    // On faut une requête avec les critères de recherche
+    // On fait une requête avec les critères de recherche
     req = this.getCo().prepareStatement("SELECT idUtilisateur FROM producteurs WHERE 1=1 " +
             criteresPourWHERE(criteres));
     // On récupère le résultat
@@ -258,25 +260,33 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
 
   /**
    * Cette méthode sert à chiffrer le mot de passe pour être stocké dans la base.
-   * L'algorithme choisi est "PBKDF2WithHmacSHA1". Le salage est sur 16 octets et
-   * le chiffrage est itéré 10 000 fois. Le mot de passe est chiffré sur 128 bits.
+   * L'algorithme choisi est "PBKDF2WithHmacSHA1".
+   * Le salage (en paramètre) et le mot de passe (chiffré) ont une entropie de 248 bits (31 octets).
+   * On itère 10 000 fois le chiffrement
    *
    * @param mdp Le mot de passe renseigné par l'utilisateur.
-   * @return Le mot de passe chiffré.
+   * @return Un objet Pair avec le mot de passe en première position et le sel en deuxième position
    */
-  private String chiffrerMDP(@NotNull String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    SecureRandom random = new SecureRandom(); // On utilise un générateur d'octets.
-    // On utilise un salage sur 16 octets
-    byte[] salt = "FHPCUUhfjçNVIYPEH23435G3JKEG53BKgkjbtGH3V34HktkbIfghVTB6".getBytes();
+  private Pair<byte[], byte[]> chiffrerMDP(String mdp, byte[] sel) throws NoSuchAlgorithmException, InvalidKeySpecException {
     // On paramètre la clé de chiffrement selon les modalités décrites en documentation
-    KeySpec spec = new PBEKeySpec(mdp.toCharArray(), salt, 10000, 128);
+    KeySpec spec = new PBEKeySpec(mdp.toCharArray(), sel, 10000, 248);
     // On récupère l'algorithme de chiffrement choisi
-    SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-    // On procède au chiffrement du mot de passe et on le retourne
-    return new String(factory.generateSecret(spec).getEncoded(), StandardCharsets.UTF_8);
+    SecretKeyFactory algo = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+    // On procède au chiffrement du mot de passe et on le retourne avec le sel utilisé
+    return new Pair<>(algo.generateSecret(spec).getEncoded(), sel);
   }
 
-    /**
+  /**
+   * Méthode servant à générer un sel ayant une entropie de 32 octets.
+   * @return Un sel sous forme de tableau de bits.
+   */
+  private static byte[] genererSel() {
+    SecureRandom random = new SecureRandom(); // On utilise un générateur d'octets.
+    // On génère le sel sur 31 octets
+    return random.generateSeed(31);
+  }
+
+  /**
      *
      * @param nomUtilisateur Le nom d'utilisateur
      * @param mdp Le mot de passe renseigné (non chiffré)
@@ -287,7 +297,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     try {
       Utilisateur u = findByNomUtilisateur(nomUtilisateur);
       if (u != null){ // Si le nom d'utilisateur existe
-        if (Arrays.equals( chiffrerMDP(mdp).getBytes() , u.getMdp().getBytes() )){
+        if (Arrays.equals( chiffrerMDP(mdp, u.getSel()).getKey() , u.getMdp().getBytes() )){
           // Et si le mot de passe est correct, on retourne l'objet Utilisateur
           return u;
         }
@@ -295,7 +305,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       //Sinon on ne renvoie rien
       return null;
     } catch (Exception e) {
-      // En cas d'erreur pour le processus d'authentification on ne renvoie rien
+      // En cas d'erreur pour le processus d'authentification, on ne renvoie rien
       return null;
     }
   }
