@@ -180,8 +180,9 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       ArrayList<Utilisateur> utilisateurs = new ArrayList<Utilisateur>();
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
+        // Note : on utilise Base64 pour convertir les bits de la base de donnée en chaine de caractère
         utilisateurs.add(new Utilisateur(rs.getInt("idUtilisateur"), rs.getString("nomUtilisateur"),
-                rs.getString("mdp"), rs.getBytes("sel"), rs.getString("nom"), rs.getString("prenom"),
+                Base64.getEncoder().encodeToString(rs.getBytes("mdp")), rs.getBytes("sel"), rs.getString("nom"), rs.getString("prenom"),
                 rs.getString("email"), getRole(rs.getInt("idUtilisateur"))));
       }
       return utilisateurs;
@@ -297,7 +298,8 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     try {
       Utilisateur u = findByNomUtilisateur(nomUtilisateur);
       if (u != null){ // Si le nom d'utilisateur existe
-        if (Arrays.equals( chiffrerMDP(mdp, u.getSel()).getKey() , u.getMdp().getBytes() )){
+        // Note : on utilise Base64 pour convertir le mot de passe (chaine de caractère) en tableau de bits
+        if (Arrays.equals( chiffrerMDP(mdp, u.getSel()).getKey() , Base64.getDecoder().decode(u.getMdp()))){
           // Et si le mot de passe est correct, on retourne l'objet Utilisateur
           return u;
         }
