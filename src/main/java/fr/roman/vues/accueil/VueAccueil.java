@@ -1,7 +1,7 @@
 package fr.roman.vues.accueil;
 
 import fr.roman.controleurs.accueil.CtrlAccueil;
-import fr.roman.modeles.ModuleAccueil;
+import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Utilisateur;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import javafx.stage.Stage;
  * Vue de base pour l'accueil. Celle-ci accueille un ensemble d'onglets, défini selon le rôle de
  * l'utilisateur.
  *
- * @see fr.roman.modeles.ModuleAccueil
+ * @see ModuleApplication
  * @see fr.roman.controleurs.accueil.CtrlAccueil
  *
  * @author Axel Leblanc
@@ -37,6 +37,9 @@ public class VueAccueil {
   private static final Image IC_COMPTE =
       new Image("file:src/main/resources/icons/account_circle_24.png");
 
+  /**
+   * Contrôleur de la vue <i>Accueil</i>.
+   */
   private CtrlAccueil ctrl = null;
 
   private final Scene scene;
@@ -51,7 +54,7 @@ public class VueAccueil {
    */
   private final BorderPane entete;
   /**
-   * Label accueillant l'utilisateur avec une formule de politesse et son nom.
+   * Label affiché en haut de la vue pour accueillir l'utilisateur.
    */
   private final Label titre;
   /**
@@ -64,9 +67,9 @@ public class VueAccueil {
   private final TabPane tabPane;
 
   /**
-   * Modules affichés sur l'accueil, associés à l'onglet qui leur correspond.
+   * Modules disponibles pour l'utilisateur, associés à l'onglet ({@link Tab}) qui leur correspond.
    */
-  private final Map<ModuleAccueil, Tab> ongletsAccueil;
+  private final Map<ModuleApplication, Tab> ongletsAccueil;
 
   /**
    * Construire la vue <i>Accueil</i>.
@@ -134,9 +137,11 @@ public class VueAccueil {
   /**
    * Définir les modules qui seront affichés (sous la forme d'onglets), associés à la vue
    * qui leur correspond.
+   *
+   * @param mapModuleVue Modules associés à la vue qui leur correspond.
    */
-  public void afficherModules(Map<ModuleAccueil, VueModuleAccueil> mapModuleVue) {
-    for (ModuleAccueil module : mapModuleVue.keySet()) {
+  public void afficherModules(Map<ModuleApplication, VueOngletAccueil> mapModuleVue) {
+    for (ModuleApplication module : mapModuleVue.keySet()) {
       Tab onglet = new Tab(module.getTitre(), mapModuleVue.get(module).getNode());
       onglet.setTooltip(new Tooltip(module.getDescription()));
 
@@ -152,18 +157,19 @@ public class VueAccueil {
    * <p><b>Exemple :</b> {@code selectionnerModule(ModuleAccueil.COMMANDES)} permet de sélectionner
    * l'onglet du module de gestion des commandes.</p>
    *
-   * <p>Si le module n'est pas disponible, la méthode ne fait rien.</p>
+   * <p>Si le module n'est pas disponible pour l'utilisateur actuellement connecté, la méthode ne
+   * fait rien.</p>
    *
    * @param module Module correspondant à l'onglet à afficher
    */
-  public void afficherOnglet(ModuleAccueil module) {
+  public void afficherOnglet(ModuleApplication module) {
     if (ongletsAccueil.containsKey(module)) {
       tabPane.getSelectionModel().select(ongletsAccueil.get(module));
     }
   }
 
   /**
-   * Créer un {@code Stage} contenant la vue <i>Accueil</i> et l'afficher.
+   * Créer un {@link Stage} contenant la vue <i>Accueil</i> et l'afficher.
    */
   public void show() {
     stage = new Stage();
@@ -177,7 +183,7 @@ public class VueAccueil {
   }
 
   /**
-   * Fermer le {@code Stage} contenant la vue <i>Accueil</i>.
+   * Fermer le {@link Stage} contenant la vue <i>Accueil</i>.
    */
   public void close() {
     stage.close();

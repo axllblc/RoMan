@@ -1,12 +1,12 @@
 package fr.roman.modeles;
 
 /**
- * Énumération des modules accessibles depuis l'accueil de l'application. Chaque onglet est défini
- * par un titre et une description.
+ * Énumération des modules de l'application. Chaque module est défini par un titre et une
+ * description.
  *
  * @author Axel Leblanc
  */
-public enum ModuleAccueil {
+public enum ModuleApplication {
   TABLEAU_DE_BORD("Tableau de bord", "Visualiser les commandes et tournées à venir."),
   COMMANDES("Commandes", "Créer, modifier ou supprimer des commandes."),
   TOURNEES("Tournées", "Créer, modifier ou supprimer des tournées."),
@@ -19,20 +19,30 @@ public enum ModuleAccueil {
   private final String description;
 
   /**
-   * Définir un module pour l'accueil de l'application, caractérisé par un titre et une description.
+   * Définir un module, caractérisé par un titre et une description.
    *
-   * @param titre Titre de l'onglet
-   * @param description Description de l'onglet
+   * @param titre Titre du module
+   * @param description Description du module
    */
-  ModuleAccueil(String titre, String description) {
+  ModuleApplication(String titre, String description) {
     this.titre = titre;
     this.description = description;
   }
 
+  /**
+   * Retourne le titre du module.
+   *
+   * @return Titre du module
+   */
   public String getTitre() {
     return titre;
   }
 
+  /**
+   * Retourne la description du module.
+   *
+   * @return Description du module
+   */
   public String getDescription() {
     return description;
   }
