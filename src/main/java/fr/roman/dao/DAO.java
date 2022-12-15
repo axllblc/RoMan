@@ -93,7 +93,7 @@ public abstract class DAO<M, C extends Enum<C>> {
    * Méthode permettant construire les critères de recherches
    * (après la clause WHERE dans la requête SQL) pour la méthode {@link #find}.
    *
-   * @param criteres Un objet {@link HashMap}<{@link C}, {@link String}> où {@link C C},
+   * @param criteres Un objet {@link HashMap} où {@link C C},
    *                 la clé, est le nom du critère ({@link Enum énumération} des champs dans
    *                 l'objet métier) et la {@link String valeur} est celle du critère.
    * @return         Une {@link String chaine de caractères} correspondant

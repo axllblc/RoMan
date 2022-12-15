@@ -163,7 +163,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   /**
    * Recherche de données dans une table de la base avec les attributs renseignés de l'utilisateur.
    *
-   * @param criteres Un objet HashMap<C, String> où la clé est le nom du critère
+   * @param criteres Un objet HashMap où la clé est le nom du critère
    *    * (un champ de la classe et table utilisateur) et la valeur est celle du critère.
    * @return Une collection d'objets qui correspond aux critères mis en paramètre.
    */

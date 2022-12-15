@@ -27,6 +27,8 @@ public class Client extends Modele {
    * @param nom Le nom du client.
    * @param tel Le numéro de téléphone du client.
    * @param mail L'adresse mail du client.
+   * @param siret Le SIRET du Client s'il est particulier
+   * @param particulier Vrai si le client est particulier, faux sinon
    * @param adresse L'adresse du client.
    */
   public Client(int idClient, String nom, String tel, String mail,

@@ -29,6 +29,8 @@ public class Adresse extends Modele {
    * @param libelle Le libellé de l'adresse
    * @param numeroVoie Le numéro de voie de l'adresse
    * @param complementNumero Le complément du numéro
+   * @param voie Le nom de la voie
+   * @param complementAdresse Le complément de l'adresse
    * @param codePostal Le code postal
    * @param ville La ville
    */
