@@ -113,21 +113,17 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
               "SET nomUtilisateur = ?, mdp = ?, sel = ?, nom = ?, prenom = ?, email = ? " +
               "WHERE idUtilisateur = ?");
       req.setString(1, u.getNomUtilisateur());
-      req.setString(2, u.getMdp());
+      req.setBytes(2, Base64.getDecoder().decode(u.getMdp()));
       req.setBytes(3, u.getSel());
-      req.setString(3, u.getNom());
-      req.setString(4, u.getPrenom());
-      req.setString(5, u.getEmail());
-      req.setInt(6, u.getIdUtilisateur());
+      req.setString(4, u.getNom());
+      req.setString(5, u.getPrenom());
+      req.setString(6, u.getEmail());
+      req.setInt(7, u.getIdUtilisateur());
       // L'exécution de la requête
-      ResultSet rs = req.executeQuery();
-      if (rs.next()) {
-        return true;
-      }
-      else { // Si la modification n'a pas aboutie : il n'y a pas l'utilisateur...
-        return false;
-      }
-    } catch (SQLException e) { // En cas d'échec de la requête
+      req.execute();
+      return true;
+    } catch (SQLException e) { // En cas d'échec de la requête : on renvoie false
+      e.printStackTrace();
       return false;
     }
   }
