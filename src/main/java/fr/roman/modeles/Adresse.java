@@ -56,6 +56,11 @@ public class Adresse extends Modele {
     return coordonneesGPS;
   }
 
+  /**
+   * Permet d'ajouter des coordonnées à une adresse
+   * @param coordonneesGPS un tableau de 2 doubles : le premier est la coordonnée des abscisses (longitude),
+   *                       le second est celle des ordonnées (latitude)
+   */
   public void setCoordonneesGPS(double[] coordonneesGPS) {
     this.coordonneesGPS = coordonneesGPS;
   }
@@ -117,5 +122,5 @@ public class Adresse extends Modele {
   }
 
   public enum Champs {complementAdresse, complementNumero, coordonneesGPS,
-    idAdresse, libelle, numeroVoie, ville, voie, codePostal};
+    idAdresse, libelle, numeroVoie, ville, voie, codePostal}
 }

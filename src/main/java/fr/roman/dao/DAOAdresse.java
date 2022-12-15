@@ -34,32 +34,27 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
   public Adresse insert(Adresse a) {
     try {
       if(a.getCoordonneesGPS() == null){
-        // Un adresse a au minimum des coordonnées GPS
+        // Une adresse a au minimum des coordonnées GPS
         return null;
       }
-      PreparedStatement stmt = this.getCo().prepareStatement("INSERT INTO adresses " +
+      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO adresses " +
               "(coordonneesGPS, libelle, numeroVoie, complementNumero, voie, complementAdresse," +
-              " codePostal, ville) VALUES (ST_GeomFromText(Point(? ?), 4326),?,?,?,?,?,?,?)");
-      // TODO Résoudre problème de lecture de l'objet Point de la requête SQL !
-      //String coGPS = "ST_GeomFromText('Point(" + a.getCoordonneesGPS()[0] + " " + a.getCoordonneesGPS()[1] + ")', 4326)";
-      stmt.setObject(1, a.getCoordonneesGPS()[0]);
-      stmt.setObject(2, a.getCoordonneesGPS()[1]);
-      stmt.setString(3, a.getLibelle());
-      stmt.setInt(4, a.getNumeroVoie());
-      stmt.setString(5, a.getComplementNumero());
-      stmt.setString(6, a.getVoie());
-      stmt.setString(7, a.getComplementAdresse());
-      stmt.setInt(8, a.getCodePostal());
-      stmt.setString(9, a.getVille());
-      System.out.println(stmt.toString());
-      stmt.execute();
+              " codePostal, ville) VALUES (ST_GeomFromText(?, 4326),?,?,?,?,?,?,?)");
+      req.setString(1, "Point(" + a.getCoordonneesGPS()[0] + " " + a.getCoordonneesGPS()[1] + ")");
+      req.setString(2, a.getLibelle());
+      req.setInt(3, a.getNumeroVoie());
+      req.setString(4, a.getComplementNumero());
+      req.setString(5, a.getVoie());
+      req.setString(6, a.getComplementAdresse());
+      req.setInt(7, a.getCodePostal());
+      req.setString(8, a.getVille());
+      req.execute();
       return a;
     } catch (SQLException e) {
       e.printStackTrace();
       return null;
     }
   }
-// TODO Implémenter les autres méthodes du DAO !
 
   /**
    * Mise à jour d'une adresse de la base.
@@ -69,7 +64,27 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    */
   @Override
   public boolean update(Adresse a) {
-    return false;
+    try {
+      PreparedStatement req  = this.getCo().prepareStatement("UPDATE adresses " +
+              "SET coordonneesGPS = ST_GeomFromText(?, 4326), libelle = ?, numeroVoie = ?, complementNumero = ?, " +
+              "voie = ?, complementAdresse = ?, codePostal = ?, ville = ? " +
+              "WHERE idAdresse = ?");
+      req.setString(1, "Point(" + a.getCoordonneesGPS()[0] + " " + a.getCoordonneesGPS()[1] + ")");
+      req.setString(2, a.getLibelle());
+      req.setInt(3, a.getNumeroVoie());
+      req.setString(4, a.getComplementNumero());
+      req.setString(5, a.getVoie());
+      req.setString(6, a.getComplementAdresse());
+      req.setInt(7, a.getCodePostal());
+      req.setString(8, a.getVille());
+      req.setInt(9, a.getIdAdresse());
+      // L'exécution de la requête
+      req.execute();
+      return true;
+    } catch (SQLException e) { // En cas d'échec de la requête : on renvoie false
+      e.printStackTrace();
+      return false;
+    }
   }
 
   /**
@@ -107,19 +122,23 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
     PreparedStatement req;
     try {
       // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM adresses WHERE 1=1 " +
+      req = this.getCo().prepareStatement("SELECT idAdresse, ST_X(coordonneesGPS) AS 'coX'," +
+              "ST_Y(coordonneesGPS) AS 'coY', libelle, numeroVoie, complementNumero, voie, " +
+              "complementAdresse, codePostal, ville FROM adresses WHERE 1=1 " +
               criteresPourWHERE(criteres));
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
+      System.out.println(req);
       // On les stockera dans un ArrayList de commandes
       ArrayList<Adresse> adresses = new ArrayList<Adresse>();
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        adresses.add(new Adresse(rs.getInt("idAdresse"),
-                new double[]{12.0, 22.0}, rs.getString("libelle"),
-                rs.getInt("numeroVoie"), rs.getString("complementNumero"),
-                rs.getString("voie"), rs.getString("complementAdresse"),
-                rs.getInt("codePostal"), rs.getString("ville")));
+        adresses.add( new Adresse(rs.getInt("idAdresse"),
+                new double[] { rs.getDouble("coX"), rs.getDouble("coY") },
+                rs.getString("libelle"), rs.getInt("numeroVoie"),
+                rs.getString("complementNumero"), rs.getString("voie"),
+                rs.getString("complementAdresse"), rs.getInt("codePostal"),
+                rs.getString("ville")));
       }
       return adresses;
     } catch (Exception e) {
