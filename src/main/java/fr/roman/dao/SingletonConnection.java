@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 /**
  * Classe implémentant la connexion avec la base de donnée.
- * Permet de retourner un objet Connection pour les DAO de l'application.
+ * Permet de retourner un objet {@link Connection} pour les {@link fr.roman.dao DAO} de l'application.
  * Suit le patron de conception "Singleton".
  */
 public class SingletonConnection {
@@ -16,15 +16,15 @@ public class SingletonConnection {
   private static Connection co;
   /**
    * Fichier de connection à la base de donnée.
-   * A comme séparateur '=', et contient au minimum 3 champs : "url", "login" et "password".
+   * A comme séparateur '=', et contient au minimum 3 champs : "{@link #url}", "{@link #login}" et "{@link #password}".
    */
-  private final File FICHIER_CONNECTION = new File("src/main/ressources/connectionBDD.txt");
+  private final File FICHIER_CONNECTION = new File("src/main/resources/connectionBDD.txt");
   private final String url;
   private final String login;
   private final String password;
 
   /**
-   * Constructeur privé de la classe SingletonConnection.
+   * Constructeur privé de la classe {@link SingletonConnection}.
    *
    * @throws Exception Si la connection n'a pas eu lieu.
    */
@@ -49,7 +49,7 @@ public class SingletonConnection {
   /**
    * Cette méthode sert à récupérer les informations stockées dans le fichier de connection à la base.
    *
-   * @return Un HashMap des informations de connection trouvé.
+   * @return Un {@link HashMap} des informations de connection trouvé.
    * @throws IOException Si le fichier n'est pas lisible
    */
   private HashMap<String, String> getDonneesConnection() throws IOException {
@@ -69,17 +69,14 @@ public class SingletonConnection {
   }
 
   /**
-   * Méthode statique permettant d'obtenir l'unique instance de Connection.
+   * Méthode statique permettant d'obtenir l'unique instance de {@link Connection}.
    *
-   * @return L'objet Connection.
+   * @return L'objet {@link Connection}.
+   * @throws Exception Si la connection n'a pas pu être établie
    */
   public static Connection getInstance() throws Exception {
     if(co == null) {
-      try {
-        new SingletonConnection();
-      } catch (Exception e) {
-        throw e;
-      }
+      new SingletonConnection();
     }
     return co;
   }
