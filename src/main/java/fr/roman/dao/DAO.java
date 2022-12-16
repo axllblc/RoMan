@@ -1,6 +1,7 @@
 package fr.roman.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -68,7 +69,7 @@ public abstract class DAO<M, C extends Enum<C>> {
    *                 (énumération des champs dans l'objet métier) et la {@link String valeur} est celle du critère.
    * @return Une {@link Collection collection}d' {@link fr.roman.modeles objets métiers} qui correspond aux {@link C critères} mis en paramètre.
    */
-  public abstract Collection<M> find(HashMap<C, String> criteres);
+  public abstract ArrayList<M> find(HashMap<C, String> criteres);
 
   /**
    * Recherche d'une ligne dans une table de la base à partir de sa clé primaire
@@ -84,7 +85,7 @@ public abstract class DAO<M, C extends Enum<C>> {
    *
    * @return Une {@link Collection collection} d'objets de l'ensemble des données de la table.
    */
-  public Collection<M> findAll(){
+  public ArrayList<M> findAll(){
     // On réutilise la méthode find avec aucun critère comme paramètre
     return find(new HashMap<C, String>());
   }
