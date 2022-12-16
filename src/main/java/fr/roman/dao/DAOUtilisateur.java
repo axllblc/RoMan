@@ -1,5 +1,6 @@
 package fr.roman.dao;
 
+import fr.roman.modeles.Commande;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
@@ -12,10 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 
@@ -44,12 +42,15 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   @Override
   public Utilisateur insert(Utilisateur u) {
     try {
+      // On s'assure que l'utilisateur à ajouter a un nom d'utilisateur (nouveau),
+      // un mot de passe et que si c'est un producteur on est bien en train d'ajouter son compte
+      // utilisateur dans le contexte d'une transaction qui se passe dans la méthode #insert
       if(u.getNomUtilisateur() == null || u.getMdp() == null
               || findByNomUtilisateur(u.getNomUtilisateur()) != null
-              || u.getRole() != Role.ADMINISTRATEUR){
+              || (u.getRole() == Role.PRODUCTEUR
+                  && !(Thread.currentThread().getStackTrace()[2].getMethodName().equals("insert")))){
         return null;
       }
-
       // La requête
       PreparedStatement req = this.getCo().prepareStatement("INSERT INTO utilisateurs " +
               "(nomUtilisateur, mdp, sel, nom, prenom, email) VALUES (?,?,?,?,?,?)",
@@ -80,24 +81,74 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   }
 
   /**
-   * Ajout d'un utilisateur producteur dans la base.
+   * Ajout d'un utilisateur producteur dans la base. On réalise une transaction pour assurer la
+   *  Cohérence entre l'ajout d'un producteur et du compte utilisateur associé.
    *
    * @param p Le producteur à ajouter à la base, qui contient entre autre un objet Utilisateur.
    * @return
    */
   public Producteur insert(Producteur p){
 
-    if(p.getUtilisateur() == null){
+    if(p.getUtilisateur() == null || p.getAdresse() == null){
       // Si on n'a pas associé le producteur à un utilisateur à ajouter,
-      // on annule la création de compte
+      // ou qu'il n'a pas d'adresse, on annule la création de compte
       return null;
     }
 
-    // TODO: 12/12/2022 Dans le cas où l'utilisateur ajouté est un producteur il est nécessaire de
-    //  faire une transaction car l'ajout du producteur doit se faire après l'ajout de l'utilisateur.
-    //  \Sinon, en cas de coupure entre les deux ajouts,le producteur risque d'être considéré
-    //  comme un administrateur.
-    return new Producteur();
+    // On enregistre un point de sauvegarde où le producteur et son compte n'est pas ajouté
+    Savepoint pointSauvegarde;
+    try {
+      pointSauvegarde = this.getCo().setSavepoint();
+      this.getCo().setAutoCommit(false);
+    } catch (SQLException e) {
+      // Si on n'arrive pas à joindre la base pour définir un point de sauvegarde
+      return null;
+    }
+
+    try {
+      Utilisateur u = p.getUtilisateur();
+      // Pour réaliser la transaction, on commence par faire la requête d'ajout de l'utilisateur
+      u = this.insert(u);
+      if (u == null){// Si cela n'a pas été possible, on lance une SQLException
+        throw new SQLException();
+      }
+      // on ajoute l'utilisateur (avec maintenant un identifiant) au producteur (qui va être ajouté)
+      p.setUtilisateur(u);
+      // La requête
+      PreparedStatement reqProducteur = this.getCo().prepareStatement("INSERT INTO producteurs " +
+              "(siret, nomEtablissement, tel, idAdresse, idUtilisateur) " +
+              "VALUES (?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+      // L'ajout des valeurs
+      reqProducteur.setString(1, p.getSiret());
+      reqProducteur.setString(2, p.getNomEtablissement());
+      reqProducteur.setString(3, p.getTel());
+      reqProducteur.setInt(4, p.getAdresse().getIdAdresse());
+      reqProducteur.setInt(5, p.getUtilisateur().getIdUtilisateur());
+
+      // L'exécution de la requête
+      reqProducteur.execute();
+      // Récupération de la clé primaire
+      ResultSet rs = reqProducteur.getGeneratedKeys();
+      if(!rs.next()){ // Si l'ajout n'a pas eu lieu, on renvoie une exception
+        throw new SQLException();
+      }
+      p = new Producteur(rs.getInt(1), p.getSiret(),
+              p.getNomEtablissement(), p.getTel(), p.getAdresse(), p.getUtilisateur());
+      // La transaction s'est bien passée, on peut libérer le point de sauvegarde
+      this.getCo().releaseSavepoint(pointSauvegarde);
+      this.getCo().setAutoCommit(true);
+      return p;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      try {
+        // En cas de problème, on revient à notre point de sauvegarde
+        this.getCo().rollback(pointSauvegarde);
+        return null;
+      } catch (SQLException ex) {
+
+        return null;
+      }
+    }
   }
 
   /**
@@ -160,7 +211,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    * Recherche de données dans une table de la base avec les attributs renseignés de l'utilisateur.
    *
    * @param criteres Un objet HashMap où la clé est le nom du critère
-   *    * (un champ de la classe et table utilisateur) et la valeur est celle du critère.
+   *        (un champ de la classe et table utilisateur) et la valeur est celle du critère.
    * @return Une collection d'objets qui correspond aux critères mis en paramètre.
    */
   @Override

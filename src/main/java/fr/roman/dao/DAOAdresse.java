@@ -128,7 +128,7 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
               criteresPourWHERE(criteres));
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
-      System.out.println(req);
+
       // On les stockera dans un ArrayList de commandes
       ArrayList<Adresse> adresses = new ArrayList<Adresse>();
       while (rs.next()) {

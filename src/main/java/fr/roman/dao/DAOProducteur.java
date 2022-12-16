@@ -53,7 +53,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       PreparedStatement req  = this.getCo().prepareStatement("UPDATE producteurs " +
               "SET siret = ?, nomEtablissement = ?, tel = ?, idAdresse = ? " +
               "WHERE idProducteur = ?");
-      req.setInt(1, p.getSiret());
+      req.setString(1, p.getSiret());
       req.setString(2, p.getNomEtablissement());
       req.setString(3, p.getTel());
       req.setInt(4, p.getAdresse().getIdAdresse());
@@ -116,7 +116,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
         utilisateur = daoU.findById(Integer.parseInt(rs.getString("idUtilisateur")));
         adresse = daoA.findById(Integer.parseInt(rs.getString("idUAdresse")));
 
-        producteurs.add(new Producteur(rs.getInt("idProducteur"), Integer.parseInt(rs.getString("siret")),
+        producteurs.add(new Producteur(rs.getInt("idProducteur"), rs.getString("siret"),
                 rs.getString("nomEtablissement"), rs.getString("tel"), adresse, utilisateur));
       }
       return producteurs;
