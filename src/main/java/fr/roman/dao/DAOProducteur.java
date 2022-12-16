@@ -59,13 +59,8 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       req.setInt(4, p.getAdresse().getIdAdresse());
       req.setInt(5, p.getIdProducteur());
       // L'exécution de la requête
-      ResultSet rs = req.executeQuery();
-      if (rs.next()) {
-        return true;
-      }
-      else { // Si la modification n'a pas aboutie : il n'y a pas le producteur...
-        return false;
-      }
+      req.execute();
+      return true;
     } catch (SQLException e) { // En cas d'échec de la requête
       return false;
     }

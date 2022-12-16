@@ -98,13 +98,8 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.setInt(11, c.getClient().getIdClient());
       req.setInt(12, c.getIdCommande());
       // L'exécution de la requête
-      ResultSet rs = req.executeQuery();
-      if (rs.next()) {
-        return true;
-      }
-      else { // Si la modification n'a pas abouti : il n'y a pas la commande...
-        return false;
-      }
+      req.execute();
+      return true;
     } catch (SQLException e) { // En cas d'échec de la requête
       return false;
     }

@@ -88,13 +88,8 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setInt(6, c.getAdresse().getIdAdresse());
       req.setInt(6, c.getIdClient());
       // L'exécution de la requête
-      ResultSet rs = req.executeQuery();
-      if (rs.next()) {
-        return true;
-      }
-      else { // Si la modification n'a pas abouti : il n'y a pas le client...
-        return false;
-      }
+      req.execute();
+      return true;
     } catch (SQLException e) { // En cas d'échec de la requête
       return false;
     }

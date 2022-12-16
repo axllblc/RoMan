@@ -89,13 +89,8 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       req.setInt(7, t.getProducteur().getIdProducteur());
       req.setInt(8, t.getIdTournee());
       // L'exécution de la requête
-      ResultSet rs = req.executeQuery();
-      if (rs.next()) {
-        return true;
-      }
-      else { // Si la modification n'a pas abouti : il n'y a pas la tournée...
-        return false;
-      }
+      req.execute();
+      return true;
     } catch (SQLException e) { // En cas d'échec de la requête
       return false;
     }
