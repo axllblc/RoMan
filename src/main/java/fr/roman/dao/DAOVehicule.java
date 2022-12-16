@@ -2,10 +2,7 @@ package fr.roman.dao;
 
 import fr.roman.modeles.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,10 +41,11 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
                       "VALUES (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
       req.setString(1, v.getImmatriculation());
-      req.setDouble(2, v.getPoidsMax());
+      req.setInt(2, v.getPoidsMax());
       req.setString(3, v.getLibelle());
       req.setInt(4, v.getProducteur().getIdProducteur());
       // L'exécution de la requête
+      System.out.println(req);
       req.execute();
       // Récupération de la clé primaire
       ResultSet rs = req.getGeneratedKeys();
@@ -59,6 +57,7 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
     } catch (Exception e) { // En cas d'échec de la requête on ne renvoie rien
+      e.printStackTrace();
       return null;
     }
   }
@@ -73,21 +72,16 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
   public boolean update(Vehicule v) {
     try {
       PreparedStatement req  = this.getCo().prepareStatement("UPDATE vehicules " +
-              "SET immatriculation = ?, poidsMax = ?, libelle = ?, idProducteur = ?" +
+              "SET immatriculation = ?, poidsMax = ?, libelle = ?, idProducteur = ? " +
               "WHERE idVehicule = ?");
       req.setString(1, v.getImmatriculation());
-      req.setDouble(2, v.getPoidsMax());
+      req.setInt(2, v.getPoidsMax());
       req.setString(3, v.getLibelle());
       req.setInt(4, v.getProducteur().getIdProducteur());
-      req.setInt(4, v.getIdVehicule());
+      req.setInt(5, v.getIdVehicule());
       // L'exécution de la requête
-      ResultSet rs = req.executeQuery();
-      if (rs.next()) {
-        return true;
-      }
-      else { // Si la modification n'a pas abouti : il n'y a pas la commande...
-        return false;
-      }
+      req.execute();
+      return true;
     } catch (SQLException e) { // En cas d'échec de la requête
       return false;
     }
@@ -104,16 +98,16 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
     try {
       PreparedStatement req = this.getCo().prepareStatement("DELETE FROM vehicules WHERE idVehicule = ?");
       req.setInt(1, id);
+      System.out.println(req);
       if (req.executeUpdate() == 1) {
         // Si l'entrée a été supprimée, on retourne true
         return true;
       }
       // Sinon, on retourne false
       return false;
-    } catch (SQLException e) {
-      return false;
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      e.printStackTrace();
+      return false;
     }
   }
 
@@ -143,7 +137,7 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
 
         vehicules.add(new Vehicule(rs.getInt("idVehicule"),
                 rs.getString("immatriculation"),
-                rs.getDouble("poidsMax"), rs.getString("libelle"), producteur));
+                rs.getInt("poidsMax"), rs.getString("libelle"), producteur));
       }
       return vehicules;
     } catch (Exception e) {

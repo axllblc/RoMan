@@ -174,7 +174,6 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       req.execute();
       return true;
     } catch (SQLException e) { // En cas d'échec de la requête : on renvoie false
-      e.printStackTrace();
       return false;
     }
   }

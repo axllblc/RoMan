@@ -7,7 +7,7 @@ public class Vehicule extends Modele {
 
   private int idVehicule;
   private String immatriculation;
-  private double poidsMax;
+  private int poidsMax;
   private String libelle;
   private Producteur producteur;
 
@@ -20,7 +20,7 @@ public class Vehicule extends Modele {
    * @param libelle Le libellé du véhicule.
    * @param producteur Le producteur propriétaire du véhicule.
    */
-  public Vehicule(int idVehicule, String immatriculation, double poidsMax,
+  public Vehicule(int idVehicule, String immatriculation, int poidsMax,
                   String libelle, Producteur producteur) {
     this.idVehicule = idVehicule;
     this.immatriculation = immatriculation;
@@ -47,11 +47,14 @@ public class Vehicule extends Modele {
     this.immatriculation = immatriculation;
   }
 
-  public double getPoidsMax() {
+  public int getPoidsMax() {
     return poidsMax;
   }
 
-  public void setPoidsMax(double poidsMax) {
+  /**
+   * @param poidsMax en kg
+   */
+  public void setPoidsMax(int poidsMax) {
     this.poidsMax = poidsMax;
   }
 
@@ -72,4 +75,15 @@ public class Vehicule extends Modele {
   }
 
   public enum Champs {immatriculation, libelle, poidsMax, icProducteur, idVehicule}
+
+  @Override
+  public String toString() {
+    return "Vehicule{" +
+            "idVehicule=" + idVehicule +
+            ", immatriculation='" + immatriculation + '\'' +
+            ", poidsMax=" + poidsMax +
+            ", libelle='" + libelle + '\'' +
+            ", producteur=" + producteur.toString() +
+            '}';
+  }
 }

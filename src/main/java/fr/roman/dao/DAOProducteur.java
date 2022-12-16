@@ -100,7 +100,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
     PreparedStatement req;
     try {
       // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM utilisateurs WHERE 1=1 " +
+      req = this.getCo().prepareStatement("SELECT * FROM producteurs WHERE 1=1 " +
               criteresPourWHERE(criteres));
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
@@ -114,13 +114,14 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
         utilisateur = daoU.findById(Integer.parseInt(rs.getString("idUtilisateur")));
-        adresse = daoA.findById(Integer.parseInt(rs.getString("idUAdresse")));
+        adresse = daoA.findById(Integer.parseInt(rs.getString("idAdresse")));
 
         producteurs.add(new Producteur(rs.getInt("idProducteur"), rs.getString("siret"),
                 rs.getString("nomEtablissement"), rs.getString("tel"), adresse, utilisateur));
       }
       return producteurs;
     } catch (Exception e) {
+      e.printStackTrace();
       // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée correctement.
       return new ArrayList<Producteur>();
     }
