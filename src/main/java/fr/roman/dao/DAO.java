@@ -17,16 +17,17 @@ public abstract class DAO<M, C extends Enum<C>> {
   /**
    * Objet {@link Connection} servant à établir la connection avec la base de donnée.
    */
-  private Connection co;
+  private final Connection co;
 
   /**
    * Constructeur.
-   *
-   * @param co L'objet {@link Connection} obtenu à partir de la classe {@link SingletonConnection}.
-   *           Sert à effectuer la connection avec la base de données.
    */
-  public DAO(Connection co) {
-    this.co = co;
+  public DAO() {
+    try {
+      this.co = SingletonConnection.getInstance();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**

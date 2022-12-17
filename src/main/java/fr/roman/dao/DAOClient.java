@@ -2,12 +2,10 @@ package fr.roman.dao;
 
 import fr.roman.modeles.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -18,12 +16,8 @@ public class DAOClient extends DAO<Client, Client.Champs> {
 
   /**
    * Constructeur.
-   *
-   * @param co L'objet Connection obtenu à partir de la classe SingletonConnection.
-   *           Sert à effectuer la connection avec la base de données.
    */
-  public DAOClient(Connection co) {
-    super(co);
+  public DAOClient() {
   }
 
   /**
@@ -137,7 +131,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       // On les stockera dans un ArrayList de commandes
       ArrayList<Client> commandes = new ArrayList<Client>();
       // On aura besoin de créer l'objet Adresse
-      DAOAdresse daoA = new DAOAdresse(SingletonConnection.getInstance());
+      DAOAdresse daoA = new DAOAdresse();
       Adresse adresse;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat

@@ -2,7 +2,6 @@ package fr.roman.dao;
 
 import fr.roman.modeles.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,12 +15,8 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
 
   /**
    * Constructeur de la classe.
-   *
-   * @param co L'objet Connection obtenu à partir de la classe SingletonConnection.
-   *           Sert à effectuer la connection avec la base de données.
    */
-  public DAOAdresse(Connection co) {
-    super(co);
+  public DAOAdresse() {
   }
 
   /**
@@ -98,12 +93,9 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
     try {
       PreparedStatement req = this.getCo().prepareStatement("DELETE FROM adresses WHERE idAdresse = ?");
       req.setInt(1, id);
-      if (req.executeUpdate() == 1) {
-        // Si l'entrée a été supprimée, on retourne true
-        return true;
-      }
+      // Si l'entrée a été supprimée, on retourne true
+      return req.executeUpdate() == 1;
       // Sinon, on retourne false
-      return false;
     } catch (SQLException e) {
       return false;
     } catch (Exception e) {

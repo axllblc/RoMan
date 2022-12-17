@@ -2,7 +2,6 @@ package fr.roman.dao;
 
 import fr.roman.modeles.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,12 +15,8 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
 
   /**
    * Constructeur.
-   *
-   * @param co L'objet Connection obtenu à partir de la classe SingletonConnection.
-   *           Sert à effectuer la connection avec la base de données.
    */
-  public DAOCommande(Connection co) {
-    super(co);
+  public DAOCommande() {
   }
 
   /**
@@ -116,12 +111,9 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
     try {
       PreparedStatement req = this.getCo().prepareStatement("DELETE FROM commandes WHERE idCommande = ?");
       req.setInt(1, id);
-      if (req.executeUpdate() == 1) {
-        // Si l'entrée a été supprimée, on retourne true
-        return true;
-      }
+      // Si l'entrée a été supprimée, on retourne true
+      return req.executeUpdate() == 1;
       // Sinon, on retourne false
-      return false;
     } catch (SQLException e) {
       return false;
     } catch (Exception e) {
@@ -147,9 +139,9 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // On les stockera dans un ArrayList de commandes
       ArrayList<Commande> commandes = new ArrayList<Commande>();
       // On aura besoin de créer les objets Client, Producteur et Tournee
-      DAOClient daoC = new DAOClient(SingletonConnection.getInstance());
-      DAOProducteur daoP = new DAOProducteur(SingletonConnection.getInstance());
-      DAOTournee daoT = new DAOTournee(SingletonConnection.getInstance());
+      DAOClient daoC = new DAOClient();
+      DAOProducteur daoP = new DAOProducteur();
+      DAOTournee daoT = new DAOTournee();
       Client client;
       Producteur producteur;
       Tournee tournee;

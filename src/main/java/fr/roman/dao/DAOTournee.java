@@ -2,12 +2,10 @@ package fr.roman.dao;
 
 import fr.roman.modeles.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -17,12 +15,8 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
 
   /**
    * Constructeur.
-   *
-   * @param co L'objet Connection obtenu à partir de la classe SingletonConnection.
-   *           Sert à effectuer la connection avec la base de données.
    */
-  public DAOTournee(Connection co) {
-    super(co);
+  public DAOTournee() {
   }
 
   /**
@@ -107,12 +101,9 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
     try {
       PreparedStatement req = this.getCo().prepareStatement("DELETE FROM tournees WHERE idTournee = ?");
       req.setInt(1, id);
-      if (req.executeUpdate() == 1) {
-        // Si l'entrée a été supprimée, on retourne true
-        return true;
-      }
+      // Si l'entrée a été supprimée, on retourne true
+      return req.executeUpdate() == 1;
       // Sinon, on retourne false
-      return false;
     } catch (SQLException e) {
       return false;
     } catch (Exception e) {
@@ -138,8 +129,8 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       // On les stockera dans un ArrayList de commandes
       ArrayList<Tournee> tournees = new ArrayList<Tournee>();
       // On aura besoin de créer les objets Vehicule et Producteur
-      DAOProducteur daoP = new DAOProducteur(SingletonConnection.getInstance());
-      DAOVehicule daoV = new DAOVehicule(SingletonConnection.getInstance());
+      DAOProducteur daoP = new DAOProducteur();
+      DAOVehicule daoV = new DAOVehicule();
       Vehicule vehicule;
       Producteur producteur;
       while (rs.next()) {

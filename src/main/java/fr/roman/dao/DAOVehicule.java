@@ -4,7 +4,6 @@ import fr.roman.modeles.*;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -14,12 +13,8 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
 
   /**
    * Constructeur.
-   *
-   * @param co L'objet Connection obtenu à partir de la classe SingletonConnection.
-   *           Sert à effectuer la connection avec la base de données.
    */
-  public DAOVehicule(Connection co) {
-    super(co);
+  public DAOVehicule() {
   }
 
   /**
@@ -99,12 +94,9 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       PreparedStatement req = this.getCo().prepareStatement("DELETE FROM vehicules WHERE idVehicule = ?");
       req.setInt(1, id);
       System.out.println(req);
-      if (req.executeUpdate() == 1) {
-        // Si l'entrée a été supprimée, on retourne true
-        return true;
-      }
+      // Si l'entrée a été supprimée, on retourne true
+      return req.executeUpdate() == 1;
       // Sinon, on retourne false
-      return false;
     } catch (Exception e) {
       e.printStackTrace();
       return false;
@@ -129,7 +121,7 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       // On les stockera dans un ArrayList de commandes
       ArrayList<Vehicule> vehicules = new ArrayList<Vehicule>();
       // On aura besoin de créer un objet Producteur
-      DAOProducteur daoP = new DAOProducteur(SingletonConnection.getInstance());
+      DAOProducteur daoP = new DAOProducteur();
       Producteur producteur;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat

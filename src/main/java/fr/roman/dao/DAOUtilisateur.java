@@ -1,6 +1,5 @@
 package fr.roman.dao;
 
-import fr.roman.modeles.Commande;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
@@ -26,11 +25,8 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
 
   /**
    * Constructeur de la classe.
-   *
-   * @param co L'objet Connection pour le lien avec la base.
    */
-  public DAOUtilisateur(Connection co) {
-    super(co);
+  public DAOUtilisateur() {
   }
 
   /**
@@ -85,7 +81,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    *  Cohérence entre l'ajout d'un producteur et du compte utilisateur associé.
    *
    * @param p Le producteur à ajouter à la base, qui contient entre autre un objet Utilisateur.
-   * @return
+   * @return L'objet métier Producteur inséré avec son compte utilisateur en attribut
    */
   public Producteur insert(Producteur p){
 
@@ -193,12 +189,9 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       }
       PreparedStatement req = this.getCo().prepareStatement("DELETE FROM utilisateurs WHERE idUtilisateur = ?");
       req.setInt(1, id);
-      if (req.executeUpdate() == 1) {
-        // Si l'entrée a été supprimée, on retourne true
-        return true;
-      }
+      // Si l'entrée a été supprimée, on retourne true
+      return req.executeUpdate() == 1;
       // Sinon, on retourne false
-      return false;
     } catch (SQLException e) {
       return false;
     } catch (Exception e) {

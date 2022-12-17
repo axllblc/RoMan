@@ -4,7 +4,6 @@ import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Utilisateur;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,12 +17,8 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
 
   /**
    * Constructeur.
-   *
-   * @param co L'objet Connection obtenu à partir de la classe SingletonConnection.
-   *           Sert à effectuer la connection avec la base de données.
    */
-  public DAOProducteur(Connection co) {
-    super(co);
+  public DAOProducteur() {
   }
 
   /**
@@ -34,7 +29,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
    */
   public Producteur insert(Producteur p) {
     try {
-      DAOUtilisateur daoU = new DAOUtilisateur(SingletonConnection.getInstance());
+      DAOUtilisateur daoU = new DAOUtilisateur();
       return daoU.insert(p);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -77,7 +72,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
     try {
       // Comme on a une suppression en cascade, il suffit de supprimer
       // le compte utilisateur associé au producteur
-      DAOUtilisateur daoU = new DAOUtilisateur(SingletonConnection.getInstance());
+      DAOUtilisateur daoU = new DAOUtilisateur();
       return daoU.delete(this.findById(id).getUtilisateur().getIdUtilisateur());
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -102,8 +97,8 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       // On les stockera dans un ArrayList d'utilisateurs
       ArrayList<Producteur> producteurs = new ArrayList<Producteur>();
       // On aura besoin de créer les objets Adresse et Utilisateur pour chaque producteur trouvé
-      DAOUtilisateur daoU = new DAOUtilisateur(SingletonConnection.getInstance());
-      DAOAdresse daoA = new DAOAdresse(SingletonConnection.getInstance());
+      DAOUtilisateur daoU = new DAOUtilisateur();
+      DAOAdresse daoA = new DAOAdresse();
       Utilisateur utilisateur;
       Adresse adresse;
       while (rs.next()) {
