@@ -131,7 +131,7 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
     PreparedStatement req;
     try {
       // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM tournee WHERE 1=1 " +
+      req = this.getCo().prepareStatement("SELECT * FROM tournees WHERE 1=1 " +
               criteresPourWHERE(criteres));
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
