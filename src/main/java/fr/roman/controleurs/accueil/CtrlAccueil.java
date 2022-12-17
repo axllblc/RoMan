@@ -138,5 +138,14 @@ public class CtrlAccueil {
         return new Label("Tournées (à implémenter)");
       }
     });
+
+    // Gestion des véhicules
+    // TODO à implémenter
+    mapModuleVue.put(ModuleApplication.VEHICULES, new VueOngletAccueil() {
+      @Override
+      public Node getNode() {
+        return new Label("Gestion des véhicules (à implémenter)");
+      }
+    });
   }
 }
