@@ -34,7 +34,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
         return null;
       }
       // La requête
-      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO commandes " +
+      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO clients " +
                       "(nom, tel, email, siret, particulier, idAdresse) " +
                       "VALUES (?,?,?,?,?,?)",
               PreparedStatement.RETURN_GENERATED_KEYS);
@@ -80,7 +80,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setInt(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
       req.setInt(6, c.getAdresse().getIdAdresse());
-      req.setInt(6, c.getIdClient());
+      req.setInt(7, c.getIdClient());
       // L'exécution de la requête
       req.execute();
       return true;
