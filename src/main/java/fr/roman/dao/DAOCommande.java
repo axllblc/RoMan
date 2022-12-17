@@ -35,7 +35,7 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // La requête
       PreparedStatement req = this.getCo().prepareStatement("INSERT INTO commandes " +
                       "(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, " +
-                      "dateIntiale, dateLivraison, idProducteur, idTournee, idClient) " +
+                      "dateInitiale, dateLivraison, idProducteur, idTournee, idClient) " +
                       "VALUES (?,?,?,?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
       req.setString(1, c.getLibelle());
@@ -63,6 +63,7 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
     } catch (Exception e) { // En cas d'échec de la requête, on ne renvoie rien
+      e.printStackTrace();
       return null;
     }
   }
