@@ -22,12 +22,8 @@ public abstract class DAO<M, C extends Enum<C>> {
   /**
    * Constructeur.
    */
-  public DAO() {
-    try {
-      this.co = SingletonConnection.getInstance();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  public DAO() throws Exception {
+    this.co = SingletonConnection.getInstance();
   }
 
   /**
