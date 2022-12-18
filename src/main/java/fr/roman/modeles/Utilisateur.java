@@ -1,5 +1,8 @@
 package fr.roman.modeles;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
 * Représente l'utilisateur de l'application.
 */
@@ -104,17 +107,33 @@ public class Utilisateur extends Modele {
     this.role = role;
   }
 
-    @Override
-    public String toString() {
-        return "Utilisateur{" +
-                "idUtilisateur=" + idUtilisateur +
-                ", nomUtilisateur='" + nomUtilisateur + '\'' +
-                ", mdp='" + mdp + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                '}';
-    }
   public enum Champs {email, mdp, nom, nomUtilisateur, prenom, role, idUtilisateur};
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Utilisateur that = (Utilisateur) o;
+    return idUtilisateur == that.idUtilisateur && Objects.equals(nomUtilisateur, that.nomUtilisateur) && Objects.equals(mdp, that.mdp) && Arrays.equals(sel, that.sel) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && role == that.role;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = Objects.hash(idUtilisateur, nomUtilisateur, mdp, nom, prenom, email, role);
+    result = 31 * result + Arrays.hashCode(sel);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Utilisateur{" +
+            "idUtilisateur=" + idUtilisateur +
+            ", nomUtilisateur='" + nomUtilisateur + '\'' +
+            ", mdp='" + mdp + '\'' +
+            ", nom='" + nom + '\'' +
+            ", prenom='" + prenom + '\'' +
+            ", email='" + email + '\'' +
+            ", role=" + role +
+            '}';
+  }
 }

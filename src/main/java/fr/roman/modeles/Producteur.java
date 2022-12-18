@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
 * Représente un producteur.
 */
@@ -82,6 +84,19 @@ public class Producteur extends Modele {
   }
 
   public enum Champs {idProducteur, siret, nomEtablissement, tel, idUtilisateur, idAdresse}
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Producteur that = (Producteur) o;
+    return idProducteur == that.idProducteur && Objects.equals(siret, that.siret) && Objects.equals(nomEtablissement, that.nomEtablissement) && Objects.equals(tel, that.tel) && Objects.equals(adresse, that.adresse) && Objects.equals(utilisateur, that.utilisateur);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idProducteur, siret, nomEtablissement, tel, adresse, utilisateur);
+  }
 
   @Override
   public String toString() {

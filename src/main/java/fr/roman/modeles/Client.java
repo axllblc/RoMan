@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
 * Représente un client de producteurs.
 */
@@ -95,4 +97,31 @@ public class Client extends Modele {
   }
 
   public enum Champs {idClient, mail, nom, particulier, siret, tel, idAdresse}
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Client client = (Client) o;
+    return idClient == client.idClient && siret == client.siret && particulier == client.particulier && Objects.equals(nom, client.nom) && Objects.equals(prenom, client.prenom) && Objects.equals(tel, client.tel) && Objects.equals(mail, client.mail) && Objects.equals(adresse, client.adresse);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idClient, nom, prenom, tel, mail, siret, particulier, adresse);
+  }
+
+  @Override
+  public String toString() {
+    return "Client{" +
+            "idClient=" + idClient +
+            ", nom='" + nom + '\'' +
+            ", prenom='" + prenom + '\'' +
+            ", tel='" + tel + '\'' +
+            ", mail='" + mail + '\'' +
+            ", siret=" + siret +
+            ", particulier=" + particulier +
+            ", adresse=" + adresse.toString() +
+            '}';
+  }
 }
