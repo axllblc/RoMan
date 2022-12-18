@@ -4,7 +4,12 @@ import fr.roman.modeles.Adresse;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 class DAOAdresseTest {
-  private DAOAdresse testDAO = new DAOAdresse();
+  private final DAOAdresse TEST_DAO = new DAOAdresse();
+
+  /**
+   * Compare le résultat de la méthode insert()
+   * seul l'idAdresse ne doit pas être égal.
+   */
   @Test
   void insert() {
     // création de deux objets Adresse sans identifiant.
@@ -19,43 +24,23 @@ class DAOAdresseTest {
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
 
-    Adresse testAddresse2 = new Adresse();
-    testAddresse2.setCoordonneesGPS(coord);
-    testAddresse2.setLibelle("test");
-    testAddresse2.setNumeroVoie(1);
-    testAddresse2.setComplementNumero("numéro");
-    testAddresse2.setVoie("voie");
-    testAddresse2.setComplementAdresse("adresse");
-    testAddresse2.setCodePostal(37000);
-    testAddresse2.setVille("tours");
+    Adresse addresseAttendu = new Adresse();
+    addresseAttendu.setCoordonneesGPS(coord);
+    addresseAttendu.setLibelle("test");
+    addresseAttendu.setNumeroVoie(1);
+    addresseAttendu.setComplementNumero("numéro");
+    addresseAttendu.setVoie("voie");
+    addresseAttendu.setComplementAdresse("adresse");
+    addresseAttendu.setCodePostal(37000);
+    addresseAttendu.setVille("tours");
+    Adresse retourAdresse = TEST_DAO.insert(testAddresse);
+
     // test si la méthode insert renvoi l'objet donné en paramètre.
-    Adresse retourAdresse = testDAO.insert(testAddresse);
-
-    // Test avec "equals".
-    // assertTrue(retourAdresse.equals(testAddresse2));
-
-    // Test attribut par attribut.
-    assertTrue(
-            testAddresse.getCoordonneesGPS()==retourAdresse.getCoordonneesGPS() &&
-            testAddresse2.getLibelle()==retourAdresse.getLibelle() &&
-            testAddresse2.getNumeroVoie()==retourAdresse.getNumeroVoie() &&
-            testAddresse2.getComplementNumero()==retourAdresse.getComplementNumero() &&
-            testAddresse2.getVoie()==retourAdresse.getVoie() &&
-            testAddresse2.getComplementAdresse()==retourAdresse.getComplementAdresse() &&
-            testAddresse2.getCodePostal()==retourAdresse.getCodePostal() &&
-            testAddresse2.getVille()==retourAdresse.getVille());
-
-    testAddresse2.setVille("paris");
-    // assertFalse(retourAdresse.equals(testAddresse2));
-    assertFalse(
-            testAddresse2.getCoordonneesGPS()==retourAdresse.getCoordonneesGPS() &&
-                    testAddresse2.getLibelle()==retourAdresse.getLibelle() &&
-                    testAddresse2.getNumeroVoie()==retourAdresse.getNumeroVoie() &&
-                    testAddresse2.getComplementNumero()==retourAdresse.getComplementNumero() &&
-                    testAddresse2.getVoie()==retourAdresse.getVoie() &&
-                    testAddresse2.getComplementAdresse()==retourAdresse.getComplementAdresse() &&
-                    testAddresse2.getCodePostal()==retourAdresse.getCodePostal() &&
-                    testAddresse2.getVille()==retourAdresse.getVille());
+    assertEquals(addresseAttendu, retourAdresse);
+    assertNotEquals(addresseAttendu.getIdAdresse(), retourAdresse.getIdAdresse());
+    addresseAttendu.setVille("paris");
+    assertNotEquals(addresseAttendu, retourAdresse);
+    assertNotEquals(addresseAttendu.getIdAdresse(), retourAdresse.getIdAdresse());
   }
 
   @Test
