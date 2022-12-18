@@ -3,7 +3,6 @@ package fr.roman.dao;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
@@ -29,20 +28,11 @@ public class SingletonConnection {
    * @throws Exception Si la connection n'a pas eu lieu.
    */
   private SingletonConnection() throws Exception {
-    try {
-      HashMap<String, String> donneesConnection = getDonneesConnection();
-      this.url = donneesConnection.get("url");
-      this.login = donneesConnection.get("login");
-      this.password = donneesConnection.get("password");
-      co = DriverManager.getConnection(url,login,password);
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new IOException("Erreur dans la lecture du fichier de connection connectionBDD.txt");
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new SQLException("La base de données est inaccessible." +
-                             "Vérifiez les informations de connection.");
-    }
+    HashMap<String, String> donneesConnection = getDonneesConnection();
+    this.url = donneesConnection.get("url");
+    this.login = donneesConnection.get("login");
+    this.password = donneesConnection.get("password");
+    co = DriverManager.getConnection(url,login,password);
 
   }
 
@@ -55,13 +45,11 @@ public class SingletonConnection {
   private HashMap<String, String> getDonneesConnection() throws IOException {
     BufferedReader br = new BufferedReader(new FileReader(FICHIER_CONNECTION));
     HashMap<String, String> donnees = new HashMap<String, String>();
-    int indiceLigne = 0;
     String ligne = br.readLine();
     while(ligne != null){
       // On parcourt chaque ligne du fichier de connection.
       String[] colonnesLigne = ligne.split("="); // On récupère les informations avec le séparateur '='
       donnees.put(colonnesLigne[0], colonnesLigne[1]);
-      indiceLigne++;
       ligne = br.readLine();
     }
     br.close();
