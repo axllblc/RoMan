@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
 * Représente une commande d'un client à un producteur.
 */
@@ -148,5 +150,36 @@ public class Commande extends Modele {
 
   public void setTournee(Tournee tournee) {
     this.tournee = tournee;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Commande commande = (Commande) o;
+    return idCommande == commande.idCommande && Double.compare(commande.poids, poids) == 0 && defautLivraison == commande.defautLivraison && Objects.equals(libelle, commande.libelle) && Objects.equals(horaireDebut, commande.horaireDebut) && Objects.equals(horaireFin, commande.horaireFin) && Objects.equals(note, commande.note) && Objects.equals(dateInitiale, commande.dateInitiale) && Objects.equals(dateLivraison, commande.dateLivraison) && Objects.equals(producteur, commande.producteur) && Objects.equals(client, commande.client) && Objects.equals(tournee, commande.tournee);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idCommande, libelle, poids, horaireDebut, horaireFin, note, defautLivraison, dateInitiale, dateLivraison, producteur, client, tournee);
+  }
+
+  @Override
+  public String toString() {
+    return "Commande{"
+        + "idCommande=" + idCommande
+        + ", libelle='" + libelle + '\''
+        + ", poids=" + poids
+        + ", horaireDebut='" + horaireDebut + '\''
+        + ", horaireFin='" + horaireFin + '\''
+        + ", note='" + note + '\''
+        + ", defautLivraison=" + defautLivraison
+        + ", dateInitiale='" + dateInitiale + '\''
+        + ", dateLivraison='" + dateLivraison + '\''
+        + ", producteur=" + producteur.toString()
+        + ", client=" + client.toString()
+        + ", tournee=" + tournee.toString()
+        + '}';
   }
 }

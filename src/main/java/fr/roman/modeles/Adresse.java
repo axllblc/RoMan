@@ -1,5 +1,8 @@
 package fr.roman.modeles;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
 * Représente une adresse d'un producteur ou d'un client.
 */
@@ -120,5 +123,35 @@ public class Adresse extends Modele {
 
   public void setVille(String ville) {
     this.ville = ville;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Adresse adresse = (Adresse) o;
+    return idAdresse == adresse.idAdresse && numeroVoie == adresse.numeroVoie && codePostal == adresse.codePostal && Arrays.equals(coordonneesGPS, adresse.coordonneesGPS) && Objects.equals(libelle, adresse.libelle) && Objects.equals(complementNumero, adresse.complementNumero) && Objects.equals(voie, adresse.voie) && Objects.equals(complementAdresse, adresse.complementAdresse) && Objects.equals(ville, adresse.ville);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = Objects.hash(idAdresse, libelle, numeroVoie, complementNumero, voie, complementAdresse, codePostal, ville);
+    result = 31 * result + Arrays.hashCode(coordonneesGPS);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Adresse{"
+        + "idAdresse=" + idAdresse
+        + ", coordonneesGPS=" + Arrays.toString(coordonneesGPS)
+        + ", libelle='" + libelle + '\''
+        + ", numeroVoie=" + numeroVoie
+        + ", complementNumero='" + complementNumero + '\''
+        + ", voie='" + voie + '\''
+        + ", complementAdresse='" + complementAdresse + '\''
+        + ", codePostal=" + codePostal
+        + ", ville='" + ville + '\''
+        + '}';
   }
 }

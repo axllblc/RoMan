@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
 * Représente la tournée d'un producteur.
 */
@@ -103,5 +105,32 @@ public class Tournee extends Modele {
 
   public void setVehicule(Vehicule vehicule) {
     this.vehicule = vehicule;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Tournee tournee = (Tournee) o;
+    return idTournee == tournee.idTournee && valide == tournee.valide && Objects.equals(horaireDebut, tournee.horaireDebut) && Objects.equals(horaireFin, tournee.horaireFin) && Objects.equals(estimationDuree, tournee.estimationDuree) && Objects.equals(note, tournee.note) && Objects.equals(producteur, tournee.producteur) && Objects.equals(vehicule, tournee.vehicule);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idTournee, horaireDebut, horaireFin, estimationDuree, note, valide, producteur, vehicule);
+  }
+
+  @Override
+  public String toString() {
+    return "Tournee{"
+        + "idTournee=" + idTournee
+        + ", horaireDebut='" + horaireDebut + '\''
+        + ", horaireFin='" + horaireFin + '\''
+        + ", estimationDuree='" + estimationDuree + '\''
+        + ", note='" + note + '\''
+        + ", valide=" + valide
+        + ", producteur=" + producteur.toString()
+        + ", vehicule=" + vehicule.toString()
+        + '}';
   }
 }

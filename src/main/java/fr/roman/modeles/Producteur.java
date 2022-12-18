@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
 * Représente un producteur.
 */
@@ -80,5 +82,30 @@ public class Producteur extends Modele {
 
   public void setUtilisateur(Utilisateur utilisateur) {
     this.utilisateur = utilisateur;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Producteur that = (Producteur) o;
+    return idProducteur == that.idProducteur && Objects.equals(siret, that.siret) && Objects.equals(nomEtablissement, that.nomEtablissement) && Objects.equals(tel, that.tel) && Objects.equals(adresse, that.adresse) && Objects.equals(utilisateur, that.utilisateur);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idProducteur, siret, nomEtablissement, tel, adresse, utilisateur);
+  }
+
+  @Override
+  public String toString() {
+    return "Producteur{"
+        + "idProducteur=" + idProducteur
+        + ", siret='" + siret + '\''
+        + ", nomEtablissement='" + nomEtablissement + '\''
+        + ", tel='" + tel + '\''
+        + ", adresse=" + adresse
+        + ", utilisateur=" + utilisateur.toString()
+        + '}';
   }
 }

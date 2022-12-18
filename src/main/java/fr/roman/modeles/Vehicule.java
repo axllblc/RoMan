@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
  * Représente le véhicule d'un producteur.
  */
@@ -74,5 +76,29 @@ public class Vehicule extends Modele {
 
   public void setProducteur(Producteur producteur) {
     this.producteur = producteur;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Vehicule vehicule = (Vehicule) o;
+    return idVehicule == vehicule.idVehicule && poidsMax == vehicule.poidsMax && Objects.equals(immatriculation, vehicule.immatriculation) && Objects.equals(libelle, vehicule.libelle) && Objects.equals(producteur, vehicule.producteur);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idVehicule, immatriculation, poidsMax, libelle, producteur);
+  }
+
+  @Override
+  public String toString() {
+    return "Vehicule{"
+        + "idVehicule=" + idVehicule
+        + ", immatriculation='" + immatriculation + '\''
+        + ", poidsMax=" + poidsMax
+        + ", libelle='" + libelle + '\''
+        + ", producteur=" + producteur.toString()
+        + '}';
   }
 }
