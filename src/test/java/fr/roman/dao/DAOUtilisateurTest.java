@@ -11,6 +11,11 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test de la classe {@link DAOUtilisateur}
+ *
+ * @author Valentin Leclair
+ */
 class DAOUtilisateurTest {
   private final DAOUtilisateur TEST_DAOUtilisateur = new DAOUtilisateur();
   private final DAOAdresse TEST_DAOAdresse = new DAOAdresse();
@@ -135,7 +140,7 @@ class DAOUtilisateurTest {
 
   /**
    * Test de la méthode find().
-   * Dépen de la méthode insert().
+   * Dépend de la méthode insert().
    */
   @Test
   void find() {
@@ -200,6 +205,23 @@ class DAOUtilisateurTest {
 
   @Test
   void authentification() {
+    // création d'un objet Utilisateur sans idUtilisateur ni de sale.
+    Utilisateur testUtilisateur = new Utilisateur();
+    String nomUtilisateur = nomUtilisateur();
+    testUtilisateur.setNomUtilisateur(nomUtilisateur);
+    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setNom("nom");
+    testUtilisateur.setPrenom("prénom");
+    testUtilisateur.setEmail("email");
+    testUtilisateur.setRole(Role.ADMINISTRATEUR);
+    Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
+    
+    // test d'authentification via le nomUtilisateur et le mdp de l'utilisateur ajouté.
+    assertEquals(retourUtilisateur, TEST_DAOUtilisateur.authentification(nomUtilisateur, "mot de passe"));
+    // test d'authentification via mdp erroné.
+    assertNull(TEST_DAOUtilisateur.authentification(nomUtilisateur, "erroné"));
+    // test d'authentification vias nomUtilisateur inexistant.
+    assertNull(TEST_DAOUtilisateur.authentification(nomUtilisateur(), "mot de passe"));
   }
 
   /**

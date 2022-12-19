@@ -17,7 +17,7 @@ class DAOAdresseTest {
   private final DAOAdresse TEST_DAO = new DAOAdresse();
 
   /**
-   * Compare le résultat de la méthode <i>insert()</i>.
+   * Compare le résultat de la méthode insert().
    * Seul l'idAdresse ne doit pas être égal.
    */
   @Test
@@ -54,8 +54,8 @@ class DAOAdresseTest {
   }
 
   /**
-   * Test de la méthode <i>update()</i>.
-   * Dépend des méthodes <i>insert()</i> et <i>findById()</i>.
+   * Test de la méthode update().
+   * Dépend des méthodes insert() et findById().
    */
   @Test
   void update() {
@@ -82,8 +82,8 @@ class DAOAdresseTest {
   }
 
   /**
-   * Test la méthode <i>delete()</i> via l'idAresse.
-   * Dépend des méthodes <i>insert()</i> et <i>findById()</i>.
+   * Test la méthode delete() via l'idAdresse.
+   * Dépend des méthodes insert() et findById().
    */
   @Test
   void delete() {
@@ -109,8 +109,8 @@ class DAOAdresseTest {
   }
 
   /**
-   * Test de la méthode <i>find()</i>.
-   * Dépend de la méthode <i>insert()</i>.
+   * Test de la méthode find().
+   * Dépend de la méthode insert().
    */
   @Test
   void find() {
@@ -136,8 +136,8 @@ class DAOAdresseTest {
   }
 
   /**
-   * Test de la méthode <i>finById()</i>.
-   * Dépend de la méthode <i>insert()</i>.
+   * Test de la méthode finById().
+   * Dépend de la méthode insert().
    */
   @Test
   void findById() {
