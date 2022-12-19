@@ -2,12 +2,22 @@ package fr.roman.dao;
 
 import fr.roman.modeles.Adresse;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Test de la classe {@link DAOAdresse}
+ *
+ * @author Valentin Leclair
+ */
 class DAOAdresseTest {
   private final DAOAdresse TEST_DAO = new DAOAdresse();
 
   /**
-   * Compare le résultat de la méthode insert().
+   * Compare le résultat de la méthode <i>insert()</i>.
    * Seul l'idAdresse ne doit pas être égal.
    */
   @Test
@@ -44,8 +54,8 @@ class DAOAdresseTest {
   }
 
   /**
-   * Test de la méthode update().
-   * Dépend des méthodes insert() et findById().
+   * Test de la méthode <i>update()</i>.
+   * Dépend des méthodes <i>insert()</i> et <i>findById()</i>.
    */
   @Test
   void update() {
@@ -72,8 +82,8 @@ class DAOAdresseTest {
   }
 
   /**
-   * Test la méthode delete() via l'idAresse.
-   * Dépend des méthodes insert() et findById().
+   * Test la méthode <i>delete()</i> via l'idAresse.
+   * Dépend des méthodes <i>insert()</i> et <i>findById()</i>.
    */
   @Test
   void delete() {
@@ -98,11 +108,55 @@ class DAOAdresseTest {
     assertFalse(TEST_DAO.delete(retourAdresse.getIdAdresse()+1));
   }
 
+  /**
+   * Test de la méthode <i>find()</i>.
+   * Dépend de la méthode <i>insert()</i>.
+   */
   @Test
   void find() {
+    // création d'un objet Adresse sans identifiant.
+    double[] coord = {40.0, 0.80};
+    Adresse testAddresse = new Adresse();
+    testAddresse.setCoordonneesGPS(coord);
+    testAddresse.setLibelle("test");
+    testAddresse.setNumeroVoie(1);
+    testAddresse.setComplementNumero("numéro");
+    testAddresse.setVoie("voie");
+    testAddresse.setComplementAdresse("adresse");
+    testAddresse.setCodePostal(37000);
+    testAddresse.setVille("tours");
+    TEST_DAO.insert(testAddresse);
+
+    // recherche les adresses qui ont comme libelle "test".
+    HashMap<Adresse.Champs, String> criteres = new HashMap<>();
+    criteres.put(Adresse.Champs.libelle, "test");
+    ArrayList<Adresse> retourFind = TEST_DAO.find(criteres);
+    // test si toutes les adresses retournées par find() sont correctes.
+    retourFind.forEach(x -> assertEquals("test", x.getLibelle()));
   }
 
+  /**
+   * Test de la méthode <i>finById()</i>.
+   * Dépend de la méthode <i>insert()</i>.
+   */
   @Test
   void findById() {
+    // création d'un objet Adresse sans identifiant.
+    double[] coord = {40.0, 0.80};
+    Adresse testAddresse = new Adresse();
+    testAddresse.setCoordonneesGPS(coord);
+    testAddresse.setLibelle("test");
+    testAddresse.setNumeroVoie(1);
+    testAddresse.setComplementNumero("numéro");
+    testAddresse.setVoie("voie");
+    testAddresse.setComplementAdresse("adresse");
+    testAddresse.setCodePostal(37000);
+    testAddresse.setVille("tours");
+    Adresse retourAdresse = TEST_DAO.insert(testAddresse);
+
+    // test recherche de l'adresse ajouter.
+    assertEquals(retourAdresse, TEST_DAO.findById(retourAdresse.getIdAdresse()));
+    // test recherche d'une adresse qui n'existe pas dans la BD.
+    assertNull(TEST_DAO.findById(retourAdresse.getIdAdresse()+1));
   }
 }
