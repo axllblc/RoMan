@@ -154,7 +154,7 @@ public class VueAccueil {
   /**
    * Basculer vers l'onglet de la vue <i>Accueil</i> correspondant au module passé en paramètre.
    *
-   * <p><b>Exemple :</b> {@code selectionnerModule(ModuleAccueil.COMMANDES)} permet de sélectionner
+   * <p><b>Exemple :</b> {@code afficherOnglet(ModuleAccueil.COMMANDES)} permet de sélectionner
    * l'onglet du module de gestion des commandes.</p>
    *
    * <p>Si le module n'est pas disponible pour l'utilisateur actuellement connecté, la méthode ne
