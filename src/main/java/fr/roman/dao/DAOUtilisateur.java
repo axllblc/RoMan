@@ -26,7 +26,8 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   /**
    * Constructeur de la classe.
    */
-  public DAOUtilisateur() {
+  public DAOUtilisateur() throws Exception {
+    super();
   }
 
   /**

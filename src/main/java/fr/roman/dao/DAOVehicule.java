@@ -14,7 +14,8 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
   /**
    * Constructeur.
    */
-  public DAOVehicule() {
+  public DAOVehicule() throws Exception {
+    super();
   }
 
   /**

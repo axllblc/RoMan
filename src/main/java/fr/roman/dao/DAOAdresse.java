@@ -16,7 +16,8 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
   /**
    * Constructeur de la classe.
    */
-  public DAOAdresse() {
+  public DAOAdresse() throws Exception {
+    super();
   }
 
   /**

@@ -18,7 +18,8 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
   /**
    * Constructeur.
    */
-  public DAOProducteur() {
+  public DAOProducteur() throws Exception {
+    super();
   }
 
   /**

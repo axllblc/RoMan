@@ -17,7 +17,8 @@ public class DAOClient extends DAO<Client, Client.Champs> {
   /**
    * Constructeur.
    */
-  public DAOClient() {
+  public DAOClient() throws Exception {
+    super();
   }
 
   /**

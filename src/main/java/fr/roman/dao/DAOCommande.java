@@ -16,7 +16,8 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
   /**
    * Constructeur.
    */
-  public DAOCommande() {
+  public DAOCommande() throws Exception {
+    super();
   }
 
   /**

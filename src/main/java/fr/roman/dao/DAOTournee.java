@@ -16,7 +16,8 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
   /**
    * Constructeur.
    */
-  public DAOTournee() {
+  public DAOTournee() throws Exception {
+    super();
   }
 
   /**
