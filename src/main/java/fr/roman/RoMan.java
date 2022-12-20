@@ -2,7 +2,7 @@ package fr.roman;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import fr.roman.authentification.VueAuthentification;
+import fr.roman.vues.authentification.VueAuthentification;
 
 /**
  * Classe principale de l'application, utilisée comme point d'entrée pour l'exécution.
