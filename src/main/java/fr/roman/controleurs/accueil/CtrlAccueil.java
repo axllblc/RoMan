@@ -2,6 +2,7 @@ package fr.roman.controleurs.accueil;
 
 import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Utilisateur;
+import fr.roman.vues.accueil.TableauDeBordProducteur;
 import fr.roman.vues.accueil.VueAccueil;
 import fr.roman.vues.accueil.VueOngletAccueil;
 import java.util.LinkedHashMap;
@@ -113,13 +114,9 @@ public class CtrlAccueil {
    */
   private void modulesProducteur() {
     // Tableau de bord
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, new VueOngletAccueil() {
-      @Override
-      public Node getNode() {
-        return new Label("Tableau de bord (à implémenter)");
-      }
-    });
+    var tableauDeBordProducteur = new TableauDeBordProducteur(vueAccueil);
+    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, tableauDeBordProducteur);
+    // TODO instancier le contrôleur du tableau de bord
 
     // Gestion des commandes
     // TODO à implémenter
