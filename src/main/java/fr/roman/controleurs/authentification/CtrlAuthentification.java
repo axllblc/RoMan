@@ -1,9 +1,8 @@
 package fr.roman.controleurs.authentification;
 
-import fr.roman.vues.authentification.VueAuthentification;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import fr.roman.modeles.Utilisateur;
 //import fr.roman.dao.DAOUtilisateur;
+import fr.roman.vues.authentification.VueAuthentification;
 
 /**
  * Controlleur de la partie Authentification.
@@ -18,37 +17,35 @@ public class CtrlAuthentification {
   /**
    * Nom de l'utilisateur à vérifier.
    */
-  private final String nomUtilisateur;
+  private String nomUtilisateur;
 
   /**
    * Mot de passe de l'utilisateur à verifier.
    */
-  private final String mdp;
+  private String mdp;
 
 
   /**
    * Constructeur de la classe.
    *
    * @param vueAuthentification Instance de la vue authentification.
-   * @param nomUtilisateur Nom de l'utilisateur à vérifier.
-   * @param mdp Mot de passe de l'utilisateur à vérifier.
    */
-  public CtrlAuthentification(VueAuthentification vueAuthentification,
-                              String nomUtilisateur, String mdp) {
+  public CtrlAuthentification(VueAuthentification vueAuthentification) {
     this.vueAuthentification = vueAuthentification;
-    this.nomUtilisateur = nomUtilisateur;
-    this.mdp = mdp;
-
-    verify(this.nomUtilisateur, this.mdp);
+    this.nomUtilisateur = this.vueAuthentification.getNomUtilisateur();
+    this.mdp = this.vueAuthentification.getPassword();
   }
 
-  private void verify(String nomUtilisateur, String mdp) {
-    /*Utilisateur u = DAOUtilisateur.authentification(nomUtilisateur, mdp);
+  public void verify() {
+    this.nomUtilisateur = vueAuthentification.getNomUtilisateur();
+    this.mdp = vueAuthentification.getPassword();
+    /*Utilisateur u = DAOUtilisateur.authentification(this.nomUtilisateur, this.mdp);
     if(u == null)
       this.vueAuthentification.erreurSaisie();
     else
       appel accueil
      */
+    this.vueAuthentification.erreurSaisie();
 
 
   }

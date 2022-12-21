@@ -1,9 +1,6 @@
 package fr.roman.vues.authentification;
 
 import fr.roman.controleurs.authentification.CtrlAuthentification;
-import fr.roman.modeles.Utilisateur;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -58,6 +55,10 @@ public class VueAuthentification {
    * Contrôleur de la vue Authentification.
    */
   private CtrlAuthentification ctrl = null;
+  /**
+   * boolean permettant de ne pas ajouter l'erreur de saisie plusieurs fois à la scène.
+   */
+  private boolean erreurIdAdd;
 
 
   /**
@@ -74,8 +75,17 @@ public class VueAuthentification {
     labelConnexion = new Label("Connexion");
     vbox = new VBox();
     scene = new Scene(vbox);
+    erreurIdAdd = false;
 
     stuctureAuthentification(stage);
+  }
+
+  public String getNomUtilisateur() {
+    return textFieldIdentifiant.getText();
+  }
+
+  public String getPassword() {
+    return passwordField.getText();
   }
 
   private void stuctureAuthentification(Stage stage) {
@@ -113,19 +123,31 @@ public class VueAuthentification {
 
     VueAuthentification vueAuthentification = this;
 
-    btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
-      public void handle(ActionEvent event) {
-        // Appel au controlleur
-        ctrl = new CtrlAuthentification(vueAuthentification,
-            textFieldIdentifiant.getText(), passwordField.getText());
-
-      }
+    btnConnexion.setOnAction((event) -> {
+        ctrl.verify();
     });
 
   }
 
+  /**
+   * Affectation du contrôleur de la vue.
+   *
+   * @param ctrl Contrôleur à affecter
+   */
+  public void setCtrl(CtrlAuthentification ctrl) {
+    this.ctrl = ctrl;
+  }
+
+  /**
+   * méthode affichant un message d'erreur lorsque les champs sont erronés.
+   */
   public void erreurSaisie() {
-    vbox.getChildren().add(labelErreurConnexion);
+    if (!erreurIdAdd) {
+      vbox.getChildren().add(labelErreurConnexion);
+      erreurIdAdd = true;
+    }
+
+
   }
 
 
