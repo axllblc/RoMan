@@ -1,5 +1,6 @@
 package fr.roman.vues.accueil;
 
+import fr.roman.modeles.ModuleApplication;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -99,6 +100,7 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
 
     structureVue();
     appliquerStyles();
+    definirGestionnairesEvenements();
   }
 
   /**
@@ -132,6 +134,17 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
 
     conteneurBtnCommandes.getStyleClass().add("conteneur-btn");
     conteneurBtnTournees.getStyleClass().add("conteneur-btn");
+  }
+
+  /**
+   * Définir les gestionnaires d'événements des éléments graphiques de la vue.
+   */
+  private void definirGestionnairesEvenements() {
+    // Boutons permettant de basculer vers un autre onglet
+    btnGestionCommandes.setOnAction(event -> parent.afficherOnglet(ModuleApplication.COMMANDES));
+    btnGestionTournees.setOnAction(event -> parent.afficherOnglet(ModuleApplication.TOURNEES));
+
+    // TODO Gestionnaires d'événements pour l'ajout
   }
 
   @Override
