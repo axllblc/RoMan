@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class DAOUtilisateurTest {
   private final DAOUtilisateur TEST_DAOUtilisateur = new DAOUtilisateur();
   private final DAOAdresse TEST_DAOAdresse = new DAOAdresse();
-  private ArrayList<String> nomUtilisateur = new ArrayList<>();
 
   /**
    * Test de la méthode insert (admin).
@@ -28,7 +28,7 @@ class DAOUtilisateurTest {
   void insertAdmin() {
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur(nomUtilisateur());
+    testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
@@ -47,14 +47,14 @@ class DAOUtilisateurTest {
   }
 
   /**
-   * Test à de la méthode insert (producteur)
+   * Test de la méthode insert (producteur)
    * Dépend des méthodes insert (admin) et insert (adresse) de la classe DAOAdresse
    */
   @Test
   void insertProducteur() {
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur(nomUtilisateur());
+    testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
@@ -82,7 +82,7 @@ class DAOUtilisateurTest {
     testProducteur.setUtilisateur(retourUtilisateur);
     Producteur retourProducteur = TEST_DAOUtilisateur.insert(testProducteur);
 
-    // compare l'objet retourné par la méthode insert (producteur)
+    // compare l'objet retourné par la méthode insert (producteur).
     assertEquals(retourProducteur, testProducteur);
     retourProducteur = TEST_DAOUtilisateur.insert(testProducteur);
     assertNull(retourProducteur);
@@ -90,13 +90,13 @@ class DAOUtilisateurTest {
 
   /**
    * Test de la méthode update().
-   * Dépend de la méthode findById().
+   * Dépend des méthodes insert() et findById().
    */
   @Test
   void update() {
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur(nomUtilisateur());
+    testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
@@ -111,7 +111,7 @@ class DAOUtilisateurTest {
     // test recherche de l'objet modifier
     Utilisateur updateUtilisateur = TEST_DAOUtilisateur.findById(retourUtilisateur.getIdUtilisateur());
     // test si l'objet a bien été modifié.
-    assertEquals(retourUtilisateur,updateUtilisateur);
+    assertEquals(retourUtilisateur, updateUtilisateur);
   }
 
   /**
@@ -122,7 +122,7 @@ class DAOUtilisateurTest {
   void delete() {
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur(nomUtilisateur());
+    testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
@@ -146,7 +146,7 @@ class DAOUtilisateurTest {
   void find() {
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur(nomUtilisateur());
+    testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
@@ -170,7 +170,7 @@ class DAOUtilisateurTest {
   void findById() {
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur(nomUtilisateur());
+    testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
@@ -183,12 +183,16 @@ class DAOUtilisateurTest {
     // test recherche d'un utilisateur qui n'existe pas dans la BD.
     assertNull(TEST_DAOUtilisateur.findById(retourUtilisateur.getIdUtilisateur()+1));
   }
-
+  
+  /**
+   * Test de la méthode FindByNomUtilisateur().
+   * Dépend de la méthode insert().
+   */
   @Test
   void findByNomUtilisateur() {
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
-    String nomUtilisateur = nomUtilisateur();
+    String nomUtilisateur = UUID.randomUUID().toString();
     testUtilisateur.setNomUtilisateur(nomUtilisateur);
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
@@ -200,14 +204,18 @@ class DAOUtilisateurTest {
     // test recherche l'utilisateur ajouté par son nomUtilisateur.
     assertEquals(retourUtilisateur, TEST_DAOUtilisateur.findByNomUtilisateur(nomUtilisateur));
     // test recherche un utilisateur avec un nomUtilisateur inexistant.
-    assertNull(TEST_DAOUtilisateur.findByNomUtilisateur(nomUtilisateur()));
+    assertNull(TEST_DAOUtilisateur.findByNomUtilisateur(UUID.randomUUID().toString()));
   }
-
+  
+  /**
+   * Test de a méthode authentification().
+   * Dépend de la méthode insert().
+   */
   @Test
   void authentification() {
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
-    String nomUtilisateur = nomUtilisateur();
+    String nomUtilisateur = UUID.randomUUID().toString();
     testUtilisateur.setNomUtilisateur(nomUtilisateur);
     testUtilisateur.setMdp("mot de passe");
     testUtilisateur.setNom("nom");
@@ -221,20 +229,6 @@ class DAOUtilisateurTest {
     // test d'authentification via mdp erroné.
     assertNull(TEST_DAOUtilisateur.authentification(nomUtilisateur, "erroné"));
     // test d'authentification vias nomUtilisateur inexistant.
-    assertNull(TEST_DAOUtilisateur.authentification(nomUtilisateur(), "mot de passe"));
-  }
-
-  /**
-   * Génère un nouveau nomUtilisateur
-   *
-   * @return String un nouveau nom utilisateur.
-   */
-  private String nomUtilisateur() {
-    String nouveauNom;
-    do {
-      nouveauNom = "nomUtilisateur" + (int) ((Math.random() * 1000) + 0);
-    } while (nomUtilisateur.contains(nouveauNom));
-    this.nomUtilisateur.add(nouveauNom);
-    return nouveauNom;
+    assertNull(TEST_DAOUtilisateur.authentification(UUID.randomUUID().toString(), "mot de passe"));
   }
 }
