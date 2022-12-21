@@ -14,7 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Valentin Leclair
  */
 class DAOAdresseTest {
-  private final DAOAdresse TEST_DAO = new DAOAdresse();
+  private final DAOAdresse TEST_DAO;
+
+  {
+    try {
+      TEST_DAO = new DAOAdresse();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   /**
    * Compare le résultat de la méthode insert().

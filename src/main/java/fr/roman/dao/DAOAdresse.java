@@ -35,7 +35,7 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
       }
       PreparedStatement req = this.getCo().prepareStatement("INSERT INTO adresses " +
               "(coordonneesGPS, libelle, numeroVoie, complementNumero, voie, complementAdresse," +
-              " codePostal, ville) VALUES (ST_GeomFromText(?, 4326),?,?,?,?,?,?,?)");
+              " codePostal, ville) VALUES (ST_GeomFromText(?, 4326),?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
       req.setString(1, "Point(" + a.getCoordonneesGPS()[0] + " " + a.getCoordonneesGPS()[1] + ")");
       req.setString(2, a.getLibelle());
       req.setInt(3, a.getNumeroVoie());
@@ -44,8 +44,17 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
       req.setString(6, a.getComplementAdresse());
       req.setInt(7, a.getCodePostal());
       req.setString(8, a.getVille());
+      // L'exécution de la requête
       req.execute();
-      return a;
+      // Récupération de la clé primaire
+      ResultSet rs = req.getGeneratedKeys();
+      if(rs.next()){
+        // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
+        return new Adresse(rs.getInt(1), a.getCoordonneesGPS(), a.getLibelle(), a.getNumeroVoie(),
+        a.getComplementNumero(), a.getVoie(), a.getComplementAdresse(), a.getCodePostal(), a.getVille());
+      }
+      // En cas d'échec de l'ajout, on ne renvoie rien
+      return null;
     } catch (SQLException e) {
       e.printStackTrace();
       return null;
