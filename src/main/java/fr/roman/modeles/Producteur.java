@@ -89,7 +89,7 @@ public class Producteur extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Producteur that = (Producteur) o;
-    return idProducteur == that.idProducteur && Objects.equals(siret, that.siret) && Objects.equals(nomEtablissement, that.nomEtablissement) && Objects.equals(tel, that.tel) && Objects.equals(adresse, that.adresse) && Objects.equals(utilisateur, that.utilisateur);
+    return Objects.equals(siret, that.siret) && Objects.equals(nomEtablissement, that.nomEtablissement) && Objects.equals(tel, that.tel) && Objects.equals(adresse, that.adresse) && Objects.equals(utilisateur, that.utilisateur);
   }
 
   @Override

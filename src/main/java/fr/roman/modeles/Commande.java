@@ -157,12 +157,12 @@ public class Commande extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Commande commande = (Commande) o;
-    return idCommande == commande.idCommande && Double.compare(commande.poids, poids) == 0 && defautLivraison == commande.defautLivraison && Objects.equals(libelle, commande.libelle) && Objects.equals(horaireDebut, commande.horaireDebut) && Objects.equals(horaireFin, commande.horaireFin) && Objects.equals(note, commande.note) && Objects.equals(dateInitiale, commande.dateInitiale) && Objects.equals(dateLivraison, commande.dateLivraison) && Objects.equals(producteur, commande.producteur) && Objects.equals(client, commande.client) && Objects.equals(tournee, commande.tournee);
+    return Double.compare(commande.poids, poids) == 0 && defautLivraison == commande.defautLivraison && Objects.equals(libelle, commande.libelle) && Objects.equals(horaireDebut, commande.horaireDebut) && Objects.equals(horaireFin, commande.horaireFin) && Objects.equals(note, commande.note) && Objects.equals(dateInitiale, commande.dateInitiale) && Objects.equals(dateLivraison, commande.dateLivraison) && Objects.equals(producteur, commande.producteur) && Objects.equals(client, commande.client) && Objects.equals(tournee, commande.tournee);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(idCommande, libelle, poids, horaireDebut, horaireFin, note, defautLivraison, dateInitiale, dateLivraison, producteur, client, tournee);
+    return Objects.hash(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, dateInitiale, dateLivraison, producteur, client, tournee);
   }
 
   @Override

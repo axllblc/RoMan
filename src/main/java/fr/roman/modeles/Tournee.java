@@ -112,12 +112,12 @@ public class Tournee extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Tournee tournee = (Tournee) o;
-    return idTournee == tournee.idTournee && valide == tournee.valide && Objects.equals(horaireDebut, tournee.horaireDebut) && Objects.equals(horaireFin, tournee.horaireFin) && Objects.equals(estimationDuree, tournee.estimationDuree) && Objects.equals(note, tournee.note) && Objects.equals(producteur, tournee.producteur) && Objects.equals(vehicule, tournee.vehicule);
+    return valide == tournee.valide && Objects.equals(horaireDebut, tournee.horaireDebut) && Objects.equals(horaireFin, tournee.horaireFin) && Objects.equals(estimationDuree, tournee.estimationDuree) && Objects.equals(note, tournee.note) && Objects.equals(producteur, tournee.producteur) && Objects.equals(vehicule, tournee.vehicule);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(idTournee, horaireDebut, horaireFin, estimationDuree, note, valide, producteur, vehicule);
+    return Objects.hash(horaireDebut, horaireFin, estimationDuree, note, valide, producteur, vehicule);
   }
 
   @Override
