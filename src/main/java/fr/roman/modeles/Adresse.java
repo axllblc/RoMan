@@ -132,12 +132,12 @@ public class Adresse extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Adresse adresse = (Adresse) o;
-    return idAdresse == adresse.idAdresse && numeroVoie == adresse.numeroVoie && codePostal == adresse.codePostal && Arrays.equals(coordonneesGPS, adresse.coordonneesGPS) && Objects.equals(libelle, adresse.libelle) && Objects.equals(complementNumero, adresse.complementNumero) && Objects.equals(voie, adresse.voie) && Objects.equals(complementAdresse, adresse.complementAdresse) && Objects.equals(ville, adresse.ville);
+    return numeroVoie == adresse.numeroVoie && codePostal == adresse.codePostal && Arrays.equals(coordonneesGPS, adresse.coordonneesGPS) && Objects.equals(libelle, adresse.libelle) && Objects.equals(complementNumero, adresse.complementNumero) && Objects.equals(voie, adresse.voie) && Objects.equals(complementAdresse, adresse.complementAdresse) && Objects.equals(ville, adresse.ville);
   }
 
   @Override
   public int hashCode() {
-    int result = Objects.hash(idAdresse, libelle, numeroVoie, complementNumero, voie, complementAdresse, codePostal, ville);
+    int result = Objects.hash(libelle, numeroVoie, complementNumero, voie, complementAdresse, codePostal, ville);
     result = 31 * result + Arrays.hashCode(coordonneesGPS);
     return result;
   }

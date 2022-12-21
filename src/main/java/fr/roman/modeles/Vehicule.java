@@ -83,12 +83,12 @@ public class Vehicule extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Vehicule vehicule = (Vehicule) o;
-    return idVehicule == vehicule.idVehicule && poidsMax == vehicule.poidsMax && Objects.equals(immatriculation, vehicule.immatriculation) && Objects.equals(libelle, vehicule.libelle) && Objects.equals(producteur, vehicule.producteur);
+    return poidsMax == vehicule.poidsMax && Objects.equals(immatriculation, vehicule.immatriculation) && Objects.equals(libelle, vehicule.libelle) && Objects.equals(producteur, vehicule.producteur);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(idVehicule, immatriculation, poidsMax, libelle, producteur);
+    return Objects.hash(immatriculation, poidsMax, libelle, producteur);
   }
 
   @Override

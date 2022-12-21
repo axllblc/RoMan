@@ -114,12 +114,12 @@ public class Utilisateur extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Utilisateur that = (Utilisateur) o;
-    return idUtilisateur == that.idUtilisateur && Objects.equals(nomUtilisateur, that.nomUtilisateur) && Objects.equals(mdp, that.mdp) && Arrays.equals(sel, that.sel) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && role == that.role;
+    return Objects.equals(nomUtilisateur, that.nomUtilisateur) && Objects.equals(mdp, that.mdp) && Arrays.equals(sel, that.sel) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && role == that.role;
   }
 
   @Override
   public int hashCode() {
-    int result = Objects.hash(idUtilisateur, nomUtilisateur, mdp, nom, prenom, email, role);
+    int result = Objects.hash(nomUtilisateur, mdp, nom, prenom, email, role);
     result = 31 * result + Arrays.hashCode(sel);
     return result;
   }
