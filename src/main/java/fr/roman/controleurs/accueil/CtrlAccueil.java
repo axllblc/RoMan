@@ -116,7 +116,7 @@ public class CtrlAccueil {
     // Tableau de bord
     var tableauDeBordProducteur = new TableauDeBordProducteur(vueAccueil);
     mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, tableauDeBordProducteur);
-    // TODO instancier le contrôleur du tableau de bord
+    new CtrlTabBordProducteur(utilisateur,  tableauDeBordProducteur);
 
     // Gestion des commandes
     // TODO à implémenter

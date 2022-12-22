@@ -1,5 +1,6 @@
 package fr.roman.vues.accueil;
 
+import fr.roman.controleurs.accueil.CtrlTabBordProducteur;
 import fr.roman.modeles.ModuleApplication;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -20,7 +21,6 @@ import javafx.scene.layout.VBox;
  * @author Axel Leblanc
  */
 public class TableauDeBordProducteur implements VueOngletAccueil {
-  // TODO Ajouter contrôleur
   /**
    * Icône pour les boutons d'ajout.
    */
@@ -34,6 +34,10 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
    * Vue qui accueille le tableau de bord ({@link VueAccueil}).
    */
   private final VueAccueil parent;
+  /**
+   * Contrôleur de la vue <i>Tableau de bord</i>.
+   */
+  private CtrlTabBordProducteur ctrl;
 
   /**
    * Conteneur principal de la vue <i>Tableau de bord</i>.
@@ -144,11 +148,21 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
     btnGestionCommandes.setOnAction(event -> parent.afficherOnglet(ModuleApplication.COMMANDES));
     btnGestionTournees.setOnAction(event -> parent.afficherOnglet(ModuleApplication.TOURNEES));
 
-    // TODO Gestionnaires d'événements pour l'ajout
+    btnNouvelleCommande.setOnAction(event -> ctrl.nouvelleCommande());
+    btnNouvelleTournee.setOnAction(event -> ctrl.nouvelleTournee());
   }
 
   @Override
   public Node getNode() {
     return node;
+  }
+
+  /**
+   * Affectation du contrôleur de la vue <i>Tableau de bord</i>.
+   *
+   * @param ctrl Contrôleur à affecter
+   */
+  public void setCtrl(CtrlTabBordProducteur ctrl) {
+    this.ctrl = ctrl;
   }
 }
