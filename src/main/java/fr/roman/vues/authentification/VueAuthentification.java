@@ -62,7 +62,8 @@ public class VueAuthentification {
 
 
   /**
-   * Constructeur de la classe.
+   * Constructeur de la classe elle permettra de mettre en place tout les éléments
+   * graphique de la fonction authentification.
    *
    * @param stage stage de la fonction start
    */
@@ -80,14 +81,29 @@ public class VueAuthentification {
     stuctureAuthentification(stage);
   }
 
+  /**
+   * Getter permettant d'obtenir la chaine de caractère entrée dans le champ identifiant.
+   *
+   * @return revoie NomUtilisateur.
+   */
   public String getNomUtilisateur() {
     return textFieldIdentifiant.getText();
   }
 
+  /**
+   * Getter permettant d'obtenir la chaine de caractère entrée dans le champ password.
+   *
+   * @return revoie Password.
+   */
   public String getPassword() {
     return passwordField.getText();
   }
 
+  /**
+   * Permet de mettre en place les éléments de la scéne.
+   *
+   * @param stage Stage de la partie Authentification.
+   */
   private void stuctureAuthentification(Stage stage) {
 
     // Ajout chaine de caratère grisée dans les TextFields
@@ -120,8 +136,6 @@ public class VueAuthentification {
 
     // Affichage scène
     stage.show();
-
-    VueAuthentification vueAuthentification = this;
 
     btnConnexion.setOnAction((event) -> {
         ctrl.verify();

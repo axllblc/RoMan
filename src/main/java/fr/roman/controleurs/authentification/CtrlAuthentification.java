@@ -26,16 +26,20 @@ public class CtrlAuthentification {
 
 
   /**
-   * Constructeur de la classe.
+   * Constructeur de la classe qui nours permettra de faire les traitements de la partie
+   * authentification et de gérer sa logique.
    *
    * @param vueAuthentification Instance de la vue authentification.
    */
   public CtrlAuthentification(VueAuthentification vueAuthentification) {
     this.vueAuthentification = vueAuthentification;
-    this.nomUtilisateur = this.vueAuthentification.getNomUtilisateur();
-    this.mdp = this.vueAuthentification.getPassword();
   }
 
+  /**
+   * Cette methode permet de verifier si l'utilisateur est un utilisateur valide :
+   * - Si il est valide on renvoie vers l'accueil
+   * - Si il ne l'est pas on affiche un message d'erreur .
+   */
   public void verify() {
     this.nomUtilisateur = vueAuthentification.getNomUtilisateur();
     this.mdp = vueAuthentification.getPassword();
