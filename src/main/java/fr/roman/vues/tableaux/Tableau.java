@@ -58,6 +58,25 @@ public abstract class Tableau<T extends Modele> {
     return tableau;
   }
 
+  /**
+   * Retourne l'objet sélectionné dans le tableau. Si plusieurs sont sélectionnés, le dernier
+   * ajouté à la sélection est retourné.
+   *
+   * @return L'objet sélectionné dans le tableau
+   */
+  public T getSelectionSimple() {
+    return tableau.getSelectionModel().getSelectedItem();
+  }
+
+  /**
+   * Retourne les objets sélectionnés dans le tableau.
+   *
+   * @return Liste des objets sélectionnés dans le tableau
+   */
+  public List<T> getSelectionMultiple() {
+    return tableau.getSelectionModel().getSelectedItems().stream().toList();
+  }
+
   // Opérations sur la collection d'objets affichés
 
   /**
