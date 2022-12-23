@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 
 /**
@@ -56,6 +57,16 @@ public abstract class Tableau<T extends Modele> {
    */
   public TableView<T> getTableau() {
     return tableau;
+  }
+
+  /**
+   * Activer ou désactiver la sélection multiple dans le tableau.
+   *
+   * @param b {@code true} pour autoriser la sélection multiple, {@code false} pour ne permettre
+   *                      la sélection que d'un seul élément à la fois.
+   */
+  public void autoriserSelectionMultiple(boolean b) {
+    tableau.getSelectionModel().setSelectionMode(b ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
   }
 
   /**
