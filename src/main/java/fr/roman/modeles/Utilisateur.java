@@ -107,7 +107,7 @@ public class Utilisateur extends Modele {
     this.role = role;
   }
 
-  public enum Champs {email, mdp, nom, nomUtilisateur, prenom, role, idUtilisateur};
+  public enum Champs {email, mdp, nom, nomUtilisateur, prenom, role, idUtilisateur}
 
   @Override
   public boolean equals(Object o) {

@@ -12,7 +12,7 @@ public class Client extends Modele {
   private String prenom;
   private String tel;
   private String mail;
-  private int siret;
+  private String siret;
   private boolean particulier;
   private Adresse adresse;
 
@@ -34,7 +34,7 @@ public class Client extends Modele {
    * @param adresse L'adresse du client.
    */
   public Client(int idClient, String nom, String tel, String mail,
-                int siret, boolean particulier, Adresse adresse) {
+                String siret, boolean particulier, Adresse adresse) {
     this.idClient = idClient;
     this.nom = nom;
     this.tel = tel;
@@ -72,11 +72,11 @@ public class Client extends Modele {
     this.mail = mail;
   }
 
-  public int getSiret() {
+  public String getSiret() {
     return siret;
   }
 
-  public void setSiret(int siret) {
+  public void setSiret(String siret) {
     this.siret = siret;
   }
 

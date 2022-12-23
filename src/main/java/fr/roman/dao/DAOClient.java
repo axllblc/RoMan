@@ -43,7 +43,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setString(1, c.getNom());
       req.setString(2, c.getTel());
       req.setString(3, c.getMail());
-      req.setInt(4, c.getSiret());
+      req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
       req.setInt(6, c.getAdresse().getIdAdresse());
       // L'exécution de la requête
@@ -78,7 +78,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setString(1, c.getNom());
       req.setString(2, c.getTel());
       req.setString(3, c.getMail());
-      req.setInt(4, c.getSiret());
+      req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
       req.setInt(6, c.getAdresse().getIdAdresse());
       req.setInt(7, c.getIdClient());
@@ -139,7 +139,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
         adresse = daoA.findById(Integer.parseInt(rs.getString("idAdresse")));
 
         commandes.add(new Client(rs.getInt("idClient"), rs.getString("nom"),
-                rs.getString("tel"), rs.getString("email"), rs.getInt("siret"),
+                rs.getString("tel"), rs.getString("email"), rs.getString("siret"),
                 rs.getBoolean("particulier"), adresse));
       }
       return commandes;
