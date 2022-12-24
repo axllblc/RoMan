@@ -19,15 +19,42 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Valentin Leclair
  */
 class DAOProducteurTest {
-  private final DAOProducteur TEST_DAOProducteur = new DAOProducteur();
-  private final DAOUtilisateur TEST_DAOUtilisateur = new DAOUtilisateur();
-  private final DAOAdresse TEST_DAOAdresse = new DAOAdresse();
-  
+  private final DAOProducteur TEST_DAOProducteur;
+
+  {
+    try {
+      TEST_DAOProducteur = new DAOProducteur();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private final DAOUtilisateur TEST_DAOUtilisateur;
+
+  {
+    try {
+      TEST_DAOUtilisateur = new DAOUtilisateur();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private final DAOAdresse TEST_DAOAdresse;
+
+  {
+    try {
+      TEST_DAOAdresse = new DAOAdresse();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   /**
    * Test de la méthode insert().
    */
   @Test
   void insert() {
+    // TODO: 24/12/2022 Modifier car on ajoute l'utilisateur en même temps que le producteur et on chiffre le mdp dans le ctrl
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());

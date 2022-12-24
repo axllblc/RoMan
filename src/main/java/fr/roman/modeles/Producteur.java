@@ -106,7 +106,7 @@ public class Producteur extends Modele {
             ", nomEtablissement='" + nomEtablissement + '\'' +
             ", tel='" + tel + '\'' +
             ", adresse=" + adresse +
-            ", utilisateur=" + utilisateur.toString() +
+            ", utilisateur=" + utilisateur +
             '}';
   }
 }

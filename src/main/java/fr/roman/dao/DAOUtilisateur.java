@@ -3,15 +3,6 @@ package fr.roman.dao;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
-import javafx.util.Pair;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.sql.*;
 import java.util.*;
 
@@ -54,9 +45,8 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
               PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
       req.setString(1, u.getNomUtilisateur());
-      Pair<byte[], byte[]> chiffrement = chiffrerMDP(u.getMdp(), genererSel());
-      req.setBytes(2,chiffrement.getKey()); // la clé est le mdp chiffré
-      req.setBytes(3,chiffrement.getValue()); // la valeur est le sel
+      req.setBytes(2, Base64.getDecoder().decode(u.getMdp())); // la clé est le mdp chiffré
+      req.setBytes(3,u.getSel()); // la valeur est le sel
       req.setString(4, u.getNom());
       req.setString(5, u.getPrenom());
       req.setString(6, u.getEmail());
@@ -67,7 +57,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       if(rs.next()){
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
         return new Utilisateur(rs.getInt(1), u.getNomUtilisateur(),
-                new String(chiffrement.getKey(), StandardCharsets.UTF_8), chiffrement.getValue(),
+                u.getMdp(), u.getSel(),
                 u.getNom(), u.getPrenom(), u.getEmail(), getRole(rs.getInt(1)));
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
@@ -136,7 +126,6 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       this.getCo().setAutoCommit(true);
       return p;
     } catch (SQLException e) {
-      e.printStackTrace();
       try {
         // En cas de problème, on revient à notre point de sauvegarde
         this.getCo().rollback(pointSauvegarde);
@@ -161,7 +150,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
               "SET nomUtilisateur = ?, mdp = ?, sel = ?, nom = ?, prenom = ?, email = ? " +
               "WHERE idUtilisateur = ?");
       req.setString(1, u.getNomUtilisateur());
-      req.setBytes(2, Base64.getDecoder().decode(u.getMdp()));
+      req.setBytes(2, u.getSel());
       req.setBytes(3, u.getSel());
       req.setString(4, u.getNom());
       req.setString(5, u.getPrenom());
@@ -297,58 +286,5 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       return null;
     }
     return resultatRecherche.get(0);
-  }
-
-  /**
-   * Cette méthode sert à chiffrer le mot de passe pour être stocké dans la base.
-   * L'algorithme choisi est "PBKDF2WithHmacSHA1".
-   * Le salage (en paramètre) et le mot de passe (chiffré) ont une entropie de 248 bits (31 octets).
-   * On itère 10 000 fois le chiffrement
-   *
-   * @param mdp Le mot de passe renseigné par l'utilisateur.
-   * @return Un objet Pair avec le mot de passe en première position et le sel en deuxième position
-   */
-  private Pair<byte[], byte[]> chiffrerMDP(String mdp, byte[] sel) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    // On paramètre la clé de chiffrement selon les modalités décrites en documentation
-    KeySpec spec = new PBEKeySpec(mdp.toCharArray(), sel, 10000, 248);
-    // On récupère l'algorithme de chiffrement choisi
-    SecretKeyFactory algo = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-    // On procède au chiffrement du mot de passe et on le retourne avec le sel utilisé
-    return new Pair<>(algo.generateSecret(spec).getEncoded(), sel);
-  }
-
-  /**
-   * Méthode servant à générer un sel ayant une entropie de 32 octets.
-   * @return Un sel sous forme de tableau de bits.
-   */
-  private static byte[] genererSel() {
-    SecureRandom random = new SecureRandom(); // On utilise un générateur d'octets.
-    // On génère le sel sur 31 octets
-    return random.generateSeed(31);
-  }
-
-  /**
-     *
-     * @param nomUtilisateur Le nom d'utilisateur
-     * @param mdp Le mot de passe renseigné (non chiffré)
-     * @return Un objet utilisateur correspondant au nom d'utilisateur.
-     *         Renvoie null si le nom d'utilisateur et/ou le mot de passe est incorrect.
-     */
-  public Utilisateur authentification(String nomUtilisateur, String mdp) {
-    try {
-      Utilisateur u = findByNomUtilisateur(nomUtilisateur);
-      if (u != null){ // Si le nom d'utilisateur existe
-        // Note : on utilise Base64 pour convertir le mot de passe (chaine de caractère) en tableau de bits
-        if (Arrays.equals( chiffrerMDP(mdp, u.getSel()).getKey() , Base64.getDecoder().decode(u.getMdp()))){
-          // Et si le mot de passe est correct, on retourne l'objet Utilisateur
-          return u;
-        }
-      }
-      //Sinon on ne renvoie rien
-      return null;
-    } catch (Exception e) {
-      // En cas d'erreur pour le processus d'authentification, on ne renvoie rien
-      return null;
-    }
   }
 }

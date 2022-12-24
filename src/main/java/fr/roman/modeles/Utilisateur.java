@@ -115,7 +115,9 @@ public class Utilisateur extends Modele {
     if (o == null || getClass() != o.getClass()) return false;
     Utilisateur that = (Utilisateur) o;
     return Objects.equals(nomUtilisateur, that.nomUtilisateur) && Objects.equals(mdp, that.mdp) && Arrays.equals(sel, that.sel) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && role == that.role;
+
   }
+
 
   @Override
   public int hashCode() {
@@ -130,6 +132,7 @@ public class Utilisateur extends Modele {
             "idUtilisateur=" + idUtilisateur +
             ", nomUtilisateur='" + nomUtilisateur + '\'' +
             ", mdp='" + mdp + '\'' +
+            ", sel=" + Arrays.toString(sel) +
             ", nom='" + nom + '\'' +
             ", prenom='" + prenom + '\'' +
             ", email='" + email + '\'' +
