@@ -53,7 +53,7 @@ public class RoMan extends Application {
     }
     else{
       // On affiche le message de l'erreur par défaut sinon
-      contenuErreur.append(e.getMessage());
+      contenuErreur.append(e.getLocalizedMessage());
     }
 
     // On affiche l'erreur
@@ -68,7 +68,7 @@ public class RoMan extends Application {
     // On ajoute le stacktrace à un TextArea
     TextArea zoneTrace = new TextArea(exceptionText);
     zoneTrace.setEditable(false); // Le tracé n'est pas modifiable
-    zoneTrace.setWrapText(true); // Le tracé est masqué au départ
+    zoneTrace.setWrapText(true); // On fait des retours à la ligne
 
     GridPane fenErreur = new GridPane();
     fenErreur.add(new Label("Voici la trace d'appels :"), 0, 0);
