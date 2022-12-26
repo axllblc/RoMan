@@ -42,8 +42,7 @@ public class RoMan extends Application {
     // On récupère le message d'erreur à afficher
     StringBuilder contenuErreur = new StringBuilder();
     contenuErreur.append("""
-            L'application Roman a rencontrée un problème.
-            Explication de l'erreur :
+            L'application Roman a rencontré un problème.
 
             """);
     if(messagePersonalise != null){
