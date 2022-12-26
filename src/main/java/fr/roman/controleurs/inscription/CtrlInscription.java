@@ -2,7 +2,6 @@ package fr.roman.controleurs.inscription;
 
 import fr.roman.dao.DAOUtilisateur;
 import fr.roman.modeles.Utilisateur;
-import javafx.util.Pair;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -21,15 +20,15 @@ public class CtrlInscription {
      * On itère 10 000 fois le chiffrement
      *
      * @param mdp Le mot de passe renseigné par l'utilisateur.
-     * @return Un objet Pair avec le mot de passe en première position et le sel en deuxième position
+     * @return Le mot de passe chiffré dans un tableau de bits
      */
-    public static Pair<byte[], byte[]> chiffrerMDP(String mdp, byte[] sel) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static byte[] chiffrerMDP(String mdp, byte[] sel) throws NoSuchAlgorithmException, InvalidKeySpecException {
         // On paramètre la clé de chiffrement selon les modalités décrites en documentation
         KeySpec spec = new PBEKeySpec(mdp.toCharArray(), sel, 10000, 248);
         // On récupère l'algorithme de chiffrement choisi
         SecretKeyFactory algo = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         // On procède au chiffrement du mot de passe et on le retourne avec le sel utilisé
-        return new Pair<>(algo.generateSecret(spec).getEncoded(), sel);
+        return algo.generateSecret(spec).getEncoded();
     }
 
     /**
@@ -55,7 +54,7 @@ public class CtrlInscription {
             Utilisateur u = daoU.findByNomUtilisateur(nomUtilisateur);
             if (u != null){ // Si le nom d'utilisateur existe
                 // Note : on utilise Base64 pour convertir le mot de passe (chaine de caractère) en tableau de bits
-                if (Arrays.equals(CtrlInscription.chiffrerMDP(mdp, u.getSel()).getKey() , Base64.getDecoder().decode(u.getMdp()))){
+                if (Arrays.equals(CtrlInscription.chiffrerMDP(mdp, u.getSel()) , Base64.getDecoder().decode(u.getMdp()))){
                     // Et si le mot de passe est correct, on retourne l'objet Utilisateur
                     return u;
                 }
