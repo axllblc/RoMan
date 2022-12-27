@@ -10,7 +10,7 @@ public class Client extends Modele {
   private int idClient;
   private String nom;
   private String tel;
-  private String mail;
+  private String email;
   private String siret;
   private boolean particulier;
   private Adresse adresse;
@@ -27,17 +27,17 @@ public class Client extends Modele {
    * @param idClient L'identifiant du client dans la base.
    * @param nom Le nom du client.
    * @param tel Le numéro de téléphone du client.
-   * @param mail L'adresse mail du client.
+   * @param email L'adresse mail du client.
    * @param siret Le SIRET du Client s'il est particulier
    * @param particulier Vrai si le client est particulier, faux sinon
    * @param adresse L'adresse du client.
    */
-  public Client(int idClient, String nom, String tel, String mail, String siret,
+  public Client(int idClient, String nom, String tel, String email, String siret,
                 boolean particulier, Adresse adresse) {
     this.idClient = idClient;
     this.nom = nom;
     this.tel = tel;
-    this.mail = mail;
+    this.email = email;
     this.siret = siret;
     this.particulier = particulier;
     this.adresse = adresse;
@@ -63,12 +63,12 @@ public class Client extends Modele {
     this.tel = tel;
   }
 
-  public String getMail() {
-    return mail;
+  public String getEmail() {
+    return email;
   }
 
-  public void setMail(String mail) {
-    this.mail = mail;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getSiret() {
@@ -100,12 +100,12 @@ public class Client extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Client client = (Client) o;
-    return siret == client.siret && particulier == client.particulier && Objects.equals(nom, client.nom) && Objects.equals(tel, client.tel) && Objects.equals(mail, client.mail) && Objects.equals(adresse, client.adresse);
+    return siret == client.siret && particulier == client.particulier && Objects.equals(nom, client.nom) && Objects.equals(tel, client.tel) && Objects.equals(email, client.email) && Objects.equals(adresse, client.adresse);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nom, tel, mail, siret, particulier, adresse);
+    return Objects.hash(nom, tel, email, siret, particulier, adresse);
   }
 
   @Override
@@ -114,7 +114,7 @@ public class Client extends Modele {
         + "idClient=" + idClient
         + ", nom='" + nom + '\''
         + ", tel='" + tel + '\''
-        + ", mail='" + mail + '\''
+        + ", mail='" + email + '\''
         + ", siret=" + siret
         + ", particulier=" + particulier
         + ", adresse=" + adresse.toString()
