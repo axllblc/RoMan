@@ -6,7 +6,7 @@ package fr.roman.modeles;
 public class Producteur extends Modele {
 
   private int idProducteur;
-  private int siret;
+  private String siret;
   private String nomEtablissement;
   private String tel;
   private Adresse adresse;
@@ -22,7 +22,7 @@ public class Producteur extends Modele {
    * @param adresse L'adresse du producteur.
    * @param utilisateur L'utilisateur associé au producteur.
    */
-  public Producteur(int idProducteur, int siret, String nomEtablissement, String tel,
+  public Producteur(int idProducteur, String siret, String nomEtablissement, String tel,
                     Adresse adresse, Utilisateur utilisateur) {
     this.idProducteur = idProducteur;
     this.siret = siret;
@@ -42,11 +42,11 @@ public class Producteur extends Modele {
     return idProducteur;
   }
 
-  public int getSiret() {
+  public String getSiret() {
     return siret;
   }
 
-  public void setSiret(int siret) {
+  public void setSiret(String siret) {
     this.siret = siret;
   }
 
