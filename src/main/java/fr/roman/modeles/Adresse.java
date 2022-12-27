@@ -29,6 +29,8 @@ public class Adresse extends Modele {
    * @param libelle Le libellé de l'adresse
    * @param numeroVoie Le numéro de voie de l'adresse
    * @param complementNumero Le complément du numéro
+   * @param voie Le nom de la voie
+   * @param complementAdresse Le complément de l'adresse
    * @param codePostal Le code postal
    * @param ville La ville
    */
@@ -54,6 +56,12 @@ public class Adresse extends Modele {
     return coordonneesGPS;
   }
 
+  /**
+   * Permet de définir les coordonnées GPS d'une adresse.
+   *
+   * @param coordonneesGPS un tableau de 2 doubles : le premier est la coordonnée des abscisses
+   *                       (longitude), le second est celle des ordonnées (latitude)
+   */
   public void setCoordonneesGPS(double[] coordonneesGPS) {
     this.coordonneesGPS = coordonneesGPS;
   }
