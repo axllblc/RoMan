@@ -8,6 +8,9 @@ import javafx.scene.layout.GridPane;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * Classe permettant de gérer les erreurs de l'application RoMan.
+ */
 public class RoManErreur {
     /**
      * Méthode statique servant à afficher une erreur sur l'interface graphique de l'application.
