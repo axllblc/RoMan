@@ -7,7 +7,7 @@ public class Vehicule extends Modele {
 
   private int idVehicule;
   private String immatriculation;
-  private double poidsMax;
+  private int poidsMax;
   private String libelle;
   private Producteur producteur;
 
@@ -20,8 +20,8 @@ public class Vehicule extends Modele {
    * @param libelle Le libellé du véhicule.
    * @param producteur Le producteur propriétaire du véhicule.
    */
-  public Vehicule(int idVehicule, String immatriculation, double poidsMax,
-                  String libelle, Producteur producteur) {
+  public Vehicule(int idVehicule, String immatriculation, int poidsMax, String libelle,
+                  Producteur producteur) {
     this.idVehicule = idVehicule;
     this.immatriculation = immatriculation;
     this.poidsMax = poidsMax;
@@ -47,11 +47,16 @@ public class Vehicule extends Modele {
     this.immatriculation = immatriculation;
   }
 
-  public double getPoidsMax() {
+  public int getPoidsMax() {
     return poidsMax;
   }
 
-  public void setPoidsMax(double poidsMax) {
+  /**
+   * Définir le poids maximum de l'ensemble des commandes admissible dans le véhicule.
+   *
+   * @param poidsMax Poids maximum, exprimé en kg
+   */
+  public void setPoidsMax(int poidsMax) {
     this.poidsMax = poidsMax;
   }
 
