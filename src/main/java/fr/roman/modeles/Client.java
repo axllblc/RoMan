@@ -105,7 +105,13 @@ public class Client extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Client client = (Client) o;
-    return siret == client.siret && particulier == client.particulier && Objects.equals(nom, client.nom) && Objects.equals(tel, client.tel) && Objects.equals(email, client.email) && Objects.equals(adresse, client.adresse);
+    return
+        Objects.equals(siret, client.siret)
+        && particulier == client.particulier
+        && Objects.equals(nom, client.nom)
+        && Objects.equals(tel, client.tel)
+        && Objects.equals(email, client.email)
+        && Objects.equals(adresse, client.adresse);
   }
 
   @Override

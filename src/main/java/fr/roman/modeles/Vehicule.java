@@ -88,7 +88,11 @@ public class Vehicule extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Vehicule vehicule = (Vehicule) o;
-    return poidsMax == vehicule.poidsMax && Objects.equals(immatriculation, vehicule.immatriculation) && Objects.equals(libelle, vehicule.libelle) && Objects.equals(producteur, vehicule.producteur);
+    return
+        poidsMax == vehicule.poidsMax
+        && Objects.equals(immatriculation, vehicule.immatriculation)
+        && Objects.equals(libelle, vehicule.libelle)
+        && Objects.equals(producteur, vehicule.producteur);
   }
 
   @Override

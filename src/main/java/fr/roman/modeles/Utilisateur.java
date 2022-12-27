@@ -117,7 +117,14 @@ public class Utilisateur extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Utilisateur that = (Utilisateur) o;
-    return Objects.equals(nomUtilisateur, that.nomUtilisateur) && Objects.equals(mdp, that.mdp) && Arrays.equals(sel, that.sel) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && role == that.role;
+    return
+        Objects.equals(nomUtilisateur, that.nomUtilisateur)
+        && Objects.equals(mdp, that.mdp)
+        && Arrays.equals(sel, that.sel)
+        && Objects.equals(nom, that.nom)
+        && Objects.equals(prenom, that.prenom)
+        && Objects.equals(email, that.email)
+        && role == that.role;
   }
 
   @Override
