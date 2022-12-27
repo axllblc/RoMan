@@ -60,10 +60,9 @@ public class Commande extends Modele {
     this.tournee = tournee;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Commande.
-   */
-  public Commande() {
+  @Override
+  public int getId() {
+    return idCommande;
   }
 
   public int getIdCommande() {

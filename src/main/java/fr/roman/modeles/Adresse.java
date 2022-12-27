@@ -51,6 +51,11 @@ public class Adresse extends Modele {
     this.ville = ville;
   }
 
+  @Override
+  public int getId() {
+    return idAdresse;
+  }
+
   public int getIdAdresse() {
     return idAdresse;
   }

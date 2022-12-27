@@ -43,6 +43,11 @@ public class Client extends Modele {
     this.adresse = adresse;
   }
 
+  @Override
+  public int getId() {
+    return idClient;
+  }
+
   public int getIdClient() {
     return idClient;
   }

@@ -40,10 +40,9 @@ public class Producteur extends Modele {
     this.utilisateur = utilisateur;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Producteur.
-   */
-  public Producteur() {
+  @Override
+  public int getId() {
+    return idProducteur;
   }
 
   public int getIdProducteur() {

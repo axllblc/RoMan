@@ -47,10 +47,9 @@ public class Tournee extends Modele {
     this.vehicule = vehicule;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Tournee.
-   */
-  public Tournee() {
+  @Override
+  public int getId() {
+    return idTournee;
   }
 
   public int getIdTournee() {

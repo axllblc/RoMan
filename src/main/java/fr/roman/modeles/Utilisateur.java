@@ -47,10 +47,9 @@ public class Utilisateur extends Modele {
     this.role = role;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Utilisateur.
-   */
-  public Utilisateur() {
+  @Override
+  public int getId() {
+    return idUtilisateur;
   }
 
   public int getIdUtilisateur() {

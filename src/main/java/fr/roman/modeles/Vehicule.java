@@ -37,10 +37,9 @@ public class Vehicule extends Modele {
     this.producteur = producteur;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Vehicule.
-   */
-  public Vehicule() {
+  @Override
+  public int getId() {
+    return idVehicule;
   }
 
   public int getIdVehicule() {
