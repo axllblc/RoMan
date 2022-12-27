@@ -35,7 +35,7 @@ public class CtrlInscription {
      * Méthode servant à générer un sel ayant une entropie de 32 octets.
      * @return Un sel sous forme de tableau de bits.
      */
-    private byte[] genererSel() {
+    public byte[] genererSel() {
         SecureRandom random = new SecureRandom(); // On utilise un générateur d'octets.
         // On génère le sel sur 31 octets
         return random.generateSeed(31);
