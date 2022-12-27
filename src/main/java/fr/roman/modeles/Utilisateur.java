@@ -7,8 +7,7 @@ import java.util.Objects;
 * Représente l'utilisateur de l'application.
 */
 public class Utilisateur extends Modele {
-
-  private int idUtilisateur;
+  private final int idUtilisateur;
   private String nomUtilisateur;
   private String mdp;
   private byte[] sel;
@@ -16,6 +15,13 @@ public class Utilisateur extends Modele {
   private String prenom;
   private String email;
   private Role role;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Utilisateur}.
+   */
+  public Utilisateur() {
+    idUtilisateur = 0;
+  }
 
   /**
    * Constructeur de la classe Utilisateur.

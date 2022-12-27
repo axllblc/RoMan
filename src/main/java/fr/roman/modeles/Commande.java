@@ -6,8 +6,7 @@ import java.util.Objects;
 * Représente une commande d'un client à un producteur.
 */
 public class Commande extends Modele {
-
-  private int idCommande;
+  private final int idCommande;
   private String libelle;
   private double poids;
   private String horaireDebut;
@@ -19,6 +18,13 @@ public class Commande extends Modele {
   private Producteur producteur;
   public Client client;
   public Tournee tournee;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Commande}.
+   */
+  public Commande() {
+    idCommande = 0;
+  }
 
   /**
    * Constructeur de la classe Commande.

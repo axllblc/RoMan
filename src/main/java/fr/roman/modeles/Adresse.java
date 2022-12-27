@@ -7,8 +7,7 @@ import java.util.Objects;
 * Représente une adresse d'un producteur ou d'un client.
 */
 public class Adresse extends Modele {
-
-  private int idAdresse;
+  private final int idAdresse;
   private double[] coordonneesGPS;
   private String libelle;
   private int numeroVoie;
@@ -19,9 +18,10 @@ public class Adresse extends Modele {
   private String ville;
 
   /**
-   * Le constructeur par défaut de la classe Adresse.
+   * Constructeur sans paramètre de la classe {@link Adresse}.
    */
   public Adresse() {
+    idAdresse = 0;
   }
 
   /**

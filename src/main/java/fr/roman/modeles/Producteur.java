@@ -6,13 +6,19 @@ import java.util.Objects;
 * Représente un producteur.
 */
 public class Producteur extends Modele {
-
-  private int idProducteur;
+  private final int idProducteur;
   private String siret;
   private String nomEtablissement;
   private String tel;
   private Adresse adresse;
   private Utilisateur utilisateur;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Producteur}.
+   */
+  public Producteur() {
+    idProducteur = 0;
+  }
 
   /**
    * Constructeur de la classe producteur.

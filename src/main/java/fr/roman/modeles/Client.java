@@ -6,8 +6,7 @@ import java.util.Objects;
 * Représente un client de producteurs.
 */
 public class Client extends Modele {
-
-  private int idClient;
+  private final int idClient;
   private String nom;
   private String tel;
   private String email;
@@ -16,9 +15,10 @@ public class Client extends Modele {
   private Adresse adresse;
 
   /**
-   * Constructeur par défaut de la classe Client.
+   * Constructeur sans paramètre de la classe {@link Client}.
    */
   public Client() {
+    idClient = 0;
   }
 
   /**

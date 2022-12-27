@@ -6,12 +6,18 @@ import java.util.Objects;
  * Représente le véhicule d'un producteur.
  */
 public class Vehicule extends Modele {
-
-  private int idVehicule;
+  private final int idVehicule;
   private String immatriculation;
   private int poidsMax;
   private String libelle;
   private Producteur producteur;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Vehicule}.
+   */
+  public Vehicule() {
+    idVehicule = 0;
+  }
 
   /**
    * Constructeur de la classe Vehicule.

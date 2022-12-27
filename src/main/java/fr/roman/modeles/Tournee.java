@@ -6,8 +6,7 @@ import java.util.Objects;
 * Représente la tournée d'un producteur.
 */
 public class Tournee extends Modele {
-
-  private int idTournee;
+  private final int idTournee;
   private String horaireDebut;
   private String horaireFin;
   private String estimationDuree;
@@ -15,6 +14,13 @@ public class Tournee extends Modele {
   private boolean valide;
   private Producteur producteur;
   private Vehicule vehicule;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Tournee}.
+   */
+  public Tournee() {
+    idTournee = 0;
+  }
 
   /**
    * Constructeur de la classe Tournee.
