@@ -1,7 +1,7 @@
 package fr.roman.controleurs.authentification;
 
 import fr.roman.modeles.Utilisateur;
-//import fr.roman.dao.DAOUtilisateur;
+//import fr.roman.controleurs.inscription;
 import fr.roman.vues.authentification.VueAuthentification;
 
 /**
@@ -43,7 +43,7 @@ public class CtrlAuthentification {
   public void verify() {
     this.nomUtilisateur = vueAuthentification.getNomUtilisateur();
     this.mdp = vueAuthentification.getPassword();
-    /*Utilisateur u = DAOUtilisateur.authentification(this.nomUtilisateur, this.mdp);
+    /*Utilisateur u = CtrlInscription.authentification(this.nomUtilisateur, this.mdp);
     if(u == null)
       this.vueAuthentification.erreurSaisie();
     else
