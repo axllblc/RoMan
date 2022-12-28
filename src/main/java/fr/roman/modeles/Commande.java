@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
 * Représente une commande d'un client à un producteur.
 */
@@ -11,7 +13,7 @@ public class Commande extends Modele {
   private String horaireDebut;
   private String horaireFin;
   private String note;
-  private boolean defaultLivraison;
+  private boolean defautLivraison;
   private String dateInitiale;
   private String dateLivraison;
   private Producteur producteur;
@@ -27,7 +29,7 @@ public class Commande extends Modele {
    * @param horaireDebut L'horaire de début du créneau de livraison souhaité par le client.
    * @param horaireFin L'horaire de fin du créneau de livraison souhaité par le client.
    * @param note Les notes associées à la commande.
-   * @param defaultLivraison Si vrai, la commande n'a pas pu être effectuée
+   * @param defautLivraison Si vrai, la commande n'a pas pu être effectuée
    *                         et doit être associé à une nouvelle tournée.
    * @param dateInitiale La date initiale de livraison prévue.
    * @param dateLivraison Le cas échéant, la date où la commande a été livrée.
@@ -36,7 +38,7 @@ public class Commande extends Modele {
    * @param tournee La tournée à laquelle la commande a été associée.
    */
   public Commande(int idCommande, String libelle, double poids, String horaireDebut,
-                  String horaireFin, String note, boolean defaultLivraison, String dateInitiale,
+                  String horaireFin, String note, boolean defautLivraison, String dateInitiale,
                   String dateLivraison, Producteur producteur, Client client, Tournee tournee) {
     this.idCommande = idCommande;
     this.libelle = libelle;
@@ -44,7 +46,7 @@ public class Commande extends Modele {
     this.horaireDebut = horaireDebut;
     this.horaireFin = horaireFin;
     this.note = note;
-    this.defaultLivraison = defaultLivraison;
+    this.defautLivraison = defautLivraison;
     this.dateInitiale = dateInitiale;
     this.dateLivraison = dateLivraison;
     this.producteur = producteur;
@@ -102,12 +104,12 @@ public class Commande extends Modele {
     this.note = note;
   }
 
-  public boolean isDefaultLivraison() {
-    return defaultLivraison;
+  public boolean isDefautLivraison() {
+    return defautLivraison;
   }
 
-  public void setDefaultLivraison(boolean defaultLivraison) {
-    this.defaultLivraison = defaultLivraison;
+  public void setDefautLivraison(boolean defautLivraison) {
+    this.defautLivraison = defautLivraison;
   }
 
   public String getDateInitiale() {
@@ -148,5 +150,39 @@ public class Commande extends Modele {
 
   public void setTournee(Tournee tournee) {
     this.tournee = tournee;
+  }
+
+  public enum Champs {dateInitiale, dateLivraison, defautLivraison, horaireDebut, horaireFin,
+    idCommande, libelle, note, poids, idProducteur, idTournee, idClient}
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Commande commande = (Commande) o;
+    return Double.compare(commande.poids, poids) == 0 && defautLivraison == commande.defautLivraison && Objects.equals(libelle, commande.libelle) && Objects.equals(horaireDebut, commande.horaireDebut) && Objects.equals(horaireFin, commande.horaireFin) && Objects.equals(note, commande.note) && Objects.equals(dateInitiale, commande.dateInitiale) && Objects.equals(dateLivraison, commande.dateLivraison) && Objects.equals(producteur, commande.producteur) && Objects.equals(client, commande.client) && Objects.equals(tournee, commande.tournee);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, dateInitiale, dateLivraison, producteur, client, tournee);
+  }
+
+  @Override
+  public String toString() {
+    return "Commande{" +
+            "idCommande=" + idCommande +
+            ", libelle='" + libelle + '\'' +
+            ", poids=" + poids +
+            ", horaireDebut='" + horaireDebut + '\'' +
+            ", horaireFin='" + horaireFin + '\'' +
+            ", note='" + note + '\'' +
+            ", defautLivraison=" + defautLivraison +
+            ", dateInitiale='" + dateInitiale + '\'' +
+            ", dateLivraison='" + dateLivraison + '\'' +
+            ", producteur=" + producteur.toString() +
+            ", client=" + client.toString() +
+            ", tournee=" + tournee.toString() +
+            '}';
   }
 }
