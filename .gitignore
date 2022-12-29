@@ -13,6 +13,7 @@ src/main/resources/connectionBDD.txt
 
 # IntelliJ IDEA
 /.idea/
+/RoMan.iml
 
 # Eclipse
 .metadata

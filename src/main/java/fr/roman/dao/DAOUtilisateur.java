@@ -45,8 +45,8 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
               PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
       req.setString(1, u.getNomUtilisateur());
-      req.setBytes(2, Base64.getDecoder().decode(u.getMdp())); // la clé est le mdp chiffré
-      req.setBytes(3,u.getSel()); // la valeur est le sel
+      req.setBytes(2, Base64.getDecoder().decode(u.getMdp()));
+      req.setBytes(3,u.getSel());
       req.setString(4, u.getNom());
       req.setString(5, u.getPrenom());
       req.setString(6, u.getEmail());
@@ -150,7 +150,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
               "SET nomUtilisateur = ?, mdp = ?, sel = ?, nom = ?, prenom = ?, email = ? " +
               "WHERE idUtilisateur = ?");
       req.setString(1, u.getNomUtilisateur());
-      req.setBytes(2, u.getSel());
+      req.setBytes(2, Base64.getDecoder().decode(u.getMdp()));
       req.setBytes(3, u.getSel());
       req.setString(4, u.getNom());
       req.setString(5, u.getPrenom());
