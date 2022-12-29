@@ -1,5 +1,7 @@
 package fr.roman.dao;
 
+import fr.roman.modeles.Modele;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
  * Est paramétré d'un ({@link fr.roman.modeles.Modele modèle M}) de l'application et de
  *  l'énumération de ses attributs/champs ({@link C C}).
  */
-public abstract class DAO<M, C extends Enum<C>> {
+public abstract class DAO<M extends Modele, C extends Enum<C>> {
 
   /**
    * Objet {@link Connection} servant à établir la connection avec la base de donnée.
