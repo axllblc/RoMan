@@ -6,13 +6,19 @@ import java.util.Objects;
 * Représente un producteur.
 */
 public class Producteur extends Modele {
-
-  private int idProducteur;
+  private final int idProducteur;
   private String siret;
   private String nomEtablissement;
   private String tel;
   private Adresse adresse;
   private Utilisateur utilisateur;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Producteur}.
+   */
+  public Producteur() {
+    idProducteur = 0;
+  }
 
   /**
    * Constructeur de la classe producteur.
@@ -24,7 +30,8 @@ public class Producteur extends Modele {
    * @param adresse L'adresse du producteur.
    * @param utilisateur L'utilisateur associé au producteur.
    */
-  public Producteur(int idProducteur, String siret, String nomEtablissement, String tel, Adresse adresse, Utilisateur utilisateur) {
+  public Producteur(int idProducteur, String siret, String nomEtablissement, String tel,
+                    Adresse adresse, Utilisateur utilisateur) {
     this.idProducteur = idProducteur;
     this.siret = siret;
     this.nomEtablissement = nomEtablissement;
@@ -33,10 +40,9 @@ public class Producteur extends Modele {
     this.utilisateur = utilisateur;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Producteur.
-   */
-  public Producteur() {
+  @Override
+  public int getId() {
+    return idProducteur;
   }
 
   public int getIdProducteur() {
@@ -90,7 +96,12 @@ public class Producteur extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Producteur that = (Producteur) o;
-    return Objects.equals(siret, that.siret) && Objects.equals(nomEtablissement, that.nomEtablissement) && Objects.equals(tel, that.tel) && Objects.equals(adresse, that.adresse) && Objects.equals(utilisateur, that.utilisateur);
+    return
+        Objects.equals(siret, that.siret)
+        && Objects.equals(nomEtablissement, that.nomEtablissement)
+        && Objects.equals(tel, that.tel)
+        && Objects.equals(adresse, that.adresse)
+        && Objects.equals(utilisateur, that.utilisateur);
   }
 
   @Override
@@ -100,13 +111,13 @@ public class Producteur extends Modele {
 
   @Override
   public String toString() {
-    return "Producteur{" +
-            "idProducteur=" + idProducteur +
-            ", siret='" + siret + '\'' +
-            ", nomEtablissement='" + nomEtablissement + '\'' +
-            ", tel='" + tel + '\'' +
-            ", adresse=" + adresse +
-            ", utilisateur=" + utilisateur +
-            '}';
+    return "Producteur{"
+        + "idProducteur=" + idProducteur
+        + ", siret='" + siret + '\''
+        + ", nomEtablissement='" + nomEtablissement + '\''
+        + ", tel='" + tel + '\''
+        + ", adresse=" + adresse
+        + ", utilisateur=" + utilisateur.toString()
+        + '}';
   }
 }

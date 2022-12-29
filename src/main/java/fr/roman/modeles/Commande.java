@@ -1,24 +1,31 @@
 package fr.roman.modeles;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 /**
 * Représente une commande d'un client à un producteur.
 */
 public class Commande extends Modele {
-
-  private int idCommande;
+  private final int idCommande;
   private String libelle;
   private double poids;
-  private String horaireDebut;
-  private String horaireFin;
+  private Calendar horaireDebut;
+  private Calendar horaireFin;
   private String note;
   private boolean defautLivraison;
-  private String dateInitiale;
-  private String dateLivraison;
+  private Calendar dateInitiale;
+  private Calendar dateLivraison;
   private Producteur producteur;
   public Client client;
   public Tournee tournee;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Commande}.
+   */
+  public Commande() {
+    idCommande = 0;
+  }
 
   /**
    * Constructeur de la classe Commande.
@@ -29,7 +36,7 @@ public class Commande extends Modele {
    * @param horaireDebut L'horaire de début du créneau de livraison souhaité par le client.
    * @param horaireFin L'horaire de fin du créneau de livraison souhaité par le client.
    * @param note Les notes associées à la commande.
-   * @param defautLivraison Si vrai, la commande n'a pas pu être effectuée
+   * @param defaultLivraison Si vrai, la commande n'a pas pu être effectuée
    *                         et doit être associé à une nouvelle tournée.
    * @param dateInitiale La date initiale de livraison prévue.
    * @param dateLivraison Le cas échéant, la date où la commande a été livrée.
@@ -38,7 +45,7 @@ public class Commande extends Modele {
    * @param tournee La tournée à laquelle la commande a été associée.
    */
   public Commande(int idCommande, String libelle, double poids, String horaireDebut,
-                  String horaireFin, String note, boolean defautLivraison, String dateInitiale,
+                  String horaireFin, String note, boolean defaultLivraison, String dateInitiale,
                   String dateLivraison, Producteur producteur, Client client, Tournee tournee) {
     this.idCommande = idCommande;
     this.libelle = libelle;
@@ -54,10 +61,9 @@ public class Commande extends Modele {
     this.tournee = tournee;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Commande.
-   */
-  public Commande() {
+  @Override
+  public int getId() {
+    return idCommande;
   }
 
   public int getIdCommande() {
@@ -80,19 +86,19 @@ public class Commande extends Modele {
     this.poids = poids;
   }
 
-  public String getHoraireDebut() {
+  public Calendar getHoraireDebut() {
     return horaireDebut;
   }
 
-  public void setHoraireDebut(String horaireDebut) {
+  public void setHoraireDebut(Calendar horaireDebut) {
     this.horaireDebut = horaireDebut;
   }
 
-  public String getHoraireFin() {
+  public Calendar getHoraireFin() {
     return horaireFin;
   }
 
-  public void setHoraireFin(String horaireFin) {
+  public void setHoraireFin(Calendar horaireFin) {
     this.horaireFin = horaireFin;
   }
 
@@ -112,19 +118,19 @@ public class Commande extends Modele {
     this.defautLivraison = defautLivraison;
   }
 
-  public String getDateInitiale() {
+  public Calendar getDateInitiale() {
     return dateInitiale;
   }
 
-  public void setDateInitiale(String dateInitiale) {
+  public void setDateInitiale(Calendar dateInitiale) {
     this.dateInitiale = dateInitiale;
   }
 
-  public String getDateLivraison() {
+  public Calendar getDateLivraison() {
     return dateLivraison;
   }
 
-  public void setDateLivraison(String dateLivraison) {
+  public void setDateLivraison(Calendar dateLivraison) {
     this.dateLivraison = dateLivraison;
   }
 
@@ -160,29 +166,43 @@ public class Commande extends Modele {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Commande commande = (Commande) o;
-    return Double.compare(commande.poids, poids) == 0 && defautLivraison == commande.defautLivraison && Objects.equals(libelle, commande.libelle) && Objects.equals(horaireDebut, commande.horaireDebut) && Objects.equals(horaireFin, commande.horaireFin) && Objects.equals(note, commande.note) && Objects.equals(dateInitiale, commande.dateInitiale) && Objects.equals(dateLivraison, commande.dateLivraison) && Objects.equals(producteur, commande.producteur) && Objects.equals(client, commande.client) && Objects.equals(tournee, commande.tournee);
+    return
+        Double.compare(commande.poids, poids) == 0
+        && defautLivraison == commande.defautLivraison
+        && Objects.equals(libelle, commande.libelle)
+        && Objects.equals(horaireDebut, commande.horaireDebut)
+        && Objects.equals(horaireFin, commande.horaireFin)
+        && Objects.equals(note, commande.note)
+        && Objects.equals(dateInitiale, commande.dateInitiale)
+        && Objects.equals(dateLivraison, commande.dateLivraison)
+        && Objects.equals(producteur, commande.producteur)
+        && Objects.equals(client, commande.client)
+        && Objects.equals(tournee, commande.tournee);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, dateInitiale, dateLivraison, producteur, client, tournee);
+    return Objects.hash(
+        libelle, poids, horaireDebut, horaireFin, note, defautLivraison, dateInitiale,
+        dateLivraison, producteur, client, tournee
+    );
   }
 
   @Override
   public String toString() {
-    return "Commande{" +
-            "idCommande=" + idCommande +
-            ", libelle='" + libelle + '\'' +
-            ", poids=" + poids +
-            ", horaireDebut='" + horaireDebut + '\'' +
-            ", horaireFin='" + horaireFin + '\'' +
-            ", note='" + note + '\'' +
-            ", defautLivraison=" + defautLivraison +
-            ", dateInitiale='" + dateInitiale + '\'' +
-            ", dateLivraison='" + dateLivraison + '\'' +
-            ", producteur=" + producteur.toString() +
-            ", client=" + client.toString() +
-            ", tournee=" + tournee.toString() +
-            '}';
+    return "Commande{"
+        + "idCommande=" + idCommande
+        + ", libelle='" + libelle + '\''
+        + ", poids=" + poids
+        + ", horaireDebut='" + horaireDebut + '\''
+        + ", horaireFin='" + horaireFin + '\''
+        + ", note='" + note + '\''
+        + ", defautLivraison=" + defautLivraison
+        + ", dateInitiale='" + dateInitiale + '\''
+        + ", dateLivraison='" + dateLivraison + '\''
+        + ", producteur=" + producteur.toString()
+        + ", client=" + client.toString()
+        + ", tournee=" + tournee.toString()
+        + '}';
   }
 }
