@@ -1,5 +1,6 @@
 package fr.roman.modeles;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 /**
@@ -9,12 +10,12 @@ public class Commande extends Modele {
   private final int idCommande;
   private String libelle;
   private double poids;
-  private String horaireDebut;
-  private String horaireFin;
+  private Calendar horaireDebut;
+  private Calendar horaireFin;
   private String note;
   private boolean defautLivraison;
-  private String dateInitiale;
-  private String dateLivraison;
+  private Calendar dateInitiale;
+  private Calendar dateLivraison;
   private Producteur producteur;
   public Client client;
   public Tournee tournee;
@@ -43,9 +44,9 @@ public class Commande extends Modele {
    * @param client Le client qui a fait la commande.
    * @param tournee La tournée à laquelle la commande a été associée.
    */
-  public Commande(int idCommande, String libelle, double poids, String horaireDebut,
-                  String horaireFin, String note, boolean defautLivraison, String dateInitiale,
-                  String dateLivraison, Producteur producteur, Client client, Tournee tournee) {
+  public Commande(int idCommande, String libelle, double poids, Calendar horaireDebut,
+                  Calendar horaireFin, String note, boolean defautLivraison, Calendar dateInitiale,
+                  Calendar dateLivraison, Producteur producteur, Client client, Tournee tournee) {
     this.idCommande = idCommande;
     this.libelle = libelle;
     this.poids = poids;
@@ -85,19 +86,19 @@ public class Commande extends Modele {
     this.poids = poids;
   }
 
-  public String getHoraireDebut() {
+  public Calendar getHoraireDebut() {
     return horaireDebut;
   }
 
-  public void setHoraireDebut(String horaireDebut) {
+  public void setHoraireDebut(Calendar horaireDebut) {
     this.horaireDebut = horaireDebut;
   }
 
-  public String getHoraireFin() {
+  public Calendar getHoraireFin() {
     return horaireFin;
   }
 
-  public void setHoraireFin(String horaireFin) {
+  public void setHoraireFin(Calendar horaireFin) {
     this.horaireFin = horaireFin;
   }
 
@@ -117,19 +118,19 @@ public class Commande extends Modele {
     this.defautLivraison = defautLivraison;
   }
 
-  public String getDateInitiale() {
+  public Calendar getDateInitiale() {
     return dateInitiale;
   }
 
-  public void setDateInitiale(String dateInitiale) {
+  public void setDateInitiale(Calendar dateInitiale) {
     this.dateInitiale = dateInitiale;
   }
 
-  public String getDateLivraison() {
+  public Calendar getDateLivraison() {
     return dateLivraison;
   }
 
-  public void setDateLivraison(String dateLivraison) {
+  public void setDateLivraison(Calendar dateLivraison) {
     this.dateLivraison = dateLivraison;
   }
 

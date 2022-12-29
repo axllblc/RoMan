@@ -1,5 +1,7 @@
 package fr.roman.modeles;
 
+import java.time.Duration;
+import java.util.Calendar;
 import java.util.Objects;
 
 /**
@@ -7,9 +9,9 @@ import java.util.Objects;
 */
 public class Tournee extends Modele {
   private final int idTournee;
-  private String horaireDebut;
-  private String horaireFin;
-  private String estimationDuree;
+  private Calendar horaireDebut;
+  private Calendar horaireFin;
+  private Duration estimationDuree;
   private String note;
   private boolean valide;
   private Producteur producteur;
@@ -35,7 +37,7 @@ public class Tournee extends Modele {
    * @param producteur Le producteur responsable de cette tournée.
    * @param vehicule Le véhicule utilisé pour effectuer la tournée.
    */
-  public Tournee(int idTournee, String horaireDebut, String horaireFin, String estimationDuree,
+  public Tournee(int idTournee, Calendar horaireDebut, Calendar horaireFin, Duration estimationDuree,
                  String note, boolean valide, Producteur producteur, Vehicule vehicule) {
     this.idTournee = idTournee;
     this.horaireDebut = horaireDebut;
@@ -56,27 +58,27 @@ public class Tournee extends Modele {
     return idTournee;
   }
 
-  public String getHoraireDebut() {
+  public Calendar getHoraireDebut() {
     return horaireDebut;
   }
 
-  public void setHoraireDebut(String horaireDebut) {
+  public void setHoraireDebut(Calendar horaireDebut) {
     this.horaireDebut = horaireDebut;
   }
 
-  public String getHoraireFin() {
+  public Calendar getHoraireFin() {
     return horaireFin;
   }
 
-  public void setHoraireFin(String horaireFin) {
+  public void setHoraireFin(Calendar horaireFin) {
     this.horaireFin = horaireFin;
   }
 
-  public String getEstimationDuree() {
+  public Duration getEstimationDuree() {
     return estimationDuree;
   }
 
-  public void setEstimationDuree(String estimationDuree) {
+  public void setEstimationDuree(Duration estimationDuree) {
     this.estimationDuree = estimationDuree;
   }
 
