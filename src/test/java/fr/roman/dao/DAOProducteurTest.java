@@ -59,17 +59,13 @@ class DAOProducteurTest {
    */
   @Test
   void insert() {
-    // TODO: 24/12/2022 Modifier car on ajoute l'utilisateur en même temps que le producteur et on chiffre le mdp dans le ctrl
-  
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID().toString());
+    testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
     testUtilisateur.setNom("nom");
@@ -116,11 +112,10 @@ class DAOProducteurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }    testUtilisateur.setNom("nom");
+    }
+    testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
@@ -168,11 +163,10 @@ class DAOProducteurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }    testUtilisateur.setNom("nom");
+    }
+    testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
@@ -217,11 +211,10 @@ class DAOProducteurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }    testUtilisateur.setNom("nom");
+    }
+    testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
@@ -267,11 +260,10 @@ class DAOProducteurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }    testUtilisateur.setNom("nom");
+    }
+    testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);

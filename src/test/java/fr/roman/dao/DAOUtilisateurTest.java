@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -55,9 +54,7 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
     testUtilisateur.setNom("nom");
@@ -89,9 +86,7 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
     testUtilisateur.setNom("nom");
@@ -137,9 +132,7 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
     testUtilisateur.setNom("nom");
@@ -170,9 +163,7 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
     testUtilisateur.setNom("nom");
@@ -201,9 +192,7 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
     testUtilisateur.setNom("nom");
@@ -232,11 +221,10 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }    testUtilisateur.setNom("nom");
+    }
+    testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.ADMINISTRATEUR);
@@ -261,11 +249,10 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }    testUtilisateur.setNom("nom");
+    }
+    testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.ADMINISTRATEUR);
@@ -290,11 +277,10 @@ class DAOUtilisateurTest {
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
       testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
-    } catch (InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }    testUtilisateur.setNom("nom");
+    }
+    testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.ADMINISTRATEUR);
