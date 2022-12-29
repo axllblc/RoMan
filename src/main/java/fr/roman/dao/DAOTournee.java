@@ -2,10 +2,11 @@ package fr.roman.dao;
 
 import fr.roman.modeles.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -39,9 +40,21 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
                       "idProducteur) VALUES (?,?,?,?,?,?,?)",
               PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
-      req.setString(1, t.getHoraireDebut());
-      req.setString(2, t.getHoraireFin());
-      req.setString(3, t.getEstimationDuree());
+
+      // Pour les objets "Calendar" ou "Duration"
+      req.setTime(1, null);
+      req.setTime(2, null);
+      req.setTime(3, null);
+      if(t.getHoraireDebut() != null){
+        req.setTimestamp(1, new Timestamp(t.getHoraireDebut().getTimeInMillis()));
+      }
+      if(t.getHoraireFin() != null){
+        req.setTimestamp(2, new Timestamp(t.getHoraireFin().getTimeInMillis()));
+      }
+      if(t.getEstimationDuree() != null){
+        req.setTime(3, Time.valueOf(LocalTime.ofSecondOfDay(t.getEstimationDuree().toSeconds())));
+      }
+
       req.setString(4, t.getNote());
       req.setBoolean(5, t.isValide());
       req.setInt(6, t.getVehicule().getIdVehicule());
@@ -75,9 +88,20 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       PreparedStatement req  = this.getCo().prepareStatement("UPDATE tournees " +
               "SET horaireDebut = ?, horaireFin = ?, estimationDuree = ?, note = ?, valide = ?, " +
               "idVehicule = ?, idProducteur = ? WHERE idTournee = ?");
-      req.setString(1, t.getHoraireDebut());
-      req.setString(2, t.getHoraireFin());
-      req.setString(3, t.getEstimationDuree());
+
+      // Pour les objets "Calendar" ou "Duration"
+      req.setTime(1, null);
+      req.setTime(2, null);
+      req.setTime(3, null);
+      if(t.getHoraireDebut() != null){
+        req.setTimestamp(1, new Timestamp(t.getHoraireDebut().getTimeInMillis()));
+      }
+      if(t.getHoraireFin() != null){
+        req.setTimestamp(2, new Timestamp(t.getHoraireFin().getTimeInMillis()));
+      }
+      if(t.getEstimationDuree() != null){
+        req.setTime(3, Time.valueOf(LocalTime.ofSecondOfDay(t.getEstimationDuree().toSeconds())));
+      }
       req.setString(4, t.getNote());
       req.setBoolean(5, t.isValide());
       req.setInt(6, t.getVehicule().getIdVehicule());
@@ -139,8 +163,22 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
         vehicule = daoV.findById(Integer.parseInt(rs.getString("idVehicule")));
         producteur = daoP.findById(Integer.parseInt(rs.getString("idProducteur")));
 
-        tournees.add(new Tournee(rs.getInt("idTournee"), rs.getString("horaireDebut"),
-                rs.getString("horaireFin"), rs.getString("estimationDuree"),
+        // Pour les objets "Calendar" ou "Duration"
+        Calendar horaireDebut = Calendar.getInstance();
+        if (rs.getTimestamp("horaireDebut") != null){
+          horaireDebut.setTimeInMillis(rs.getTimestamp("horaireDebut").getTime());
+        }
+        Calendar horaireFin = Calendar.getInstance();
+        if(rs.getTimestamp("horaireFin") !=null){
+          horaireFin.setTimeInMillis(rs.getTimestamp("horaireFin").getTime());
+        }
+        Duration estimationDuree = Duration.ZERO;
+        if(rs.getTime("estimationDuree") != null){
+          estimationDuree = Duration.ofNanos(rs.getTime("estimationDuree").toLocalTime().toNanoOfDay());
+        }
+
+        tournees.add(new Tournee(rs.getInt("idTournee"), horaireDebut,
+                horaireFin, estimationDuree,
                 rs.getString("note"), rs.getBoolean("valide"),
                 producteur, vehicule));
       }

@@ -42,7 +42,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       // L'ajout des valeurs
       req.setString(1, c.getNom());
       req.setString(2, c.getTel());
-      req.setString(3, c.getMail());
+      req.setString(3, c.getEmail());
       req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
       req.setInt(6, c.getAdresse().getIdAdresse());
@@ -53,7 +53,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       if(rs.next()){
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
         return new Client(rs.getInt(1), c.getNom(), c.getTel(),
-                c.getMail(), c.getSiret(), c.isParticulier(), c.getAdresse());
+                c.getEmail(), c.getSiret(), c.isParticulier(), c.getAdresse());
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
@@ -77,7 +77,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       // L'ajout des valeurs
       req.setString(1, c.getNom());
       req.setString(2, c.getTel());
-      req.setString(3, c.getMail());
+      req.setString(3, c.getEmail());
       req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
       req.setInt(6, c.getAdresse().getIdAdresse());
