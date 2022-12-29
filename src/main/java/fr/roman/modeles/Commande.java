@@ -44,9 +44,9 @@ public class Commande extends Modele {
    * @param client Le client qui a fait la commande.
    * @param tournee La tournée à laquelle la commande a été associée.
    */
-  public Commande(int idCommande, String libelle, double poids, String horaireDebut,
-                  String horaireFin, String note, boolean defaultLivraison, String dateInitiale,
-                  String dateLivraison, Producteur producteur, Client client, Tournee tournee) {
+  public Commande(int idCommande, String libelle, double poids, Calendar horaireDebut,
+                  Calendar horaireFin, String note, boolean defaultLivraison, Calendar dateInitiale,
+                  Calendar dateLivraison, Producteur producteur, Client client, Tournee tournee) {
     this.idCommande = idCommande;
     this.libelle = libelle;
     this.poids = poids;
