@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -64,7 +65,8 @@ class DAOProducteurTest {
     testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
-      testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -72,7 +74,55 @@ class DAOProducteurTest {
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
-  
+
+    double[] coord = {40.0, 0.80};
+    Adresse testAddresse = new Adresse();
+    testAddresse.setCoordonneesGPS(coord);
+    testAddresse.setLibelle("test");
+    testAddresse.setNumeroVoie(1);
+    testAddresse.setComplementNumero("numéro");
+    testAddresse.setVoie("voie");
+    testAddresse.setComplementAdresse("adresse");
+    testAddresse.setCodePostal(37000);
+    testAddresse.setVille("tours");
+    Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
+
+    Producteur testProducteur = new Producteur();
+    testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
+    testProducteur.setNomEtablissement("nomÉtablissement");
+    testProducteur.setTel("0123456789");
+    testProducteur.setAdresse(retourAdresse);
+    testProducteur.setUtilisateur(testUtilisateur);
+    Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
+
+    // compare l'objet retourné par la méthode insert (producteur).
+    assertEquals(retourProducteur, testProducteur);
+    // test d'insérer un producteur déjà ajouter.
+    retourProducteur = TEST_DAOUtilisateur.insert(testProducteur);
+    assertNull(retourProducteur);
+  }
+
+  /**
+   * Test de la méthode update().
+   * Dépend des méthodes insert() et findById().
+   */
+  @Test
+  void update() {
+    // création d'objet Utilisateur, Adresse et producteur.
+    Utilisateur testUtilisateur = new Utilisateur();
+    testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
+    testUtilisateur.setNom("nom");
+    testUtilisateur.setPrenom("prénom");
+    testUtilisateur.setEmail("email");
+    testUtilisateur.setRole(Role.PRODUCTEUR);
+
     double[] coord = {40.0, 0.80};
     Adresse testAddresse = new Adresse();
     testAddresse.setCoordonneesGPS(coord);
@@ -92,62 +142,14 @@ class DAOProducteurTest {
     testProducteur.setAdresse(retourAdresse);
     testProducteur.setUtilisateur(testUtilisateur);
     Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
-  
-    // compare l'objet retourné par la méthode insert (producteur).
-    assertEquals(retourProducteur, testProducteur);
-    // test d'insérer un producteur déjà ajouter.
-    retourProducteur = TEST_DAOUtilisateur.insert(testProducteur);
-    assertNull(retourProducteur);
-  }
-  
-  /**
-   * Test de la méthode update().
-   * Dépend des méthodes insert() et findById().
-   */
-  @Test
-  void update() {
-    // création d'objet Utilisateur, Adresse et producteur.
-    Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
-    testUtilisateur.setSel(TEST_CTRL.genererSel());
-    try {
-      testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
-    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      throw new RuntimeException(e);
-    }
-    testUtilisateur.setNom("nom");
-    testUtilisateur.setPrenom("prénom");
-    testUtilisateur.setEmail("email");
-    testUtilisateur.setRole(Role.PRODUCTEUR);
-    Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
-  
-    double[] coord = {40.0, 0.80};
-    Adresse testAddresse = new Adresse();
-    testAddresse.setCoordonneesGPS(coord);
-    testAddresse.setLibelle("test"+UUID.randomUUID());
-    testAddresse.setNumeroVoie(1);
-    testAddresse.setComplementNumero("numéro");
-    testAddresse.setVoie("voie");
-    testAddresse.setComplementAdresse("adresse");
-    testAddresse.setCodePostal(37000);
-    testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-  
-    Producteur testProducteur = new Producteur();
-    testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
-    testProducteur.setNomEtablissement("nomÉtablissement"+UUID.randomUUID());
-    testProducteur.setTel("0123456789");
-    testProducteur.setAdresse(retourAdresse);
-    testProducteur.setUtilisateur(retourUtilisateur);
-    Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
-    
-    //
+
+    // modification de l'objet Producteur.
     retourProducteur.setNomEtablissement("upgradeNomÉtablissement");
     retourProducteur.setNomEtablissement("upgradeNomÉtablissement");
     assertTrue(TEST_DAOProducteur.update(retourProducteur));
-    //
+    // recherche l'objet Producteur récemment modifier.
     Producteur updateProducteur = TEST_DAOProducteur.findById(retourProducteur.getIdProducteur());
-    //
+    // test l'égalité entre l'objet et les données de la BD.
     assertEquals(retourProducteur, updateProducteur);
   }
   
@@ -162,7 +164,8 @@ class DAOProducteurTest {
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
-      testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -182,7 +185,7 @@ class DAOProducteurTest {
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
     Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-  
+
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
     testProducteur.setNomEtablissement("nomÉtablissement"+UUID.randomUUID());
@@ -195,10 +198,8 @@ class DAOProducteurTest {
     assertTrue(TEST_DAOProducteur.delete(retourProducteur.getIdProducteur()));
     // test recherche de l'utilisateur supprimer.
     assertNull(TEST_DAOProducteur.findById(retourProducteur.getIdProducteur()));
-    // test de suppression d'un Producteur inexistant.
-    assertFalse(TEST_DAOProducteur.delete(retourProducteur.getIdProducteur()+1));
   }
-  
+
   /**
    * Test de la méthode find().
    * Dépend de la méthode insert().
@@ -210,7 +211,8 @@ class DAOProducteurTest {
     testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
-      testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -219,7 +221,7 @@ class DAOProducteurTest {
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
     Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
-  
+
     double[] coord = {40.0, 0.80};
     Adresse testAddresse = new Adresse();
     testAddresse.setCoordonneesGPS(coord);
@@ -231,7 +233,7 @@ class DAOProducteurTest {
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
     Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-  
+
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
     testProducteur.setNomEtablissement("nomÉtablissement"+UUID.randomUUID());
@@ -239,7 +241,7 @@ class DAOProducteurTest {
     testProducteur.setAdresse(retourAdresse);
     testProducteur.setUtilisateur(retourUtilisateur);
     TEST_DAOProducteur.insert(testProducteur);
-  
+
     // recherche les producteurs qui ont comme tel "01234567891234"
     HashMap<Producteur.Champs, String> criteres = new HashMap<>();
     criteres.put(Producteur.Champs.tel, "01234567891234");
@@ -247,7 +249,7 @@ class DAOProducteurTest {
     // test si tous les producteurs retournés par find() sont corrects.
     retourFind.forEach(x -> assertEquals("01234567891234", x.getTel()));
   }
-  
+
   /**
    * Test de la méthode findById().
    * Dépend de la méthode insert().
@@ -256,10 +258,11 @@ class DAOProducteurTest {
   void findById() {
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
-    testUtilisateur.setNomUtilisateur("nom utilisateur"+UUID.randomUUID());
+    testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
     testUtilisateur.setSel(TEST_CTRL.genererSel());
     try {
-      testUtilisateur.setMdp(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel()).toString());
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -267,11 +270,11 @@ class DAOProducteurTest {
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
-  
+
     double[] coord = {40.0, 0.80};
     Adresse testAddresse = new Adresse();
     testAddresse.setCoordonneesGPS(coord);
-    testAddresse.setLibelle("test"+UUID.randomUUID());
+    testAddresse.setLibelle("test");
     testAddresse.setNumeroVoie(1);
     testAddresse.setComplementNumero("numéro");
     testAddresse.setVoie("voie");
@@ -279,15 +282,15 @@ class DAOProducteurTest {
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
     Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-  
+
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
-    testProducteur.setNomEtablissement("nomÉtablissement"+UUID.randomUUID());
+    testProducteur.setNomEtablissement("nomÉtablissement");
     testProducteur.setTel("0123456789");
     testProducteur.setAdresse(retourAdresse);
     testProducteur.setUtilisateur(testUtilisateur);
     Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
-    
+
     // test rechercher du producteur ajouter.
     assertEquals(retourProducteur, TEST_DAOProducteur.findById(retourProducteur.getIdProducteur()));
     // test recherche d'un producteur qui n'existe pas dans la BD.
