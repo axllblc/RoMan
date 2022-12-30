@@ -100,6 +100,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
         throw new SQLException();
       }
       // on ajoute l'utilisateur (avec maintenant un identifiant) au producteur (qui va être ajouté)
+      u.setRole(Role.PRODUCTEUR); // On ajoute un producteur
       p.setUtilisateur(u);
       // La requête
       PreparedStatement reqProducteur = this.getCo().prepareStatement("INSERT INTO producteurs " +
