@@ -7,8 +7,7 @@ import java.util.Objects;
 * Représente l'utilisateur de l'application.
 */
 public class Utilisateur extends Modele {
-
-  private int idUtilisateur;
+  private final int idUtilisateur;
   private String nomUtilisateur;
   private String mdp;
   private byte[] sel;
@@ -16,6 +15,13 @@ public class Utilisateur extends Modele {
   private String prenom;
   private String email;
   private Role role;
+
+  /**
+   * Constructeur sans paramètre de la classe {@link Utilisateur}.
+   */
+  public Utilisateur() {
+    idUtilisateur = 0;
+  }
 
   /**
    * Constructeur de la classe Utilisateur.
@@ -41,10 +47,9 @@ public class Utilisateur extends Modele {
     this.role = role;
   }
 
-  /**
-   * Le constructeur par défaut de la classe Utilisateur.
-   */
-  public Utilisateur() {
+  @Override
+  public int getId() {
+    return idUtilisateur;
   }
 
   public int getIdUtilisateur() {
@@ -107,17 +112,20 @@ public class Utilisateur extends Modele {
     this.role = role;
   }
 
-  public enum Champs {email, mdp, nom, nomUtilisateur, prenom, role, idUtilisateur}
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Utilisateur that = (Utilisateur) o;
-    return Objects.equals(nomUtilisateur, that.nomUtilisateur) && Objects.equals(mdp, that.mdp) && Arrays.equals(sel, that.sel) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && role == that.role;
-
+    return
+        Objects.equals(nomUtilisateur, that.nomUtilisateur)
+        && Objects.equals(mdp, that.mdp)
+        && Arrays.equals(sel, that.sel)
+        && Objects.equals(nom, that.nom)
+        && Objects.equals(prenom, that.prenom)
+        && Objects.equals(email, that.email)
+        && role == that.role;
   }
-
 
   @Override
   public int hashCode() {
@@ -128,15 +136,15 @@ public class Utilisateur extends Modele {
 
   @Override
   public String toString() {
-    return "Utilisateur{" +
-            "idUtilisateur=" + idUtilisateur +
-            ", nomUtilisateur='" + nomUtilisateur + '\'' +
-            ", mdp='" + mdp + '\'' +
-            ", sel=" + Arrays.toString(sel) +
-            ", nom='" + nom + '\'' +
-            ", prenom='" + prenom + '\'' +
-            ", email='" + email + '\'' +
-            ", role=" + role +
-            '}';
+    return "Utilisateur{"
+        + "idUtilisateur=" + idUtilisateur
+        + ", nomUtilisateur='" + nomUtilisateur + '\''
+        + ", mdp='" + mdp + '\''
+        + ", sel=" + Arrays.toString(sel)
+        + ", nom='" + nom + '\''
+        + ", prenom='" + prenom + '\''
+        + ", email='" + email + '\''
+        + ", role=" + role
+        + '}';
   }
 }
