@@ -151,7 +151,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
               "SET nomUtilisateur = ?, mdp = ?, sel = ?, nom = ?, prenom = ?, email = ? " +
               "WHERE idUtilisateur = ?");
       req.setString(1, u.getNomUtilisateur());
-      req.setBytes(2, u.getSel());
+      req.setBytes(2, Base64.getDecoder().decode(u.getMdp()));
       req.setBytes(3, u.getSel());
       req.setString(4, u.getNom());
       req.setString(5, u.getPrenom());
