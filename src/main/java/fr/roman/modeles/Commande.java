@@ -158,6 +158,9 @@ public class Commande extends Modele {
     this.tournee = tournee;
   }
 
+  public enum Champs {dateInitiale, dateLivraison, defautLivraison, horaireDebut, horaireFin,
+    idCommande, libelle, note, poids, idProducteur, idTournee, idClient}
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

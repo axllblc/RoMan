@@ -89,6 +89,8 @@ public class Producteur extends Modele {
     this.utilisateur = utilisateur;
   }
 
+  public enum Champs {idProducteur, siret, nomEtablissement, tel, idUtilisateur, idAdresse}
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

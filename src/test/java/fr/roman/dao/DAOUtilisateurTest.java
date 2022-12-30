@@ -1,12 +1,16 @@
 package fr.roman.dao;
 
+import fr.roman.controleurs.inscription.CtrlInscription;
 import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
 import org.junit.jupiter.api.Test;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -38,23 +42,28 @@ class DAOUtilisateurTest {
     }
   }
 
+  private final CtrlInscription TEST_CTRL = new CtrlInscription();
+
   /**
    * Test de la méthode insert (admin).
    */
   @Test
   void insertAdmin() {
-    // TODO: 24/12/2022 Modifier car on chiffre le mot de passe dans le contrôleur
     // création d'un objet Utilisateur sans idUtilisateur ni de sale.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
-    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.ADMINISTRATEUR);
     Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
-    testUtilisateur.setMdp(retourUtilisateur.getMdp());
-    testUtilisateur.setSel(retourUtilisateur.getSel());
 
     // s'il s'agit du premier utilisateur ajouté il sera root.
     if (retourUtilisateur.getIdUtilisateur()==1) {testUtilisateur.setRole(Role.ROOT);}
@@ -71,17 +80,21 @@ class DAOUtilisateurTest {
    */
   @Test
   void insertProducteur() {
-    // TODO: 24/12/2022 Modifier car on ajoute l'utilisateur en même temps que le producteur et on chiffre le mdp dans le ctrl
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
-    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
-    Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
-    
+
     double[] coord = {40.0, 0.80};
     Adresse testAddresse = new Adresse();
     testAddresse.setCoordonneesGPS(coord);
@@ -95,13 +108,13 @@ class DAOUtilisateurTest {
     Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
 
     Producteur testProducteur = new Producteur();
-    testProducteur.setSiret("01234567891234");
+    testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
     testProducteur.setNomEtablissement("nomÉtablissement");
     testProducteur.setTel("0123456789");
     testProducteur.setAdresse(retourAdresse);
-    testProducteur.setUtilisateur(retourUtilisateur);
+    testProducteur.setUtilisateur(testUtilisateur);
     Producteur retourProducteur = TEST_DAOUtilisateur.insert(testProducteur);
-
+    
     // compare l'objet retourné par la méthode insert (producteur).
     assertEquals(retourProducteur, testProducteur);
     retourProducteur = TEST_DAOUtilisateur.insert(testProducteur);
@@ -114,10 +127,16 @@ class DAOUtilisateurTest {
    */
   @Test
   void update() {
-    // création d'un objet Utilisateur sans idUtilisateur ni de sale.
+    // création d'un objet Utilisateur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
-    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
@@ -140,10 +159,16 @@ class DAOUtilisateurTest {
    */
   @Test
   void delete() {
-    // création d'un objet Utilisateur sans idUtilisateur ni de sale.
+    // création d'un objet Utilisateur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
-    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
@@ -151,9 +176,11 @@ class DAOUtilisateurTest {
     Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
 
     // test suppression du dernier utilisateur ajouter à la BD.
-    assertTrue(TEST_DAOUtilisateur.delete(retourUtilisateur.getIdUtilisateur()));
-    // test recherche de l'utilisateur supprimer.
-    assertNull(TEST_DAOUtilisateur.findById(retourUtilisateur.getIdUtilisateur()));
+    if (retourUtilisateur.getIdUtilisateur() != 1) {
+      assertTrue(TEST_DAOUtilisateur.delete(retourUtilisateur.getIdUtilisateur()));
+      // test recherche de l'utilisateur supprimer.
+      assertNull(TEST_DAOUtilisateur.findById(retourUtilisateur.getIdUtilisateur()));
+    }
     // test suppression d'un utilisateur qui n'existe pas dans la BD.
     assertFalse(TEST_DAOUtilisateur.delete(retourUtilisateur.getIdUtilisateur()+1));
   }
@@ -164,10 +191,16 @@ class DAOUtilisateurTest {
    */
   @Test
   void find() {
-    // création d'un objet Utilisateur sans idUtilisateur ni de sale.
+    // création d'un objet Utilisateur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
-    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
@@ -188,10 +221,16 @@ class DAOUtilisateurTest {
    */
   @Test
   void findById() {
-    // création d'un objet Utilisateur sans idUtilisateur ni de sale.
+    // création d'un objet Utilisateur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
-    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
@@ -214,7 +253,13 @@ class DAOUtilisateurTest {
     Utilisateur testUtilisateur = new Utilisateur();
     String nomUtilisateur = UUID.randomUUID().toString();
     testUtilisateur.setNomUtilisateur(nomUtilisateur);
-    testUtilisateur.setMdp("mot de passe");
+    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    try {
+      testUtilisateur.setMdp(Base64.getEncoder()
+      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     testUtilisateur.setNom("nom");
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
@@ -225,32 +270,5 @@ class DAOUtilisateurTest {
     assertEquals(retourUtilisateur, TEST_DAOUtilisateur.findByNomUtilisateur(nomUtilisateur));
     // test recherche un utilisateur avec un nomUtilisateur inexistant.
     assertNull(TEST_DAOUtilisateur.findByNomUtilisateur(UUID.randomUUID().toString()));
-  }
-  
-  /**
-   * Test de a méthode authentification().
-   * Dépend de la méthode insert().
-   */
-  @Test
-  void authentification() {
-    // TODO: 24/12/2022 Modifier car changement de localisation de la méthode
-    // création d'un objet Utilisateur sans idUtilisateur ni de sale.
-    Utilisateur testUtilisateur = new Utilisateur();
-    String nomUtilisateur = UUID.randomUUID().toString();
-    testUtilisateur.setNomUtilisateur(nomUtilisateur);
-    testUtilisateur.setMdp("mot de passe");
-    testUtilisateur.setNom("nom");
-    testUtilisateur.setPrenom("prénom");
-    testUtilisateur.setEmail("email");
-    testUtilisateur.setRole(Role.ADMINISTRATEUR);
-    Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
-    /*
-    // test d'authentification via le nomUtilisateur et le mdp de l'utilisateur ajouté.
-    assertEquals(retourUtilisateur, TEST_DAOUtilisateur.authentification(nomUtilisateur, "mot de passe"));
-    // test d'authentification via mdp erroné.
-    assertNull(TEST_DAOUtilisateur.authentification(nomUtilisateur, "erroné"));
-    // test d'authentification vias nomUtilisateur inexistant.
-    assertNull(TEST_DAOUtilisateur.authentification(UUID.randomUUID().toString(), "mot de passe"));
-     */
   }
 }

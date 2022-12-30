@@ -130,6 +130,9 @@ public class Adresse extends Modele {
     this.ville = ville;
   }
 
+  public enum Champs {complementAdresse, complementNumero, coordonneesGPS,
+    idAdresse, libelle, numeroVoie, ville, voie, codePostal}
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

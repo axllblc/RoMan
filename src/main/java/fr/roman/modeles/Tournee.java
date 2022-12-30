@@ -114,6 +114,8 @@ public class Tournee extends Modele {
     this.vehicule = vehicule;
   }
 
+  public enum Champs {horaireDebut, horaireFin, idTournee, note, idProducteur, valide, idVehicule, estimationDuree}
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

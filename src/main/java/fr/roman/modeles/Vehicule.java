@@ -83,6 +83,8 @@ public class Vehicule extends Modele {
     this.producteur = producteur;
   }
 
+  public enum Champs {immatriculation, libelle, poidsMax, icProducteur, idVehicule}
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

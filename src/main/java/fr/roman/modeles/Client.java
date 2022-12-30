@@ -100,6 +100,8 @@ public class Client extends Modele {
     this.adresse = adresse;
   }
 
+  public enum Champs {idClient, email, nom, particulier, siret, tel, idAdresse}
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

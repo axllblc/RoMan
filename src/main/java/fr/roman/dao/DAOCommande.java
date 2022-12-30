@@ -2,10 +2,9 @@ package fr.roman.dao;
 
 import fr.roman.modeles.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -41,12 +40,30 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // L'ajout des valeurs
       req.setString(1, c.getLibelle());
       req.setDouble(2, c.getPoids());
-      req.setString(3, c.getHoraireDebut());
-      req.setString(4, c.getHoraireFin());
+
+      // Pour les objets "Calendar"
+      req.setTime(3, null);
+      req.setTime(4, null);
+      if(c.getHoraireDebut() != null){
+        req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTimeInMillis()));
+      }
+      if(c.getHoraireFin() != null){
+        req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTimeInMillis()));
+      }
+
       req.setString(5, c.getNote());
       req.setBoolean(6, c.isDefautLivraison());
-      req.setString(7, c.getDateInitiale());
-      req.setString(8, c.getDateLivraison());
+
+      // Pour les objets "Calendar"
+      req.setTime(7, null);
+      req.setTime(8, null);
+      if(c.getDateInitiale() != null){
+        req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTimeInMillis()));
+      }
+      if(c.getDateLivraison() != null){
+        req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTimeInMillis()));
+      }
+
       req.setInt(9, c.getProducteur().getIdProducteur());
       req.setInt(10, c.getTournee().getIdTournee());
       req.setInt(11, c.getClient().getIdClient());
@@ -64,7 +81,6 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
     } catch (Exception e) { // En cas d'échec de la requête, on ne renvoie rien
-      e.printStackTrace();
       return null;
     }
   }
@@ -84,12 +100,29 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
               "idTournee = ?, idClient = ? WHERE idCommande = ?");
       req.setString(1, c.getLibelle());
       req.setDouble(2, c.getPoids());
-      req.setString(3, c.getHoraireDebut());
-      req.setString(4, c.getHoraireFin());
+      // Pour les objets "Calendar"
+      req.setTime(3, null);
+      req.setTime(4, null);
+      if(c.getHoraireDebut() != null){
+        req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTimeInMillis()));
+      }
+      if(c.getHoraireFin() != null){
+        req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTimeInMillis()));
+      }
+
       req.setString(5, c.getNote());
       req.setBoolean(6, c.isDefautLivraison());
-      req.setString(7, c.getDateInitiale());
-      req.setString(8, c.getDateLivraison());
+
+      // Pour les objets "Calendar"
+      req.setTime(7, null);
+      req.setTime(8, null);
+      if(c.getDateInitiale() != null){
+        req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTimeInMillis()));
+      }
+      if(c.getDateLivraison() != null){
+        req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTimeInMillis()));
+      }
+
       req.setInt(9, c.getProducteur().getIdProducteur());
       req.setInt(10, c.getTournee().getIdTournee());
       req.setInt(11, c.getClient().getIdClient());
@@ -153,11 +186,28 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
         producteur = daoP.findById(Integer.parseInt(rs.getString("idProducteur")));
         tournee = daoT.findById(Integer.parseInt(rs.getString("idTournee")));
 
+        // Pour les objets "Calendar"
+        Calendar horaireDebut = Calendar.getInstance();
+        if (rs.getTimestamp("horaireDebut") != null){
+          horaireDebut.setTimeInMillis(rs.getTimestamp("horaireDebut").getTime());
+        }
+        Calendar horaireFin = Calendar.getInstance();
+        if(rs.getTimestamp("horaireFin") !=null){
+          horaireFin.setTimeInMillis(rs.getTimestamp("horaireFin").getTime());
+        }
+        Calendar dateInitiale = Calendar.getInstance();
+        if (rs.getTimestamp("dateInitiale") != null){
+          horaireDebut.setTimeInMillis(rs.getTimestamp("dateInitiale").getTime());
+        }
+        Calendar dateLivraison = Calendar.getInstance();
+        if(rs.getTimestamp("dateLivraison") !=null){
+          horaireFin.setTimeInMillis(rs.getTimestamp("dateLivraison").getTime());
+        }
+
         commandes.add(new Commande(rs.getInt("idCommande"), rs.getString("libelle"),
-                rs.getInt("poids"), rs.getString("horaireDebut"), rs.getString("horaireFin"),
+                rs.getInt("poids"), horaireDebut, horaireFin,
                 rs.getString("note"), rs.getBoolean("defautLivraison"),
-                rs.getString("dateInitiale"), rs.getString("dateLivraison"),
-                producteur, client, tournee));
+                dateInitiale, dateLivraison, producteur, client, tournee));
       }
       return commandes;
     } catch (Exception e) {
