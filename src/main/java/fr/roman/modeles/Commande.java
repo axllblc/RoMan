@@ -17,8 +17,8 @@ public class Commande extends Modele {
   private Calendar dateInitiale;
   private Calendar dateLivraison;
   private Producteur producteur;
-  public Client client;
-  public Tournee tournee;
+  private Client client;
+  private Tournee tournee;
 
   /**
    * Constructeur sans paramètre de la classe {@link Commande}.
@@ -158,8 +158,47 @@ public class Commande extends Modele {
     this.tournee = tournee;
   }
 
-  public enum Champs {dateInitiale, dateLivraison, defautLivraison, horaireDebut, horaireFin,
-    idCommande, libelle, note, poids, idProducteur, idTournee, idClient}
+  public enum Champs implements ChampsModele {
+    idCommande(true, true, true, false, false),
+    dateInitiale(false, false, false, false, true),
+    dateLivraison, defautLivraison, horaireDebut, horaireFin, libelle, note, poids,
+    idProducteur(false, true, true, false, false),
+    idTournee(false, true, true, false, true),
+    idClient(false, true, true, false, false);
+    public final boolean modifProd;
+    public final boolean modifAdmin;
+    public final boolean id;
+    public final boolean idExt;
+    public final boolean nullable;
+    /**
+     * Constructeur pour désigner des propriétés du champ
+     *
+     * @param id True si il s'agit de l'identifiant, false sinon
+     * @param modifProd True si le champ est modifiable par un producteur, false sinon
+     * @param modifAdmin True si le champ est modifiable par un administrateur, false sinon
+     * @param idExt True s'il s'agit d'un identifiant qui correspond
+     *              à une clé étrangère dans la BDD, false sinon
+     * @param nullable True si le champ peut être null, false sinon
+     */
+    Champs(boolean id, boolean modifProd, boolean modifAdmin, boolean idExt, boolean nullable) {
+      this.id = id;
+      this.modifProd = modifProd;
+      this.modifAdmin = modifAdmin;
+      this.idExt = idExt;
+      this.nullable = nullable;
+    }
+    /**
+     * Par défaut, tous les utilisateurs peuvent modifier le champ,
+     * ce n'est pas un id et il est nullable
+     */
+    Champs(){
+      modifProd = true;
+      modifAdmin = true;
+      id = false;
+      idExt = false;
+      nullable = true;
+    }
+  }
 
   @Override
   public boolean equals(Object o) {
