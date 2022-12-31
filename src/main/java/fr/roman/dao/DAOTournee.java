@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 /**
 * DAO pour la classe Tournee.
@@ -46,10 +47,10 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       req.setTime(2, null);
       req.setTime(3, null);
       if(t.getHoraireDebut() != null){
-        req.setTimestamp(1, new Timestamp(t.getHoraireDebut().getTimeInMillis()));
+        req.setTimestamp(1, new Timestamp(t.getHoraireDebut().getTime().getTime()));
       }
       if(t.getHoraireFin() != null){
-        req.setTimestamp(2, new Timestamp(t.getHoraireFin().getTimeInMillis()));
+        req.setTimestamp(2, new Timestamp(t.getHoraireFin().getTime().getTime()));
       }
       if(t.getEstimationDuree() != null){
         req.setTime(3, Time.valueOf(LocalTime.ofSecondOfDay(t.getEstimationDuree().toSeconds())));
@@ -94,10 +95,10 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       req.setTime(2, null);
       req.setTime(3, null);
       if(t.getHoraireDebut() != null){
-        req.setTimestamp(1, new Timestamp(t.getHoraireDebut().getTimeInMillis()));
+        req.setTimestamp(1, new Timestamp(t.getHoraireDebut().getTime().getTime()));
       }
       if(t.getHoraireFin() != null){
-        req.setTimestamp(2, new Timestamp(t.getHoraireFin().getTimeInMillis()));
+        req.setTimestamp(2, new Timestamp(t.getHoraireFin().getTime().getTime()));
       }
       if(t.getEstimationDuree() != null){
         req.setTime(3, Time.valueOf(LocalTime.ofSecondOfDay(t.getEstimationDuree().toSeconds())));
@@ -164,13 +165,13 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
         producteur = daoP.findById(Integer.parseInt(rs.getString("idProducteur")));
 
         // Pour les objets "Calendar" ou "Duration"
-        Calendar horaireDebut = Calendar.getInstance();
+        Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         if (rs.getTimestamp("horaireDebut") != null){
-          horaireDebut.setTimeInMillis(rs.getTimestamp("horaireDebut").getTime());
+          horaireDebut.setTime(rs.getTimestamp("horaireDebut"));
         }
-        Calendar horaireFin = Calendar.getInstance();
+        Calendar horaireFin = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         if(rs.getTimestamp("horaireFin") !=null){
-          horaireFin.setTimeInMillis(rs.getTimestamp("horaireFin").getTime());
+          horaireFin.setTime(rs.getTimestamp("horaireFin"));
         }
         Duration estimationDuree = Duration.ZERO;
         if(rs.getTime("estimationDuree") != null){

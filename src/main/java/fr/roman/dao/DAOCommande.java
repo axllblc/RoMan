@@ -6,10 +6,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 /**
-* DAO pour la classe Commande
-*/
+ * DAO pour la classe Commande
+ */
 public class DAOCommande extends DAO<Commande, Commande.Champs> {
 
   /**
@@ -34,9 +35,9 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       }
       // La requête
       PreparedStatement req = this.getCo().prepareStatement("INSERT INTO commandes " +
-                      "(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, " +
-                      "dateInitiale, dateLivraison, idProducteur, idTournee, idClient) " +
-                      "VALUES (?,?,?,?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+              "(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, " +
+              "dateInitiale, dateLivraison, idProducteur, idTournee, idClient) " +
+              "VALUES (?,?,?,?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
       // L'ajout des valeurs
       req.setString(1, c.getLibelle());
       req.setDouble(2, c.getPoids());
@@ -45,10 +46,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.setTime(3, null);
       req.setTime(4, null);
       if(c.getHoraireDebut() != null){
-        req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTimeInMillis()));
+        req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTime().getTime()));
       }
       if(c.getHoraireFin() != null){
-        req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTimeInMillis()));
+        req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTime().getTime()));
       }
 
       req.setString(5, c.getNote());
@@ -58,10 +59,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.setTime(7, null);
       req.setTime(8, null);
       if(c.getDateInitiale() != null){
-        req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTimeInMillis()));
+        req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTime().getTime()));
       }
       if(c.getDateLivraison() != null){
-        req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTimeInMillis()));
+        req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTime().getTime()));
       }
 
       req.setInt(9, c.getProducteur().getIdProducteur());
@@ -104,10 +105,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.setTime(3, null);
       req.setTime(4, null);
       if(c.getHoraireDebut() != null){
-        req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTimeInMillis()));
+        req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTime().getTime()));
       }
       if(c.getHoraireFin() != null){
-        req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTimeInMillis()));
+        req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTime().getTime()));
       }
 
       req.setString(5, c.getNote());
@@ -117,10 +118,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.setTime(7, null);
       req.setTime(8, null);
       if(c.getDateInitiale() != null){
-        req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTimeInMillis()));
+        req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTime().getTime()));
       }
       if(c.getDateLivraison() != null){
-        req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTimeInMillis()));
+        req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTime().getTime()));
       }
 
       req.setInt(9, c.getProducteur().getIdProducteur());
@@ -187,22 +188,24 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
         tournee = daoT.findById(Integer.parseInt(rs.getString("idTournee")));
 
         // Pour les objets "Calendar"
-        Calendar horaireDebut = Calendar.getInstance();
+        Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         if (rs.getTimestamp("horaireDebut") != null){
-          horaireDebut.setTimeInMillis(rs.getTimestamp("horaireDebut").getTime());
+          horaireDebut.setTime(rs.getTimestamp("horaireDebut"));
         }
-        Calendar horaireFin = Calendar.getInstance();
+        Calendar horaireFin = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         if(rs.getTimestamp("horaireFin") !=null){
-          horaireFin.setTimeInMillis(rs.getTimestamp("horaireFin").getTime());
+          horaireFin.setTime(rs.getTimestamp("horaireFin"));
         }
-        Calendar dateInitiale = Calendar.getInstance();
+        Calendar dateInitiale = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         if (rs.getTimestamp("dateInitiale") != null){
-          horaireDebut.setTimeInMillis(rs.getTimestamp("dateInitiale").getTime());
+          dateInitiale.setTime(rs.getTimestamp("dateInitiale"));
+          dateInitiale.add(Calendar.DAY_OF_MONTH, 1); // car on n'a pas d'heure donc on recule d'1 jour sinon
         }
-        Calendar dateLivraison = Calendar.getInstance();
+        Calendar dateLivraison = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         if(rs.getTimestamp("dateLivraison") !=null){
-          horaireFin.setTimeInMillis(rs.getTimestamp("dateLivraison").getTime());
+          dateLivraison.setTime(rs.getTimestamp("dateLivraison"));
         }
+
 
         commandes.add(new Commande(rs.getInt("idCommande"), rs.getString("libelle"),
                 rs.getInt("poids"), horaireDebut, horaireFin,
