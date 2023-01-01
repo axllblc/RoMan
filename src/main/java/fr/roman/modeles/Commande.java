@@ -159,7 +159,7 @@ public class Commande extends Modele {
   }
 
   public enum Champs implements ChampsModele {
-    idCommande(true, true, true, false, false),
+    idCommande(true, false, false, false, false),
     dateInitiale(false, false, false, false, true),
     dateLivraison, defautLivraison, horaireDebut, horaireFin, libelle, note, poids,
     idProducteur(false, true, true, false, false),
