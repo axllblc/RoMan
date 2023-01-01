@@ -72,9 +72,9 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum & ChampsModel
      */
     void accesChamps(){
         switch (getRole()) {
-            case ADMINISTRATEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(!nom.modifAdmin));
-            case PRODUCTEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(!nom.modifProd));
-            case ROOT -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(nom.id));
+            case ADMINISTRATEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setMouseTransparent(!nom.modifAdmin));
+            case PRODUCTEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setMouseTransparent(!nom.modifProd));
+            case ROOT -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setMouseTransparent(nom.id));
         }
     }
 
