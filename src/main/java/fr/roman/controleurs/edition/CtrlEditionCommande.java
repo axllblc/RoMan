@@ -9,9 +9,11 @@ import fr.roman.vues.edition.VueEdition;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.CalendarTimeTextField;
 
 public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> {
 
@@ -34,12 +36,14 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
 
     /**
      * Constructeur du contrôleur
-     * @param commande La commande dans laquelle des stockés les informations de la vue (vide si typeEdition = CREATION)
+     * @param commande La commande dans laquelle des stockés les informations de la vue
+     *                 (vide si typeEdition = CREATION)
      * @param vueEdition La vue (d'édition) que la classe contrôle
      * @param typeEdition Le type de contrôleur : création ou modification
      * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
      */
-    public CtrlEditionCommande(Commande commande, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
+    public CtrlEditionCommande(Commande commande, VueEdition vueEdition,
+                               TypeEdition typeEdition, Role role) {
         super(commande, vueEdition, typeEdition, role);
     }
 
@@ -66,6 +70,13 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
 
         // libelle
         TextField libelle = new TextField();
+        libelle.setTextFormatter(new TextFormatter<>(change -> {
+            if (!change.getControlNewText().matches(".{0,50}")) {
+                return null;
+            } else {
+                return change;
+            }
+        }));
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             libelle.setText(getModele().getLibelle());
         }
@@ -77,7 +88,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
             poids.setText(String.valueOf((int) getModele().getPoids()));
         }
         poids.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d*")) {
+            if (!change.getControlNewText().matches("\\d{0,3}")) {
                 return null;
             } else {
                 return change;
@@ -86,34 +97,23 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getChampsFormulaire().put(Commande.Champs.poids, poids);
 
         // horaireDebut
-        // TODO: 30/12/2022 Rajouter les minutes ?
-        TextField horaireDebut = new TextField();
-
+        CalendarTimeTextField horaireDebut = new CalendarTimeTextField();
+        horaireDebut.setLocale(Locale.FRANCE);
+        horaireDebut.setMinuteStep(15);
+        horaireDebut.setDateFormat(new SimpleDateFormat("HH:mm"));
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            horaireDebut.setText(String.valueOf(getModele().getHoraireDebut().get(Calendar.HOUR_OF_DAY)));
+            horaireDebut.setCalendar(getModele().getHoraireDebut());
         }
-        horaireDebut.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("[0-9]|[01][0-9]|2[0-3]")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
         getChampsFormulaire().put(Commande.Champs.horaireDebut, horaireDebut);
 
         // horaireFin
-        // TODO: 30/12/2022 Rajouter les minutes ?
-        TextField horaireFin = new TextField();
+        CalendarTimeTextField horaireFin = new CalendarTimeTextField();
+        horaireFin.setLocale(Locale.FRANCE);
+        horaireFin.setMinuteStep(15);
+        horaireFin.setDateFormat(new SimpleDateFormat("HH:mm"));
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            horaireFin.setText(String.valueOf(getModele().getHoraireFin().get(Calendar.HOUR_OF_DAY)));
+            horaireFin.setCalendar(getModele().getHoraireFin());
         }
-        horaireFin.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("[0-9]|[01][0-9]|2[0-3]")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
         getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
 
         // note
@@ -131,22 +131,25 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getChampsFormulaire().put(Commande.Champs.defautLivraison, defautLivraison);
 
         // dateInitiale
-        DatePicker dateInitiale = new DatePicker(LocalDate.now());
+        CalendarTextField dateInitiale = new CalendarTextField();
+        dateInitiale.autosize();
+        dateInitiale.setLocale(Locale.FRANCE);
+        dateInitiale.setDateFormat(new SimpleDateFormat("dd/MM/yyyy"));
+        dateInitiale.setAllowNull(true);
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            Calendar dateI = getModele().getDateInitiale();
-            dateInitiale.setValue(LocalDate.of(dateI.get(Calendar.YEAR),
-                    dateI.get(Calendar.MONTH)+1, dateI.get(Calendar.DAY_OF_MONTH)));
-
+            dateInitiale.setCalendar(getModele().getDateInitiale());
         }
         getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
 
         // dateLivraison
-        DatePicker dateLivraison = new DatePicker(LocalDate.now());
-        //DateTimePicker dtp = new DateTimePicker();
+        CalendarTextField dateLivraison = new CalendarTextField();
+        dateLivraison.setShowTime(true);
+        dateLivraison.autosize();
+        dateLivraison.setLocale(Locale.FRANCE);
+        dateLivraison.setDateFormat(new SimpleDateFormat("dd/MM/yyyy HH:mm"));
+        dateLivraison.setAllowNull(true);
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            Calendar dateL = getModele().getDateLivraison();
-            dateLivraison.setValue(LocalDate.of(dateL.get(Calendar.YEAR),
-                    dateL.get(Calendar.MONTH) + 1, dateL.get(Calendar.DAY_OF_MONTH)));
+            dateLivraison.setCalendar(getModele().getDateLivraison());
         }
         getChampsFormulaire().put(Commande.Champs.dateLivraison, dateLivraison);
 
@@ -198,7 +201,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     /**
      * Classe appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
-     * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
+     * @return L'objet Commande correspondant à ce qui a été ajouté dans la base de données
      */
     @Override
     public Commande validerSaisie() {
@@ -209,18 +212,18 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getModele().setLibelle(((TextField) champsFormulaire.get(Commande.Champs.libelle)).getText());
 
         // poids
-        getModele().setPoids(Double.parseDouble(((TextField) champsFormulaire.get(Commande.Champs.poids)).getText()));
+        getModele().setPoids(Double.parseDouble(((TextField) champsFormulaire
+                .get(Commande.Champs.poids)).getText()));
 
         // horaireDebut
-        Calendar hd = new GregorianCalendar(TimeZone.getTimeZone("Europe/Paris"));
-        hd.set(Calendar.HOUR_OF_DAY, Integer.parseInt(((TextField) champsFormulaire.get(Commande.Champs.horaireDebut)).getText()));
-        getModele().setHoraireDebut(hd);
+        Calendar horaireDebut = ((CalendarTimeTextField) champsFormulaire
+                .get(Commande.Champs.horaireDebut)).getCalendar();
+        getModele().setHoraireDebut(horaireDebut);
 
         // horaireFin
-        Calendar hf = new GregorianCalendar(TimeZone.getTimeZone("Europe/Paris"));
-        hf.set(Calendar.HOUR_OF_DAY, Integer.parseInt(((TextField) champsFormulaire
-                .get(Commande.Champs.horaireFin)).getText()));
-        getModele().setHoraireFin(hf);
+        Calendar horaireFin = ((CalendarTimeTextField) champsFormulaire
+                .get(Commande.Champs.horaireFin)).getCalendar();
+        getModele().setHoraireFin(horaireFin);
 
         // note
         getModele().setNote(((TextField) champsFormulaire.get(Commande.Champs.note)).getText());
@@ -230,16 +233,14 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
                 .get(Commande.Champs.defautLivraison)).isSelected());
 
         // dateInitiale
-        Calendar di = new GregorianCalendar(TimeZone.getTimeZone("Europe/Paris"));
-        LocalDate dateI = ((DatePicker) champsFormulaire.get(Commande.Champs.dateInitiale)).getValue();
-        di.setTime(Date.from(dateI.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        getModele().setDateInitiale(di);
+        Calendar dateInitiale = ((CalendarTextField) champsFormulaire
+                .get(Commande.Champs.dateInitiale)).getCalendar();
+        getModele().setDateInitiale(dateInitiale);
 
         // dateLivraison
-        Calendar dl = new GregorianCalendar(TimeZone.getTimeZone("Europe/Paris"));
-        LocalDate dateL = ((DatePicker) champsFormulaire.get(Commande.Champs.dateLivraison)).getValue();
-        dl.setTime(Date.from(dateL.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        getModele().setDateInitiale(dl);
+        Calendar calendar = ((CalendarTextField) champsFormulaire
+                .get(Commande.Champs.dateLivraison)).getCalendar();
+        getModele().setDateLivraison(calendar);
 
         // idProducteur
         Producteur p = daoProducteur.findById(Integer.parseInt(((TextField) champsFormulaire
@@ -247,13 +248,20 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getModele().setProducteur(p);
 
         // idClient
-        Client c = daoClient.findById(Integer.parseInt(((TextField) champsFormulaire.get(Commande.Champs.idClient)).getText()));
+        Client c = daoClient.findById(Integer.parseInt(((TextField) champsFormulaire
+                .get(Commande.Champs.idClient)).getText()));
         getModele().setClient(c);
 
         // idTournee
-        Tournee t = daoTournee.findById(Integer.parseInt(((TextField) champsFormulaire.get(Commande.Champs.idTournee)).getText()));
-        getModele().setTournee(t);
+        if(((TextField) champsFormulaire.get(Commande.Champs.idTournee)).getText().equals("")){
+            Tournee t = daoTournee.findById(Integer.parseInt(((TextField) champsFormulaire
+                    .get(Commande.Champs.idTournee)).getText()));
+            getModele().setTournee(t);
+        }
 
+        if (p == null || c == null){ // Le producteur ou le client n'existe pas dans la base
+            return null;
+        }
         Commande commande = null;
         switch (getTypeEdition()){
             case CREATION -> commande = daoCommande.insert(getModele());
