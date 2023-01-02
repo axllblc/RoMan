@@ -17,8 +17,8 @@ public class Commande extends Modele {
   private Calendar dateInitiale;
   private Calendar dateLivraison;
   private Producteur producteur;
-  public Client client;
-  public Tournee tournee;
+  private Client client;
+  private Tournee tournee;
 
   /**
    * Constructeur sans paramètre de la classe {@link Commande}.
