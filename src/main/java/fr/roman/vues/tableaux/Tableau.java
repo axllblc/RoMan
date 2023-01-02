@@ -104,7 +104,8 @@ public abstract class Tableau<T extends Modele> {
    * @param objets Nouveau contenu du tableau
    */
   public void setContenu(List<T> objets) {
-    contenu.setAll(objets);
+    vider();
+    definir(objets);
   }
 
   /**
