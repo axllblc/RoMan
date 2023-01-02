@@ -200,9 +200,9 @@ public class Commande extends Modele {
         + ", defautLivraison=" + defautLivraison
         + ", dateInitiale='" + dateInitiale + '\''
         + ", dateLivraison='" + dateLivraison + '\''
-        + ", producteur=" + producteur.toString()
-        + ", client=" + client.toString()
-        + ", tournee=" + tournee.toString()
+        + ", producteur=" + producteur
+        + ", client=" + client
+        + ", tournee=" + tournee
         + '}';
   }
 }

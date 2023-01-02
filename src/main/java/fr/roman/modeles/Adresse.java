@@ -172,4 +172,45 @@ public class Adresse extends Modele {
         + ", ville='" + ville + '\''
         + '}';
   }
+
+  /**
+   * Retourne l'adresse postale sous la forme d'une chaîne de caractères.
+   *
+   * @param newline {@code true} pour activer les retours à la ligne
+   *
+   * @return Adresse postale sous la forme d'une chaîne de caractères
+   */
+  public String getAdressePostale(boolean newline) {
+    StringBuilder sb = new StringBuilder();
+
+    // Libellé (nom du destinataire)
+    if (getLibelle() != null && !getLibelle().equals("")) {
+      sb.append(getLibelle())
+          .append(newline ? "\n" : " – ");
+    }
+
+    // Numéro de voie et complément de numéro (ex : "bis")
+    sb.append(getNumeroVoie() != 0 ? getNumeroVoie() + " " : "");
+    if (getComplementNumero() != null && !getComplementNumero().equals("")) {
+      sb.append(getComplementNumero()).append(" ");
+    }
+
+    // Nom de la voie
+    sb.append(getVoie());
+
+    // Complément d'adresse (bâtiment, étage, etc.)
+    if (getComplementAdresse() != null && !getComplementAdresse().equals("")) {
+      sb.append(", ")
+          .append(getComplementAdresse());
+    }
+
+    sb.append(newline ? ",\n" : ", ");
+
+    // Code postal et ville
+    sb.append("%05d".formatted(getCodePostal()))
+        .append(" ")
+        .append(getVille());
+
+    return sb.toString();
+  }
 }
