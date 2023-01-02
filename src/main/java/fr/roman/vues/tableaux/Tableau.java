@@ -1,10 +1,12 @@
 package fr.roman.vues.tableaux;
 
 import fr.roman.modeles.Modele;
+import fr.roman.vues.composants.BoutonAction;
 import java.util.List;
 import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 
@@ -33,6 +35,10 @@ public abstract class Tableau<T extends Modele> {
    * Collection des objets métier affichés dans le tableau.
    */
   protected final ObservableList<T> contenu;
+  /**
+   * Menu contextuel du tableau.
+   */
+  protected ContextMenu menu;
 
   /**
    * Construit un tableau pour l'affichage d'objets métier. Ce constructeur initialise un objet
@@ -46,6 +52,8 @@ public abstract class Tableau<T extends Modele> {
     tableau = new TableView<>();
     contenu = FXCollections.observableArrayList();
     tableau.setItems(contenu);
+    menu = new ContextMenu();
+    tableau.setContextMenu(menu);
   }
 
   /**
@@ -164,5 +172,16 @@ public abstract class Tableau<T extends Modele> {
    */
   public void vider() {
     contenu.clear();
+  }
+
+  /**
+   * Définir les éléments ({@link BoutonAction}) du menu contextuel.
+   *
+   * @param items Éléments du menu contextuel
+   */
+  public void setMenu(List<BoutonAction> items) {
+    tableau.getContextMenu().getItems().setAll(
+        items.stream().map(BoutonAction::asMenuItem).toList()
+    );
   }
 }
