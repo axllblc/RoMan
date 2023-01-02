@@ -83,7 +83,71 @@ public class Vehicule extends Modele {
     this.producteur = producteur;
   }
 
-  public enum Champs {immatriculation, libelle, poidsMax, icProducteur, idVehicule}
+  public enum Champs implements ChampsModele {
+    idVehicule(true, false, false, false, false),
+    immatriculation(false, true, true, false, false),
+    poidsMax(false, true, true, false, false),
+    libelle,
+    idProducteur(false, false, true, true, false);
+    private final boolean modifProd;
+    private final boolean modifAdmin;
+    private final boolean id;
+    private final boolean idExt;
+    private final boolean nullable;
+    /**
+     * Constructeur pour désigner des propriétés du champ
+     *
+     * @param id True si il s'agit de l'identifiant, false sinon
+     * @param modifProd True si le champ est modifiable par un producteur, false sinon
+     * @param modifAdmin True si le champ est modifiable par un administrateur, false sinon
+     * @param idExt True s'il s'agit d'un identifiant qui correspond
+     *              à une clé étrangère dans la BDD, false sinon
+     * @param nullable True si le champ peut être null, false sinon
+     */
+    Champs(boolean id, boolean modifProd, boolean modifAdmin, boolean idExt, boolean nullable) {
+      this.id = id;
+      this.modifProd = modifProd;
+      this.modifAdmin = modifAdmin;
+      this.idExt = idExt;
+      this.nullable = nullable;
+    }
+    /**
+     * Par défaut, tous les utilisateurs peuvent modifier le champ,
+     * ce n'est pas un id et il est nullable
+     */
+    Champs(){
+      modifProd = true;
+      modifAdmin = true;
+      id = false;
+      idExt = false;
+      nullable = true;
+    }
+
+    @Override
+    public boolean isModifProd() {
+      return this.modifProd;
+    }
+
+    @Override
+    public boolean isModifAdmin() {
+      return this.modifAdmin;
+    }
+
+    @Override
+    public boolean isId() {
+      return this.id;
+    }
+
+    @Override
+    public boolean isIdExt() {
+      return this.idExt;
+    }
+
+    @Override
+    public boolean isNullable() {
+      return this.nullable;
+    }
+  }
 
   @Override
   public boolean equals(Object o) {
