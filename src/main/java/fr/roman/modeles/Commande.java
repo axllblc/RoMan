@@ -165,11 +165,11 @@ public class Commande extends Modele {
     idProducteur(false, true, true, false, false),
     idTournee(false, true, true, false, true),
     idClient(false, true, true, false, false);
-    public final boolean modifProd;
-    public final boolean modifAdmin;
-    public final boolean id;
-    public final boolean idExt;
-    public final boolean nullable;
+    private final boolean modifProd;
+    private final boolean modifAdmin;
+    private final boolean id;
+    private final boolean idExt;
+    private final boolean nullable;
     /**
      * Constructeur pour désigner des propriétés du champ
      *
@@ -197,6 +197,31 @@ public class Commande extends Modele {
       id = false;
       idExt = false;
       nullable = true;
+    }
+
+    @Override
+    public boolean isModifProd() {
+      return this.modifProd;
+    }
+
+    @Override
+    public boolean isModifAdmin() {
+      return this.modifAdmin;
+    }
+
+    @Override
+    public boolean isId() {
+      return this.id;
+    }
+
+    @Override
+    public boolean isIdExt() {
+      return this.idExt;
+    }
+
+    @Override
+    public boolean isNullable() {
+      return false;
     }
   }
 

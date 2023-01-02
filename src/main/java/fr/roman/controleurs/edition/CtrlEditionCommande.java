@@ -196,7 +196,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     }
 
     /**
-     * Classe abstraite appelée par le bouton de validation du formulaire pour
+     * Classe appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
      */
@@ -207,6 +207,8 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         // libelle
         champsFormulaire = (Map<Commande.Champs, Node>) getVueEdition().getChamps();
         getModele().setLibelle(((TextField) champsFormulaire.get(Commande.Champs.libelle)).getText());
+
+        // poids
         getModele().setPoids(Double.parseDouble(((TextField) champsFormulaire.get(Commande.Champs.poids)).getText()));
 
         // horaireDebut

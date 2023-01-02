@@ -14,7 +14,7 @@ import java.util.Map;
  * @param <M> Un métier qui étends {@link Modele}
  * @param <C> Une énumération de ses champs, qui étends {@link ChampsModele}
  */
-public abstract class CtrlEdition<M extends Modele, C extends Enum & ChampsModele> {
+public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsModele> {
 
     /**
      * Le type de controleur : création ou modification
@@ -72,9 +72,9 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum & ChampsModel
      */
     void accesChamps(){
         switch (getRole()) {
-            case ADMINISTRATEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setMouseTransparent(!nom.modifAdmin));
-            case PRODUCTEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setMouseTransparent(!nom.modifProd));
-            case ROOT -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setMouseTransparent(nom.id));
+            case ADMINISTRATEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(!nom.isModifAdmin()));
+            case PRODUCTEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(!nom.isModifProd()));
+            case ROOT -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(nom.isId()));
         }
     }
 

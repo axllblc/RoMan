@@ -24,4 +24,10 @@ public interface ChampsModele {
      * Vrai si le champ peut être null, faux sinon
      */
     boolean nullable = true;
+
+    boolean isModifProd();
+    boolean isModifAdmin();
+    boolean isId();
+    boolean isIdExt();
+    boolean isNullable();
 }
