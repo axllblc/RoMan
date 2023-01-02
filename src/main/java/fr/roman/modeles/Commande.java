@@ -36,7 +36,7 @@ public class Commande extends Modele {
    * @param horaireDebut L'horaire de début du créneau de livraison souhaité par le client.
    * @param horaireFin L'horaire de fin du créneau de livraison souhaité par le client.
    * @param note Les notes associées à la commande.
-   * @param defaultLivraison Si vrai, la commande n'a pas pu être effectuée
+   * @param defautLivraison Si vrai, la commande n'a pas pu être effectuée
    *                         et doit être associé à une nouvelle tournée.
    * @param dateInitiale La date initiale de livraison prévue.
    * @param dateLivraison Le cas échéant, la date où la commande a été livrée.
@@ -45,7 +45,7 @@ public class Commande extends Modele {
    * @param tournee La tournée à laquelle la commande a été associée.
    */
   public Commande(int idCommande, String libelle, double poids, Calendar horaireDebut,
-                  Calendar horaireFin, String note, boolean defaultLivraison, Calendar dateInitiale,
+                  Calendar horaireFin, String note, boolean defautLivraison, Calendar dateInitiale,
                   Calendar dateLivraison, Producteur producteur, Client client, Tournee tournee) {
     this.idCommande = idCommande;
     this.libelle = libelle;
