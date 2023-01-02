@@ -37,8 +37,9 @@ public class Tournee extends Modele {
    * @param producteur Le producteur responsable de cette tournée.
    * @param vehicule Le véhicule utilisé pour effectuer la tournée.
    */
-  public Tournee(int idTournee, Calendar horaireDebut, Calendar horaireFin, Duration estimationDuree,
-                 String note, boolean valide, Producteur producteur, Vehicule vehicule) {
+  public Tournee(int idTournee, Calendar horaireDebut, Calendar horaireFin,
+                 Duration estimationDuree, String note, boolean valide, Producteur producteur,
+                 Vehicule vehicule) {
     this.idTournee = idTournee;
     this.horaireDebut = horaireDebut;
     this.horaireFin = horaireFin;
@@ -145,8 +146,8 @@ public class Tournee extends Modele {
         + ", estimationDuree='" + estimationDuree + '\''
         + ", note='" + note + '\''
         + ", valide=" + valide
-        + ", producteur=" + producteur.toString()
-        + ", vehicule=" + vehicule.toString()
+        + ", producteur=" + producteur
+        + ", vehicule=" + vehicule
         + '}';
   }
 }
