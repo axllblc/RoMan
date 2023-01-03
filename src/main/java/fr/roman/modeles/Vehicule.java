@@ -173,7 +173,7 @@ public class Vehicule extends Modele {
         + ", immatriculation='" + immatriculation + '\''
         + ", poidsMax=" + poidsMax
         + ", libelle='" + libelle + '\''
-        + ", producteur=" + producteur.toString()
+        + ", producteur=" + producteur
         + '}';
   }
 }

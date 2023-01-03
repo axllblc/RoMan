@@ -130,7 +130,7 @@ public class Client extends Modele {
         + ", mail='" + email + '\''
         + ", siret=" + siret
         + ", particulier=" + particulier
-        + ", adresse=" + adresse.toString()
+        + ", adresse=" + adresse
         + '}';
   }
 }
