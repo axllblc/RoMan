@@ -3,6 +3,8 @@ package fr.roman.vues.accueil;
 import fr.roman.controleurs.accueil.CtrlAccueil;
 import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Utilisateur;
+import fr.roman.vues.composants.FabriqueIcone;
+import fr.roman.vues.composants.Icone;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.geometry.Insets;
@@ -13,8 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
@@ -31,12 +31,6 @@ import javafx.stage.Stage;
  * @author Axel Leblanc
  */
 public class VueAccueil {
-  /**
-   * Icône représentant un compte utilisateur.
-   */
-  private static final Image IC_COMPTE =
-      new Image("file:src/main/resources/icons/account_circle_24.png");
-
   /**
    * Contrôleur de la vue <i>Accueil</i>.
    */
@@ -81,7 +75,7 @@ public class VueAccueil {
     conteneur = new BorderPane();
     entete = new BorderPane();
     titre = new Label("Bonjour !");
-    btnCompte = new Button("Mon compte", new ImageView(IC_COMPTE));
+    btnCompte = new Button("Mon compte", FabriqueIcone.get(Icone.COMPTE));
     tabPane = new TabPane();
 
     scene = new Scene(conteneur);
