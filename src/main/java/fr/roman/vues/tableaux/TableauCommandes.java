@@ -1,11 +1,16 @@
 package fr.roman.vues.tableaux;
 
 import fr.roman.modeles.Commande;
+import fr.roman.vues.composants.FabriqueIcone;
+import fr.roman.vues.composants.Icone;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.geometry.Pos;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 /**
@@ -13,6 +18,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
  *
  * <p>Les commandes affichées sont les suivantes :
  * <ul>
+ *   <li>Statut de la commande (livrée, en attente, reportée, en retard)</li>
  *   <li>Libellé de commande</li>
  *   <li>Date de livraison initialement fixée (date et créneau)</li>
  *   <li>Poids de la commande</li>
@@ -32,6 +38,32 @@ public class TableauCommandes extends Tableau<Commande> {
     super();
 
     // Création des colonnes
+
+    /* Colonne affichant le statut de la commande. */
+    TableColumn<Commande, Commande.Statut> colStatut = new TableColumn<>();
+    colStatut.setCellValueFactory(c ->
+        new ReadOnlyObjectWrapper<>(c.getValue().getStatut())
+    );
+    colStatut.setCellFactory(tableColumn -> new TableCell<>() {
+      @Override
+      protected void updateItem(Commande.Statut statut, boolean empty) {
+        if (empty || statut == null) {
+          return;
+        }
+
+        setGraphic(
+            switch (statut) {
+              case LIVREE -> FabriqueIcone.get(Icone.OK, TAILLE_ICONE);
+              case EN_ATTENTE -> FabriqueIcone.get(Icone.EN_ATTENTE, TAILLE_ICONE);
+              case REPORTEE -> FabriqueIcone.get(Icone.DEFAUT_LIVRAISON, TAILLE_ICONE);
+              case EN_RETARD -> FabriqueIcone.get(Icone.ATTENTION, TAILLE_ICONE);
+            });
+        setTooltip(new Tooltip(statut.getLabel()));
+        setAlignment(Pos.CENTER);
+      }
+    });
+    colStatut.setPrefWidth(20);
+    colStatut.setResizable(false);
 
     /* Colonne affichant les libellés de commandes. */
     TableColumn<Commande, String> colLibelle = new TableColumn<>("Libellé");
@@ -116,7 +148,7 @@ public class TableauCommandes extends Tableau<Commande> {
     );
 
     // Insertion des colonnes définies ci-dessus
-    var colonnes = List.of(colLibelle, colDateInitiale, colPoids, colClient);
+    var colonnes = List.of(colStatut, colLibelle, colDateInitiale, colPoids, colClient);
     colDateInitiale.getColumns().addAll(List.of(colJourLivraison, colCreneauLivraison));
     colClient.getColumns().addAll(List.of(colNomClient, colAdresseClient));
     getTableau().getColumns().addAll(colonnes);
