@@ -10,11 +10,17 @@ public class Commande extends Modele {
   private final int idCommande;
   private String libelle;
   private double poids;
+  /** Heure de début du créneau fixé pour la livraison. */
   private Calendar horaireDebut;
+  /** Heure de fin du créneau fixé pour la livraison. */
   private Calendar horaireFin;
   private String note;
+  /** Indique si la commande n'a pas pu être effectuée et doit être associée à une nouvelle
+   * tournée. */
   private boolean defautLivraison;
+  /** Date fixée pour la livraison. */
   private Calendar dateInitiale;
+  /** Date à laquelle la commande a été livrée. */
   private Calendar dateLivraison;
   private Producteur producteur;
   public Client client;
@@ -86,18 +92,38 @@ public class Commande extends Modele {
     this.poids = poids;
   }
 
+  /**
+   * Retourne l'heure de début du créneau fixé pour la livraison.
+   *
+   * @return Heure de début du créneau fixé pour la livraison
+   */
   public Calendar getHoraireDebut() {
     return horaireDebut;
   }
 
+  /**
+   * Définir l'heure de début du créneau fixé pour la livraison.
+   *
+   * @param horaireDebut Heure de début du créneau fixé pour la livraison
+   */
   public void setHoraireDebut(Calendar horaireDebut) {
     this.horaireDebut = horaireDebut;
   }
 
+  /**
+   * Retourne l'heure de fin du créneau fixé pour la livraison.
+   *
+   * @return Heure de fin du créneau fixé pour la livraison
+   */
   public Calendar getHoraireFin() {
     return horaireFin;
   }
 
+  /**
+   * Définir l'heure de fin du créneau fixé pour la livraison.
+   *
+   * @param horaireFin Heure de début du créneau fixé pour la livraison
+   */
   public void setHoraireFin(Calendar horaireFin) {
     this.horaireFin = horaireFin;
   }
@@ -110,26 +136,58 @@ public class Commande extends Modele {
     this.note = note;
   }
 
+  /**
+   * Retourne {@code true} si la livraison n'a pas pu être effectuée et doit être associée à une
+   * nouvelle tournée.
+   *
+   * @return {@code true} en cas de défaut de livraison, {@code false} sinon
+   */
   public boolean isDefautLivraison() {
     return defautLivraison;
   }
 
+  /**
+   * Indiquer si la livraison n'a pas pu être effectuée et doit être associée à une nouvelle
+   * tournée.
+   *
+   * @param defautLivraison {@code true} en cas de défaut de livraison, {@code false} sinon
+   */
   public void setDefautLivraison(boolean defautLivraison) {
     this.defautLivraison = defautLivraison;
   }
 
+  /**
+   * Retourne la date fixée pour la livraison.
+   *
+   * @return Date fixée pour la livraison
+   */
   public Calendar getDateInitiale() {
     return dateInitiale;
   }
 
+  /**
+   * Définir la date fixée pour la livraison.
+   *
+   * @param dateInitiale Date fixée pour la livraison
+   */
   public void setDateInitiale(Calendar dateInitiale) {
     this.dateInitiale = dateInitiale;
   }
 
+  /**
+   * Retourne la date à laquelle la commande a été livrée.
+   *
+   * @return Date à laquelle la commande a été livrée
+   */
   public Calendar getDateLivraison() {
     return dateLivraison;
   }
 
+  /**
+   * Définir la date à laquelle la commande a été livrée.
+   *
+   * @param dateLivraison Date à laquelle la commande a été livrée
+   */
   public void setDateLivraison(Calendar dateLivraison) {
     this.dateLivraison = dateLivraison;
   }
