@@ -59,12 +59,16 @@ public class TableauTournees extends Tableau<Tournee> {
     colValidite.setCellFactory(tableColumn -> new TableCell<>() {
       @Override
       protected void updateItem(Boolean valide, boolean empty) {
+        super.updateItem(valide, empty);
+
         if (!empty) {
           setGraphic(valide
               ? FabriqueIcone.get(Icone.OK, TAILLE_ICONE)
               : FabriqueIcone.get(Icone.ATTENTION, TAILLE_ICONE));
           setTooltip(new Tooltip(valide ? "Tournée valide" : "La tournée contient des erreurs"));
           setAlignment(Pos.CENTER);
+        } else {
+          setGraphic(null);
         }
       }
     });
@@ -77,6 +81,8 @@ public class TableauTournees extends Tableau<Tournee> {
     colDate.setCellFactory(tableColumn -> new TextFieldTableCell<>() {
       @Override
       public void updateItem(Date date, boolean empty) {
+        super.updateItem(date, empty);
+
         if (!empty) {
           setText(DateFormat.getDateInstance(DateFormat.LONG).format(date));
         }
@@ -95,6 +101,8 @@ public class TableauTournees extends Tableau<Tournee> {
     colCreneau.setCellFactory(tableColumn -> new TextFieldTableCell<>() {
       @Override
       public void updateItem(Date[] dates, boolean empty) {
+        super.updateItem(dates, empty);
+
         if (!empty) {
           setText(
               DateFormat.getTimeInstance(DateFormat.SHORT).format(dates[0])
@@ -113,6 +121,8 @@ public class TableauTournees extends Tableau<Tournee> {
     colDuree.setCellFactory(tableColumn -> new TextFieldTableCell<>() {
       @Override
       public void updateItem(Duration duree, boolean empty) {
+        super.updateItem(duree, empty);
+
         if (!empty) {
           setText(duree.toHoursPart() + " h " + duree.toMinutesPart() + " min");
         }

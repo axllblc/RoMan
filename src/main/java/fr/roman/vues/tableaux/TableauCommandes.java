@@ -56,7 +56,10 @@ public class TableauCommandes extends Tableau<Commande> {
     colStatut.setCellFactory(tableColumn -> new TableCell<>() {
       @Override
       protected void updateItem(Commande.Statut statut, boolean empty) {
+        super.updateItem(statut, empty);
+
         if (empty || statut == null) {
+          setGraphic(null);
           return;
         }
 
@@ -92,6 +95,8 @@ public class TableauCommandes extends Tableau<Commande> {
         new TextFieldTableCell<>() {
           @Override
           public void updateItem(Date date, boolean empty) {
+            super.updateItem(date, empty);
+
             if (!empty) {
               setText(DateFormat.getDateInstance(DateFormat.LONG).format(date));
             }
@@ -114,6 +119,8 @@ public class TableauCommandes extends Tableau<Commande> {
         new TextFieldTableCell<>() {
           @Override
           public void updateItem(Date[] creneau, boolean empty) {
+            super.updateItem(creneau, empty);
+
             if (!empty) {
               setText(
                   DateFormat.getTimeInstance(DateFormat.SHORT).format(creneau[0])
