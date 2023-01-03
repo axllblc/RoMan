@@ -216,6 +216,35 @@ public class Commande extends Modele {
     this.tournee = tournee;
   }
 
+  /**
+   * Retourne le statut de la commande : livrée, en attente, reportée, ou en retard.
+   *
+   * <ul>
+   *   <li>Une commande est <b>livrée</b> ({@link Statut#LIVREE}) si sa date de livraison
+   *   ({@link #getDateLivraison()}) est non-{@code null}</li>
+   *   <li>Une commande est <b>en retard</b> ({@link Statut#EN_RETARD}) si la date de livraison
+   *   initialement fixée ({@link #getDateInitiale()}) est passée</li>
+   *   <li>Une commande est <b>reportée</b> ({@link Statut#REPORTEE}) si
+   *   {@link #isDefautLivraison()} vaut {@code true}</li>
+   *   <li>Une commande est <b>en attente</b> ({@link Statut#EN_ATTENTE}) dans les autres cas</li>
+   * </ul>
+   *
+   * @return Statut de la commande
+   *
+   * @see Statut
+   */
+  public Statut getStatut() {
+    if (dateLivraison != null) {
+      return Statut.LIVREE;
+    } else if (dateInitiale.before(Calendar.getInstance())) {
+      return Statut.EN_RETARD;
+    } else if (defautLivraison) {
+      return Statut.REPORTEE;
+    } else {
+      return Statut.EN_ATTENTE;
+    }
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -259,5 +288,25 @@ public class Commande extends Modele {
         + ", client=" + client
         + ", tournee=" + tournee
         + '}';
+  }
+
+  /**
+   * Statut d'une commande : livrée, en attente, reportée, ou en retard.
+   */
+  public enum Statut {
+    LIVREE("Livrée"),
+    EN_ATTENTE("En attente de livraison"),
+    REPORTEE("Reportée"),
+    EN_RETARD("En retard");
+
+    final String label;
+
+    Statut(String label) {
+      this.label = label;
+    }
+
+    public String getLabel() {
+      return label;
+    }
   }
 }
