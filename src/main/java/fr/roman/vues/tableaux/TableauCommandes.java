@@ -1,7 +1,10 @@
 package fr.roman.vues.tableaux;
 
+import static fr.roman.vues.composants.IconTableColumn.TAILLE_ICONE;
+
 import fr.roman.modeles.Commande;
 import fr.roman.vues.composants.FabriqueIcone;
+import fr.roman.vues.composants.IconTableColumn;
 import fr.roman.vues.composants.Icone;
 import java.text.DateFormat;
 import java.util.Date;
@@ -31,6 +34,12 @@ import javafx.scene.control.cell.TextFieldTableCell;
  * @author Axel Leblanc
  */
 public class TableauCommandes extends Tableau<Commande> {
+  private static final String TITRE_COL_STATUT = """
+      Statut de la commande
+      
+      Cliquer pour trier selon l'importance.
+      """;
+
   /**
    * Construire un tableau permettant de lister des commandes.
    */
@@ -40,7 +49,7 @@ public class TableauCommandes extends Tableau<Commande> {
     // Création des colonnes
 
     /* Colonne affichant le statut de la commande. */
-    TableColumn<Commande, Commande.Statut> colStatut = new TableColumn<>();
+    IconTableColumn<Commande, Commande.Statut> colStatut = new IconTableColumn<>(TITRE_COL_STATUT);
     colStatut.setCellValueFactory(c ->
         new ReadOnlyObjectWrapper<>(c.getValue().getStatut())
     );
@@ -62,8 +71,6 @@ public class TableauCommandes extends Tableau<Commande> {
         setAlignment(Pos.CENTER);
       }
     });
-    colStatut.setPrefWidth(20);
-    colStatut.setResizable(false);
 
     /* Colonne affichant les libellés de commandes. */
     TableColumn<Commande, String> colLibelle = new TableColumn<>("Libellé");

@@ -1,7 +1,10 @@
 package fr.roman.vues.tableaux;
 
+import static fr.roman.vues.composants.IconTableColumn.TAILLE_ICONE;
+
 import fr.roman.modeles.Tournee;
 import fr.roman.vues.composants.FabriqueIcone;
+import fr.roman.vues.composants.IconTableColumn;
 import fr.roman.vues.composants.Icone;
 import java.text.DateFormat;
 import java.time.Duration;
@@ -34,6 +37,12 @@ import javafx.scene.control.cell.TextFieldTableCell;
  * @author Axel Leblanc
  */
 public class TableauTournees extends Tableau<Tournee> {
+  private static final String TITRE_COL_VALIDITE = """
+      Validité de la tournée
+      
+      Cliquer pour trier selon la validité.
+      """;
+
   /**
    * Construire un tableau permettant de lister des tournées.
    */
@@ -43,7 +52,7 @@ public class TableauTournees extends Tableau<Tournee> {
     // Création des colonnes
 
     /* Colonne affichant la validité de la tournée. */
-    TableColumn<Tournee, Boolean> colValidite = new TableColumn<>();
+    IconTableColumn<Tournee, Boolean> colValidite = new IconTableColumn<>(TITRE_COL_VALIDITE);
     colValidite.setCellValueFactory(t ->
         new ReadOnlyObjectWrapper<>(t.getValue().isValide())
     );
@@ -59,8 +68,6 @@ public class TableauTournees extends Tableau<Tournee> {
         }
       }
     });
-    colValidite.setPrefWidth(20);
-    colValidite.setResizable(false);
 
     /* Colonne affichant la date de la tournée. */
     TableColumn<Tournee, Date> colDate = new TableColumn<>("Date");
