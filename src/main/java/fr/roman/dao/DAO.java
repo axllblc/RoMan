@@ -3,6 +3,7 @@ package fr.roman.dao;
 import fr.roman.modeles.Modele;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * @param o Un {@link fr.roman.modeles objet métier}.
    * @return {@link M L'objet métier} avec son identifiant ou null si l'insertion n'a pas eu lieu.
    */
-  public abstract M insert(M o);
+  public abstract M insert(M o) throws Exception;
 
   /**
    * Mise à jour d'une ligne dans une table de la base.
@@ -50,7 +51,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * @param o Un {@link fr.roman.modeles objet métier.}
    * @return True si la ligne a été modifiée, false sinon.
    */
-  public abstract boolean update(M o);
+  public abstract boolean update(M o) throws Exception;
 
   /**
    * Suppression de données dans la base.
@@ -58,7 +59,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * @param id L'identifiant dans la base de donnée de la ligne à supprimer.
    * @return True si la ligne a été supprimée, false sinon.
    */
-  public abstract boolean delete(int id);
+  public abstract boolean delete(int id) throws Exception;
 
   /**
    * Recherche de données dans une table de la base avec les attributs renseignés de l'objet métier.
@@ -69,7 +70,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * @return Un {@link ArrayList}d' {@link fr.roman.modeles objets métiers}
    *         qui correspond aux {@link C critères} mis en paramètre.
    */
-  public abstract ArrayList<M> find(HashMap<C, String> criteres);
+  public abstract ArrayList<M> find(HashMap<C, String> criteres) throws Exception;
 
   /**
    * Recherche d'une ligne dans une table de la base à partir de sa clé primaire.
@@ -78,14 +79,14 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * @return L'{@link M objet métier} contenant les informations de la ligne.
    *         Renvoie null si la ligne n'a pas été trouvée.
    */
-  public abstract M findById(int id);
+  public abstract M findById(int id) throws Exception;
 
   /**
    * Recherche de l'ensemble des données de la table.
    *
    * @return Un {@link ArrayList} d'objets de l'ensemble des données de la table.
    */
-  public ArrayList<M> findAll() {
+  public ArrayList<M> findAll() throws Exception {
     // On réutilise la méthode find avec aucun critère comme paramètre
     return find(new HashMap<>());
   }

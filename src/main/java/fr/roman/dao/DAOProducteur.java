@@ -6,7 +6,6 @@ import fr.roman.modeles.Utilisateur;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,18 +22,15 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
   }
 
   /**
-   * Entrée d'un producteur dans la table (et par extension un compte Utilisateur).
+   * Entrée d'un producteur dans la table (et par extension un compte Utilisateur associé).
    *
    * @param p Un objet Producteur, qui doit contenir un objet Utilisateur.
-   * @return Un objet Producteur avec son identifiant, null s'il n'a pas pu être ajouté.
+   * @return Un objet Producteur avec son identifiant
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
-  public Producteur insert(Producteur p) {
-    try {
-      DAOUtilisateur daoU = new DAOUtilisateur();
-      return daoU.insert(p);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  public Producteur insert(Producteur p) throws Exception {
+    DAOUtilisateur daoU = new DAOUtilisateur();
+    return daoU.insert(p);
   }
 
   /**
@@ -42,23 +38,32 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
    *
    * @param p Un objet Producteur.
    * @return True si le producteur a été modifié, false sinon.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public boolean update(Producteur p) {
-    try {
-      PreparedStatement req  = this.getCo().prepareStatement("UPDATE producteurs "
-              + "SET siret = ?, nomEtablissement = ?, tel = ?, idAdresse = ? "
-              + "WHERE idProducteur = ?");
+  public boolean update(Producteur p) throws Exception {
+    if (p.getUtilisateur() == null || p.getAdresse() == null) {
+      // Si on n'a pas associé le producteur à un utilisateur,
+      // ou qu'il n'a pas d'adresse, on annule la modification
+      throw new Exception("Adresse et/ou utilisateur non renseignés");
+    }
+    // On vérifie que le Siret (si modifié) n'existe pas déjà dans la base
+    HashMap critereSiret = new HashMap<>();
+    critereSiret.put(Producteur.Champs.siret, p.getSiret());
+    ArrayList<Producteur> resRech = find(critereSiret);
+    if (!find(critereSiret).isEmpty() && resRech.get(0).getIdProducteur() != p.getIdProducteur()) {
+      throw new Exception("Siret déjà renseigné");
+    }
+    String sql = "UPDATE producteurs SET siret = ?, nomEtablissement = ?, tel = ?, idAdresse = ? "
+            + "WHERE idProducteur = ?";
+    try(PreparedStatement req  = this.getCo().prepareStatement(sql)) {
       req.setString(1, p.getSiret());
       req.setString(2, p.getNomEtablissement());
       req.setString(3, p.getTel());
       req.setInt(4, p.getAdresse().getIdAdresse());
       req.setInt(5, p.getIdProducteur());
       // L'exécution de la requête
-      req.execute();
-      return true;
-    } catch (SQLException e) { // En cas d'échec de la requête
-      return false;
+      return (req.executeUpdate() > 0);
     }
   }
 
@@ -67,17 +72,14 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
    *
    * @param id L'identifiant du producteur à supprimer.
    * @return True si le producteur a été supprimé, false sinon.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public boolean delete(int id) {
-    try {
-      // Comme on a une suppression en cascade, il suffit de supprimer
-      // le compte utilisateur associé au producteur
-      DAOUtilisateur daoU = new DAOUtilisateur();
-      return daoU.delete(this.findById(id).getUtilisateur().getIdUtilisateur());
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  public boolean delete(int id) throws Exception {
+    // Comme on a une suppression en cascade, il suffit de supprimer
+    // le compte utilisateur associé au producteur
+    DAOUtilisateur daoU = new DAOUtilisateur();
+    return daoU.delete(this.findById(id).getUtilisateur().getIdUtilisateur());
   }
 
   /**
@@ -85,14 +87,13 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
    *
    * @param criteres Les critères de recherche de producteurs.
    * @return Une collection de Producteur qui correspond aux critères mis en paramètre.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Producteur> find(HashMap<Producteur.Champs, String> criteres) {
-    PreparedStatement req;
-    try {
-      // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM producteurs WHERE 1=1 "
-              + criteresPourWHERE(criteres));
+  public ArrayList<Producteur> find(HashMap<Producteur.Champs, String> criteres) throws Exception {
+    // On fait une requête avec les critères de recherche
+    String sql = "SELECT * FROM producteurs WHERE 1=1 " + criteresPourWHERE(criteres);
+    try(PreparedStatement req = this.getCo().prepareStatement(sql)) {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList d'utilisateurs
@@ -111,9 +112,6 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
                 rs.getString("nomEtablissement"), rs.getString("tel"), adresse, utilisateur));
       }
       return producteurs;
-    } catch (Exception e) {
-      // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée correctement.
-      return new ArrayList<>();
     }
   }
 
@@ -123,9 +121,10 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
    * @param id L'identifiant du producteur.
    * @return L'objet Producteur contenant les informations de la ligne.
    * Renvoie null si la ligne n'a pas été trouvée.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public Producteur findById(int id) {
+  public Producteur findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
     HashMap<Producteur.Champs, String> criteres = new HashMap<>();
     criteres.put(Producteur.Champs.idProducteur, String.valueOf(id));

@@ -23,13 +23,14 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    * Méthode servant à ajouter une adresse dans la base de données.
    *
    * @param a L'adresse (sans identifiant)
-   * @return L'identifiant de la ligne ajoutée.
+   * @return L'objet adresse avec son identifiant.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public Adresse insert(Adresse a) {
+  public Adresse insert(Adresse a) throws Exception {
     if (a.getCoordonneesGPS() == null) {
       // Une adresse a au minimum des coordonnées GPS
-      return null;
+      throw new Exception(new Throwable("Absence de coordonnées"));
     }
     String sql = "INSERT INTO adresses "
             + "(coordonneesGPS, libelle, numeroVoie, complementNumero, voie, complementAdresse,"
@@ -56,11 +57,7 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
                 a.getNumeroVoie(), a.getComplementNumero(), a.getVoie(), a.getComplementAdresse(),
                 a.getCodePostal(), a.getVille());
       }
-      // En cas d'échec de l'ajout, on ne renvoie rien
-      return null;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return null;
+      throw new Exception(new Throwable("Erreur dans l'insertion de l'Adresse"));
     }
   }
 
@@ -69,9 +66,14 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    *
    * @param a Un objet Adresse.
    * @return True si l'adresse a été modifiée, false sinon.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public boolean update(Adresse a) {
+  public boolean update(Adresse a) throws Exception {
+    if (a.getCoordonneesGPS() == null) {
+      // Une adresse a au minimum des coordonnées GPS
+      throw new Exception(new Throwable("Absence de coordonnées"));
+    }
     String sql = "UPDATE adresses SET coordonneesGPS = ST_GeomFromText(?, 4326), libelle = ?, "
                 + "numeroVoie = ?, complementNumero = ?, voie = ?, complementAdresse = ?, "
                 + "codePostal = ?, ville = ? WHERE idAdresse = ?";
@@ -86,11 +88,7 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
       req.setString(8, a.getVille());
       req.setInt(9, a.getIdAdresse());
       // L'exécution de la requête
-      req.execute();
-      return true;
-    } catch (SQLException e) { // En cas d'échec de la requête : on renvoie false
-      e.printStackTrace();
-      return false;
+      return (req.executeUpdate() > 0);
     }
   }
 
@@ -99,19 +97,16 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    *
    * @param id L'identifiant de l'adresse dans la base.
    * @return Vrai si la ligne a été supprimée, false sinon.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public boolean delete(int id) {
+  public boolean delete(int id) throws SQLException {
     String sql = "DELETE FROM adresses WHERE idAdresse = ?";
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       req.setInt(1, id);
       // Si l'entrée a été supprimée, on retourne true
       return req.executeUpdate() == 1;
       // Sinon, on retourne false
-    } catch (SQLException e) {
-      return false;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
     }
   }
 
@@ -120,9 +115,10 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    *
    * @param criteres Les critères de recherche des adresses.
    * @return Une collection d'objets qui correspond aux critères mis en paramètre.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Adresse> find(HashMap<Adresse.Champs, String> criteres) {
+  public ArrayList<Adresse> find(HashMap<Adresse.Champs, String> criteres) throws SQLException {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT idAdresse, ST_X(coordonneesGPS) AS 'coX',"
             + "ST_Y(coordonneesGPS) AS 'coY', libelle, numeroVoie, complementNumero, voie, "
@@ -132,7 +128,7 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
-      ArrayList<Adresse> adresses = new ArrayList<Adresse>();
+      ArrayList<Adresse> adresses = new ArrayList<>();
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
         adresses.add(new Adresse(rs.getInt("idAdresse"),
@@ -143,9 +139,6 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
                 rs.getString("ville")));
       }
       return adresses;
-    } catch (Exception e) {
-      // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée correctement.
-      return new ArrayList<Adresse>();
     }
   }
 
@@ -155,9 +148,10 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    * @param id L'identifiant de l'adresse.
    * @return L'objet Adresse contenant les informations de la ligne.
    * Renvoie null si l'adresse n'a pas été trouvée.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public Adresse findById(int id) {
+  public Adresse findById(int id) throws SQLException {
     // On réutilise la méthode find avec comme seul critère l'identifiant
     HashMap<Adresse.Champs, String> criteres = new HashMap<>();
     criteres.put(Adresse.Champs.idAdresse, String.valueOf(id));

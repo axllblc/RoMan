@@ -25,13 +25,14 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    * Ajout d'un client dans la table.
    *
    * @param c Le client à ajouter.
-   * @return L'identifiant du client ajouté. -1 en cas d'échec.
+   * @return L'objet Client de ce qui a été ajouté.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public Client insert(Client c) {
+  public Client insert(Client c) throws Exception {
     // Un client a forcément un nom et une adresse
     if (c.getNom() == null || c.getAdresse() == null) {
-      return null;
+      throw new Exception(new Throwable("Nom et/ou adresse manquant"));
     }
     String sql = "INSERT INTO clients (nom, tel, email, siret, particulier, idAdresse) "
             + "VALUES (?,?,?,?,?,?)";
@@ -54,9 +55,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
                 c.getEmail(), c.getSiret(), c.isParticulier(), c.getAdresse());
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
-      return null;
-    } catch (Exception e) { // En cas d'erreur de la requête on ne renvoie rien
-      return null;
+      throw new Exception(new Throwable("Erreur dans l'insertion du client dans la base"));
     }
   }
 
@@ -65,9 +64,14 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    *
    * @param c Le client à modifier.
    * @return true si le client a été modifié, false sinon.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public boolean update(Client c) {
+  public boolean update(Client c) throws Exception {
+    // Un client a forcément un nom et une adresse
+    if (c.getNom() == null || c.getAdresse() == null) {
+      throw new Exception(new Throwable("Nom et/ou adresse manquant"));
+    }
     String sql = "UPDATE clients "
             + "SET nom = ?, tel = ?, email = ?, siret = ?, particulier = ?, idAdresse = ? "
             + "WHERE idClient = ?";
@@ -81,10 +85,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setInt(6, c.getAdresse().getIdAdresse());
       req.setInt(7, c.getIdClient());
       // L'exécution de la requête
-      req.execute();
-      return true;
-    } catch (SQLException e) { // En cas d'échec de la requête
-      return false;
+      return req.executeUpdate() > 0;
     }
   }
 
@@ -93,18 +94,14 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    *
    * @param id L'identifiant du client à supprimer.
    * @return true si la ligne a été supprimée, false sinon.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public boolean delete(int id) {
+  public boolean delete(int id) throws SQLException {
     String sql = "DELETE FROM clients WHERE idClient = ?";
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       req.setInt(1, id);
-
       return req.executeUpdate() == 1; // Si l'entrée a été supprimée, on retourne true
-    } catch (SQLException e) {
-      return false;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
     }
   }
 
@@ -113,16 +110,17 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    *
    * @param criteres Les critères de recherche des clients.
    * @return Une collection d'objets qui correspond aux critères mis en paramètre.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Client> find(HashMap<Client.Champs, String> criteres) {
+  public ArrayList<Client> find(HashMap<Client.Champs, String> criteres) throws Exception {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT * FROM clients WHERE 1=1 " + criteresPourWHERE(criteres);
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
-      ArrayList<Client> commandes = new ArrayList<Client>();
+      ArrayList<Client> commandes = new ArrayList<>();
       // On aura besoin de créer l'objet Adresse
       DAOAdresse daoA = new DAOAdresse();
       Adresse adresse;
@@ -135,9 +133,6 @@ public class DAOClient extends DAO<Client, Client.Champs> {
                 rs.getBoolean("particulier"), adresse));
       }
       return commandes;
-    } catch (Exception e) {
-      // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée correctement.
-      return new ArrayList<Client>();
     }
   }
 
@@ -147,9 +142,10 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    * @param id L'identifiant du client.
    * @return L'objet client contenant les informations de la ligne.
    * Renvoie null si le client n'a pas été trouvée.
+   * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public Client findById(int id) {
+  public Client findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
     HashMap<Client.Champs, String> criteres = new HashMap<>();
     criteres.put(Client.Champs.idClient, String.valueOf(id));
