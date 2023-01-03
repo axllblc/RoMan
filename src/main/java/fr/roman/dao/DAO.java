@@ -4,18 +4,17 @@ import fr.roman.modeles.Modele;
 
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
  * Classe abstraite {@link DAO} qui définie les principales méthodes des classes filles.
  * Possède un attribut {@link Connection} pour la liaison avec la base de donnée.
- * Est paramétré d'un ({@link fr.roman.modeles.Modele modèle M}) de l'application et de
- *  l'énumération de ses attributs/champs ({@link C C}).
+ *
+ * @param <M> Est paramétré d'un {@link fr.roman.modeles.Modele modèle} de l'application
+ * @param <C> Est paramétré de l'énumération de ses attributs/champs.
  */
 public abstract class DAO<M extends Modele, C extends Enum<C>> {
-
   /**
    * Objet {@link Connection} servant à établir la connection avec la base de donnée.
    */
@@ -29,7 +28,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
   }
 
   /**
-   * Permet de retrouver l'objet {@link Connection} servant à JDBC
+   * Permet de retrouver l'objet {@link Connection} servant à JDBC.
    *
    * @return L'objet {@link Connection}
    */
@@ -54,7 +53,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
   public abstract boolean update(M o);
 
   /**
-   * Suppression de données dans la base
+   * Suppression de données dans la base.
    *
    * @param id L'identifiant dans la base de donnée de la ligne à supprimer.
    * @return True si la ligne a été supprimée, false sinon.
@@ -65,13 +64,15 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * Recherche de données dans une table de la base avec les attributs renseignés de l'objet métier.
    *
    * @param criteres Un objet HashMap<C, String> où ({@link C C} est la clé est le nom du critère
-   *                 (énumération des champs dans l'objet métier) et la {@link String valeur} est celle du critère.
-   * @return Une {@link Collection collection}d' {@link fr.roman.modeles objets métiers} qui correspond aux {@link C critères} mis en paramètre.
+   *                 (énumération des champs dans l'objet métier)
+   *                 et la {@link String valeur} est celle du critère.
+   * @return Un {@link ArrayList}d' {@link fr.roman.modeles objets métiers}
+   *         qui correspond aux {@link C critères} mis en paramètre.
    */
   public abstract ArrayList<M> find(HashMap<C, String> criteres);
 
   /**
-   * Recherche d'une ligne dans une table de la base à partir de sa clé primaire
+   * Recherche d'une ligne dans une table de la base à partir de sa clé primaire.
    *
    * @param id L'identifiant de l'{@link fr.roman.modeles objet métier}.
    * @return L'{@link M objet métier} contenant les informations de la ligne.
@@ -82,11 +83,11 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
   /**
    * Recherche de l'ensemble des données de la table.
    *
-   * @return Une {@link Collection collection} d'objets de l'ensemble des données de la table.
+   * @return Un {@link ArrayList} d'objets de l'ensemble des données de la table.
    */
-  public ArrayList<M> findAll(){
+  public ArrayList<M> findAll() {
     // On réutilise la méthode find avec aucun critère comme paramètre
-    return find(new HashMap<C, String>());
+    return find(new HashMap<>());
   }
 
   /**
@@ -99,7 +100,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * @return         Une {@link String chaine de caractères} correspondant
    *                 à ce qu'il faut mettre après la clause WHERE.
    */
-  String criteresPourWHERE(HashMap<C, String> criteres){
+  String criteresPourWHERE(final HashMap<C, String> criteres) {
     // Réalisé à l'aide d'expressions régulières et de l'API Stream.
     return criteres.entrySet()
             .stream()

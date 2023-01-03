@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.TimeZone;
 
 /**
- * DAO pour la classe Commande
+ * DAO pour la classe Commande.
  */
 public class DAOCommande extends DAO<Commande, Commande.Champs> {
 
@@ -28,16 +28,16 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
    */
   @Override
   public Commande insert(Commande c) {
-    try {
-      // La commande est nécessairement associée à un producteur et un client
-      if(c.getClient() == null || c.getProducteur() == null){
-        return null;
-      }
-      // La requête
-      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO commandes " +
-              "(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, " +
-              "dateInitiale, dateLivraison, idProducteur, idTournee, idClient) " +
-              "VALUES (?,?,?,?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+    // La commande est nécessairement associée à un producteur et un client
+    if (c.getClient() == null || c.getProducteur() == null) {
+      return null;
+    }
+    String sql = "INSERT INTO commandes "
+            + "(libelle, poids, horaireDebut, horaireFin, note, defautLivraison, "
+            + "dateInitiale, dateLivraison, idProducteur, idTournee, idClient) "
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql,
+            PreparedStatement.RETURN_GENERATED_KEYS)) {
       // L'ajout des valeurs
       req.setString(1, c.getLibelle());
       req.setDouble(2, c.getPoids());
@@ -45,10 +45,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // Pour les objets "Calendar"
       req.setTime(3, null);
       req.setTime(4, null);
-      if(c.getHoraireDebut() != null){
+      if (c.getHoraireDebut() != null) {
         req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTime().getTime()));
       }
-      if(c.getHoraireFin() != null){
+      if (c.getHoraireFin() != null) {
         req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTime().getTime()));
       }
 
@@ -58,10 +58,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // Pour les objets "Calendar"
       req.setTime(7, null);
       req.setTime(8, null);
-      if(c.getDateInitiale() != null){
+      if (c.getDateInitiale() != null) {
         req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTime().getTime()));
       }
-      if(c.getDateLivraison() != null){
+      if (c.getDateLivraison() != null) {
         req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTime().getTime()));
       }
 
@@ -72,7 +72,7 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       req.execute();
       // Récupération de la clé primaire
       ResultSet rs = req.getGeneratedKeys();
-      if(rs.next()){
+      if (rs.next()) {
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
         return new Commande(rs.getInt(1), c.getLibelle(), c.getPoids(),
                 c.getHoraireDebut(), c.getHoraireFin(), c.getNote(), c.isDefautLivraison(),
@@ -94,20 +94,19 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
    */
   @Override
   public boolean update(Commande c) {
-    try {
-      PreparedStatement req  = this.getCo().prepareStatement("UPDATE commandes " +
-              "SET libelle = ?, poids = ?, horaireDebut = ?, horaireFin = ?, " +
-              "note = ?, defautLivraison = ?, dateInitiale = ?, dateLivraison = ?, idProducteur = ?," +
-              "idTournee = ?, idClient = ? WHERE idCommande = ?");
+    String sql = "UPDATE commandes SET libelle = ?, poids = ?, horaireDebut = ?, horaireFin = ?, "
+            + "note = ?, defautLivraison = ?, dateInitiale = ?, dateLivraison = ?,"
+            + "idProducteur = ?, idTournee = ?, idClient = ? WHERE idCommande = ?";
+    try (PreparedStatement req  = this.getCo().prepareStatement(sql)) {
       req.setString(1, c.getLibelle());
       req.setDouble(2, c.getPoids());
       // Pour les objets "Calendar"
       req.setTime(3, null);
       req.setTime(4, null);
-      if(c.getHoraireDebut() != null){
+      if (c.getHoraireDebut() != null) {
         req.setTimestamp(3, new Timestamp(c.getHoraireDebut().getTime().getTime()));
       }
-      if(c.getHoraireFin() != null){
+      if (c.getHoraireFin() != null) {
         req.setTimestamp(4, new Timestamp(c.getHoraireFin().getTime().getTime()));
       }
 
@@ -117,10 +116,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       // Pour les objets "Calendar"
       req.setTime(7, null);
       req.setTime(8, null);
-      if(c.getDateInitiale() != null){
+      if (c.getDateInitiale() != null) {
         req.setTimestamp(7, new Timestamp(c.getDateInitiale().getTime().getTime()));
       }
-      if(c.getDateLivraison() != null){
+      if (c.getDateLivraison() != null) {
         req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTime().getTime()));
       }
 
@@ -137,15 +136,15 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
   }
 
   /**
-   * Suppression d'une commande dans la base
+   * Suppression d'une commande dans la base.
    *
    * @param id L'identifiant de la commande à supprimer.
    * @return True si la commande a été supprimée, false sinon.
    */
   @Override
   public boolean delete(int id) {
-    try {
-      PreparedStatement req = this.getCo().prepareStatement("DELETE FROM commandes WHERE idCommande = ?");
+    String sql = "DELETE FROM commandes WHERE idCommande = ?";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       req.setInt(1, id);
       // Si l'entrée a été supprimée, on retourne true
       return req.executeUpdate() == 1;
@@ -165,11 +164,9 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
    */
   @Override
   public ArrayList<Commande> find(HashMap<Commande.Champs, String> criteres) {
-    PreparedStatement req;
-    try {
-      // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM commandes WHERE 1=1 " +
-              criteresPourWHERE(criteres));
+    // On fait une requête avec les critères de recherche
+    String sql = "SELECT * FROM commandes WHERE 1=1 " + criteresPourWHERE(criteres);
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
@@ -188,21 +185,20 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
         tournee = daoT.findById(Integer.parseInt(rs.getString("idTournee")));
 
         // Pour les objets "Calendar"
-        Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        if (rs.getTimestamp("horaireDebut") != null){
+        Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        if (rs.getTimestamp("horaireDebut") != null) {
           horaireDebut.setTime(rs.getTimestamp("horaireDebut"));
         }
-        Calendar horaireFin = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        if(rs.getTimestamp("horaireFin") !=null){
+        Calendar horaireFin = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        if (rs.getTimestamp("horaireFin") != null) {
           horaireFin.setTime(rs.getTimestamp("horaireFin"));
         }
-        Calendar dateInitiale = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        if (rs.getTimestamp("dateInitiale") != null){
+        Calendar dateInitiale = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        if (rs.getTimestamp("dateInitiale") != null) {
           dateInitiale.setTime(rs.getTimestamp("dateInitiale"));
-          dateInitiale.add(Calendar.DAY_OF_MONTH, 1); // car on n'a pas d'heure donc on recule d'1 jour sinon
         }
-        Calendar dateLivraison = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        if(rs.getTimestamp("dateLivraison") !=null){
+        Calendar dateLivraison = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        if (rs.getTimestamp("dateLivraison") != null) {
           dateLivraison.setTime(rs.getTimestamp("dateLivraison"));
         }
 
@@ -215,12 +211,12 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       return commandes;
     } catch (Exception e) {
       // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée correctement.
-      return new ArrayList<Commande>();
+      return new ArrayList<>();
     }
   }
 
   /**
-   * Recherche d'une commande dans la base à partir de sa clé primaire
+   * Recherche d'une commande dans la base à partir de sa clé primaire.
    *
    * @param id L'identifiant de la commande.
    * @return L'objet Commande contenant les informations de la ligne trouvée.
@@ -229,10 +225,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
   @Override
   public Commande findById(int id) {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Commande.Champs, String> criteres = new HashMap<Commande.Champs, String>();
+    HashMap<Commande.Champs, String> criteres = new HashMap<>();
     criteres.put(Commande.Champs.idCommande, String.valueOf(id));
     ArrayList<Commande> resultatRecherche = find(criteres);
-    if(resultatRecherche.isEmpty()){
+    if (resultatRecherche.isEmpty()) {
       return null;
     }
     return resultatRecherche.get(0);

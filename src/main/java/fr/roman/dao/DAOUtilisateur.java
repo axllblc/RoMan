@@ -3,6 +3,7 @@ package fr.roman.dao;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
+
 import java.sql.*;
 import java.util.*;
 
@@ -29,24 +30,24 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    */
   @Override
   public Utilisateur insert(Utilisateur u) {
-    try {
-      // On s'assure que l'utilisateur à ajouter a un nom d'utilisateur (nouveau),
-      // un mot de passe et que si c'est un producteur on est bien en train d'ajouter son compte
-      // utilisateur dans le contexte d'une transaction qui se passe dans la méthode #insert
-      if(u.getNomUtilisateur() == null || u.getMdp() == null
-              || findByNomUtilisateur(u.getNomUtilisateur()) != null
-              || (u.getRole() == Role.PRODUCTEUR
-                  && !(Thread.currentThread().getStackTrace()[2].getMethodName().equals("insert")))){
-        return null;
-      }
-      // La requête
-      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO utilisateurs " +
-              "(nomUtilisateur, mdp, sel, nom, prenom, email) VALUES (?,?,?,?,?,?)",
-              PreparedStatement.RETURN_GENERATED_KEYS);
+    // On s'assure que l'utilisateur à ajouter a un nom d'utilisateur (nouveau),
+    // un mot de passe et que si c'est un producteur on est bien en train d'ajouter son compte
+    // utilisateur dans le contexte d'une transaction qui se passe dans la méthode #insert
+    if (u.getNomUtilisateur() == null || u.getMdp() == null
+            || findByNomUtilisateur(u.getNomUtilisateur()) != null
+            || (u.getRole() == Role.PRODUCTEUR
+                && !(Thread.currentThread().getStackTrace()[2].getMethodName().equals("insert")))) {
+      return null;
+    }
+    // La requête
+    String sql = "INSERT INTO utilisateurs (nomUtilisateur, mdp, sel, nom, prenom, email) "
+            + "VALUES (?,?,?,?,?,?)";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql,
+            PreparedStatement.RETURN_GENERATED_KEYS)) {
       // L'ajout des valeurs
       req.setString(1, u.getNomUtilisateur());
       req.setBytes(2, Base64.getDecoder().decode(u.getMdp()));
-      req.setBytes(3,u.getSel());
+      req.setBytes(3, u.getSel());
       req.setString(4, u.getNom());
       req.setString(5, u.getPrenom());
       req.setString(6, u.getEmail());
@@ -54,11 +55,11 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       req.execute();
       // Récupération de la clé primaire
       ResultSet rs = req.getGeneratedKeys();
-      if(rs.next()){
+      if (rs.next()) {
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
-        return new Utilisateur(rs.getInt(1), u.getNomUtilisateur(),
-                u.getMdp(), u.getSel(),
-                u.getNom(), u.getPrenom(), u.getEmail(), getRole(rs.getInt(1)));
+        return new Utilisateur(rs.getInt(1), u.getNomUtilisateur(), u.getMdp(),
+                u.getSel(), u.getNom(), u.getPrenom(), u.getEmail(),
+                getRole(rs.getInt(1)));
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
@@ -74,14 +75,12 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    * @param p Le producteur à ajouter à la base, qui contient entre autre un objet Utilisateur.
    * @return L'objet métier Producteur inséré avec son compte utilisateur en attribut
    */
-  public Producteur insert(Producteur p){
-
-    if(p.getUtilisateur() == null || p.getAdresse() == null){
+  public Producteur insert(Producteur p) {
+    if (p.getUtilisateur() == null || p.getAdresse() == null) {
       // Si on n'a pas associé le producteur à un utilisateur à ajouter,
       // ou qu'il n'a pas d'adresse, on annule la création de compte
       return null;
     }
-
     // On enregistre un point de sauvegarde où le producteur et son compte n'est pas ajouté
     Savepoint pointSauvegarde;
     try {
@@ -91,22 +90,22 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       // Si on n'arrive pas à joindre la base pour définir un point de sauvegarde
       return null;
     }
-
-    try {
+    // La requête (deuxième) après l'ajout de l'utilisateur
+    String sql = "INSERT INTO producteurs (siret, nomEtablissement, tel, idAdresse, idUtilisateur) "
+                + "VALUES (?,?,?,?,?)";
+    try (PreparedStatement reqProducteur = this.getCo()
+            .prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
       Utilisateur u = p.getUtilisateur();
       // Pour réaliser la transaction, on commence par faire la requête d'ajout de l'utilisateur
       u = this.insert(u);
-      if (u == null){// Si cela n'a pas été possible, on lance une SQLException
-        throw new SQLException();
+      if (u == null) { // Si cela n'a pas été possible, on lance une SQLException
+        throw new SQLException("Ajout de l'utilisateur (producteur) impossible");
       }
       // on ajoute l'utilisateur (avec maintenant un identifiant) au producteur (qui va être ajouté)
       u.setRole(Role.PRODUCTEUR); // On ajoute un producteur
       p.setUtilisateur(u);
-      // La requête
-      PreparedStatement reqProducteur = this.getCo().prepareStatement("INSERT INTO producteurs " +
-              "(siret, nomEtablissement, tel, idAdresse, idUtilisateur) " +
-              "VALUES (?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
-      // L'ajout des valeurs
+
+      // L'ajout des valeurs pour la requête d'ajout dans la table "Producteur"
       reqProducteur.setString(1, p.getSiret());
       reqProducteur.setString(2, p.getNomEtablissement());
       reqProducteur.setString(3, p.getTel());
@@ -117,7 +116,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       reqProducteur.execute();
       // Récupération de la clé primaire
       ResultSet rs = reqProducteur.getGeneratedKeys();
-      if(!rs.next()){ // Si l'ajout n'a pas eu lieu, on renvoie une exception
+      if (!rs.next()) { // Si l'ajout n'a pas eu lieu, on renvoie une exception
         throw new SQLException();
       }
       p = new Producteur(rs.getInt(1), p.getSiret(),
@@ -146,10 +145,10 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    */
   @Override
   public boolean update(Utilisateur u) {
-    try {
-      PreparedStatement req  = this.getCo().prepareStatement("UPDATE utilisateurs " +
-              "SET nomUtilisateur = ?, mdp = ?, sel = ?, nom = ?, prenom = ?, email = ? " +
-              "WHERE idUtilisateur = ?");
+    String sql = "UPDATE utilisateurs "
+            + "SET nomUtilisateur = ?, mdp = ?, sel = ?, nom = ?, prenom = ?, email = ? "
+            + "WHERE idUtilisateur = ?";
+    try (PreparedStatement req  = this.getCo().prepareStatement(sql)) {
       req.setString(1, u.getNomUtilisateur());
       req.setBytes(2, Base64.getDecoder().decode(u.getMdp()));
       req.setBytes(3, u.getSel());
@@ -173,12 +172,12 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    */
   @Override
   public boolean delete(int id) {
-    try {
-      if(id == 1){
-        // Si on cherche a supprimer le super-administrateur (a pour identifiant 1), on ne peut pas.
-        return false;
-      }
-      PreparedStatement req = this.getCo().prepareStatement("DELETE FROM utilisateurs WHERE idUtilisateur = ?");
+    if (id == 1) {
+      // Si on cherche a supprimer le super-administrateur (a pour identifiant 1), on ne peut pas.
+      return false;
+    }
+    String sql = "DELETE FROM utilisateurs WHERE idUtilisateur = ?";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       req.setInt(1, id);
       // Si l'entrée a été supprimée, on retourne true
       return req.executeUpdate() == 1;
@@ -199,11 +198,9 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    */
   @Override
   public ArrayList<Utilisateur> find(HashMap<Utilisateur.Champs, String> criteres) {
-    PreparedStatement req;
-    try {
-      // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM utilisateurs WHERE 1=1 " +
-                      criteresPourWHERE(criteres));
+    // On fait une requête avec les critères de recherche
+    String sql = "SELECT * FROM utilisateurs WHERE 1=1 " + criteresPourWHERE(criteres);
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList d'utilisateurs
@@ -212,13 +209,14 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
         // Tant qu'il y a des lignes dans le résultat
         // Note : on utilise Base64 pour convertir les bits de la base de donnée en chaine de caractère
         utilisateurs.add(new Utilisateur(rs.getInt("idUtilisateur"), rs.getString("nomUtilisateur"),
-                Base64.getEncoder().encodeToString(rs.getBytes("mdp")), rs.getBytes("sel"), rs.getString("nom"), rs.getString("prenom"),
+                Base64.getEncoder().encodeToString(rs.getBytes("mdp")), rs.getBytes("sel"),
+                rs.getString("nom"), rs.getString("prenom"),
                 rs.getString("email"), getRole(rs.getInt("idUtilisateur"))));
       }
       return utilisateurs;
     } catch (Exception e) {
       // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée.
-      return new ArrayList<Utilisateur>();
+      return new ArrayList<>();
     }
   }
 
@@ -232,29 +230,28 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    * @throws Exception Si la requête n'a pas pu avoir lieu, on renvoie une exception
    */
   private Role getRole(int idUtilisateur) throws Exception {
-    if(idUtilisateur == 1){
+    if (idUtilisateur == 1) {
       // Le root ou super-administrateur a l'identifiant 1
       return Role.ROOT;
     }
     // Pour retrouver on recherche la présence de l'identifiant dans la table producteur
-    HashMap<Utilisateur.Champs, String> criteres = new HashMap<Utilisateur.Champs, String>();
+    HashMap<Utilisateur.Champs, String> criteres = new HashMap<>();
     criteres.put(Utilisateur.Champs.idUtilisateur, String.valueOf(idUtilisateur));
-    PreparedStatement req;
     // On fait une requête avec les critères de recherche
-    req = this.getCo().prepareStatement("SELECT idUtilisateur FROM producteurs WHERE 1=1 " +
-            criteresPourWHERE(criteres));
-    // On récupère le résultat
-    ResultSet rs = req.executeQuery();
-    if (rs.next()) {
-      return Role.PRODUCTEUR;
-    }
-    else{
-      return Role.ADMINISTRATEUR;
+    String sql = "SELECT idUtilisateur FROM producteurs WHERE 1=1 " + criteresPourWHERE(criteres);
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      // On récupère le résultat
+      ResultSet rs = req.executeQuery();
+      if (rs.next()) {
+        return Role.PRODUCTEUR;
+      } else {
+        return Role.ADMINISTRATEUR;
+      }
     }
   }
 
   /**
-   * Recherche d'un utilisateur à partir de sa clé primaire
+   * Recherche d'un utilisateur à partir de sa clé primaire.
    *
    * @param id L'identifiant de l'utilisateur.
    * @return L'utilisateur trouvé. Renvoie null s'il n'a pas été trouvée.
@@ -262,27 +259,28 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   @Override
   public Utilisateur findById(int id) {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Utilisateur.Champs, String> criteres = new HashMap<Utilisateur.Champs, String>();
+    HashMap<Utilisateur.Champs, String> criteres = new HashMap<>();
     criteres.put(Utilisateur.Champs.idUtilisateur, String.valueOf(id));
     ArrayList<Utilisateur> resultatRecherche = find(criteres);
-    if(resultatRecherche.isEmpty()){
+    if (resultatRecherche.isEmpty()) {
       return null;
     }
     return resultatRecherche.get(0);
   }
 
   /**
-   * Recherche la présence d'un utilisateur dans la base
+   * Recherche la présence d'un utilisateur dans la base.
+   *
    * @param nomUtilisateur Le nom d'utilisateur recherché
    * @return Un objet Utilisateur contenant les informations de l'utilisateur trouvé, null sinon
    */
   public Utilisateur findByNomUtilisateur(String nomUtilisateur) {
     // On réutilise la méthode find avec comme seul critère le nom d'utilisateur
-    HashMap<Utilisateur.Champs, String> criteres = new HashMap<Utilisateur.Champs, String>();
+    HashMap<Utilisateur.Champs, String> criteres = new HashMap<>();
     criteres.put(Utilisateur.Champs.nomUtilisateur, String.valueOf(nomUtilisateur));
     // On récupère le résultat
     ArrayList<Utilisateur> resultatRecherche = find(criteres);
-    if(resultatRecherche.isEmpty()){
+    if (resultatRecherche.isEmpty()) {
       // Si l'utilisateur n'a pas été trouvé avec ce nom d'utilisateur, on renvoie null
       return null;
     }

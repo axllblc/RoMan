@@ -26,29 +26,28 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
    */
   @Override
   public Vehicule insert(Vehicule v) {
-    try {
-      // Le véhicule est nécessairement associée à un prodcuteur et a une immatriculation
-      if(v.getProducteur() == null || v.getImmatriculation() == null){
-        return null;
-      }
-      // La requête
-      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO vehicules " +
-                      "(immatriculation, poidsMax, libelle, idProducteur) " +
-                      "VALUES (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+    // Le véhicule est nécessairement associé à un producteur et a une immatriculation
+    if (v.getProducteur() == null || v.getImmatriculation() == null) {
+      return null;
+    }
+    // La requête
+    String sql = "INSERT INTO vehicules (immatriculation, poidsMax, libelle, idProducteur) "
+            + "VALUES (?,?,?,?)";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql,
+            PreparedStatement.RETURN_GENERATED_KEYS)) {
       // L'ajout des valeurs
       req.setString(1, v.getImmatriculation());
       req.setInt(2, v.getPoidsMax());
       req.setString(3, v.getLibelle());
       req.setInt(4, v.getProducteur().getIdProducteur());
       // L'exécution de la requête
-      System.out.println(req);
       req.execute();
       // Récupération de la clé primaire
       ResultSet rs = req.getGeneratedKeys();
-      if(rs.next()){
+      if (rs.next()) {
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
-        return new Vehicule(rs.getInt(1), v.getImmatriculation(), v.getPoidsMax(),
-                v.getLibelle(), v.getProducteur());
+        return new Vehicule(rs.getInt(1), v.getImmatriculation(),
+                v.getPoidsMax(), v.getLibelle(), v.getProducteur());
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
@@ -66,10 +65,9 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
    */
   @Override
   public boolean update(Vehicule v) {
-    try {
-      PreparedStatement req  = this.getCo().prepareStatement("UPDATE vehicules " +
-              "SET immatriculation = ?, poidsMax = ?, libelle = ?, idProducteur = ? " +
-              "WHERE idVehicule = ?");
+    String sql = "UPDATE vehicules SET immatriculation = ?, poidsMax = ?, "
+            + "libelle = ?, idProducteur = ? WHERE idVehicule = ?";
+    try (PreparedStatement req  = this.getCo().prepareStatement(sql)) {
       req.setString(1, v.getImmatriculation());
       req.setInt(2, v.getPoidsMax());
       req.setString(3, v.getLibelle());
@@ -84,17 +82,16 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
   }
 
   /**
-   * Suppression d'un véhicule dans la base
+   * Suppression d'un véhicule dans la base.
    *
    * @param id L'identifiant du véhicule à supprimer.
    * @return True si le véhicule a été supprimé, false sinon.
    */
   @Override
   public boolean delete(int id) {
-    try {
-      PreparedStatement req = this.getCo().prepareStatement("DELETE FROM vehicules WHERE idVehicule = ?");
+    String sql = "DELETE FROM vehicules WHERE idVehicule = ?";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       req.setInt(1, id);
-      System.out.println(req);
       // Si l'entrée a été supprimée, on retourne true
       return req.executeUpdate() == 1;
       // Sinon, on retourne false
@@ -112,11 +109,9 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
    */
   @Override
   public ArrayList<Vehicule> find(HashMap<Vehicule.Champs, String> criteres) {
-    PreparedStatement req;
-    try {
-      // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM vehicules WHERE 1=1 " +
-              criteresPourWHERE(criteres));
+    // On fait une requête avec les critères de recherche
+    String sql = "SELECT * FROM vehicules WHERE 1=1 " + criteresPourWHERE(criteres);
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
@@ -135,12 +130,12 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       return vehicules;
     } catch (Exception e) {
       // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée correctement.
-      return new ArrayList<Vehicule>();
+      return new ArrayList<>();
     }
   }
 
   /**
-   * Recherche d'un véhicule à partir de sa clé primaire
+   * Recherche d'un véhicule à partir de sa clé primaire.
    *
    * @param id L'identifiant du véhicule.
    * @return L'objet Vehicule contenant les informations de la ligne.
@@ -149,10 +144,10 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
   @Override
   public Vehicule findById(int id) {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Vehicule.Champs, String> criteres = new HashMap<Vehicule.Champs, String>();
+    HashMap<Vehicule.Champs, String> criteres = new HashMap<>();
     criteres.put(Vehicule.Champs.idVehicule, String.valueOf(id));
     ArrayList<Vehicule> resultatRecherche = find(criteres);
-    if(resultatRecherche.isEmpty()){
+    if (resultatRecherche.isEmpty()) {
       return null;
     }
     return resultatRecherche.get(0);

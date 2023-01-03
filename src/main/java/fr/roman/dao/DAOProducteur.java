@@ -46,9 +46,9 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
   @Override
   public boolean update(Producteur p) {
     try {
-      PreparedStatement req  = this.getCo().prepareStatement("UPDATE producteurs " +
-              "SET siret = ?, nomEtablissement = ?, tel = ?, idAdresse = ? " +
-              "WHERE idProducteur = ?");
+      PreparedStatement req  = this.getCo().prepareStatement("UPDATE producteurs "
+              + "SET siret = ?, nomEtablissement = ?, tel = ?, idAdresse = ? "
+              + "WHERE idProducteur = ?");
       req.setString(1, p.getSiret());
       req.setString(2, p.getNomEtablissement());
       req.setString(3, p.getTel());
@@ -63,7 +63,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
   }
 
   /**
-   * Suppression d'un producteur dans la base (on supprime aussi le compte utilisateur associé)
+   * Suppression d'un producteur dans la base (on supprime aussi le compte utilisateur associé).
    *
    * @param id L'identifiant du producteur à supprimer.
    * @return True si le producteur a été supprimé, false sinon.
@@ -91,8 +91,8 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
     PreparedStatement req;
     try {
       // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM producteurs WHERE 1=1 " +
-              criteresPourWHERE(criteres));
+      req = this.getCo().prepareStatement("SELECT * FROM producteurs WHERE 1=1 "
+              + criteresPourWHERE(criteres));
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList d'utilisateurs
@@ -112,14 +112,13 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       }
       return producteurs;
     } catch (Exception e) {
-      e.printStackTrace();
       // On renvoie un ArrayList vide si la requête n'a pas pu être effectuée correctement.
-      return new ArrayList<Producteur>();
+      return new ArrayList<>();
     }
   }
 
   /**
-   * Recherche d'un producteur à partir de sa clé primaire
+   * Recherche d'un producteur à partir de sa clé primaire.
    *
    * @param id L'identifiant du producteur.
    * @return L'objet Producteur contenant les informations de la ligne.
@@ -128,10 +127,10 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
   @Override
   public Producteur findById(int id) {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Producteur.Champs, String> criteres = new HashMap<Producteur.Champs, String>();
+    HashMap<Producteur.Champs, String> criteres = new HashMap<>();
     criteres.put(Producteur.Champs.idProducteur, String.valueOf(id));
     ArrayList<Producteur> resultatRecherche = find(criteres);
-    if(resultatRecherche.isEmpty()){
+    if (resultatRecherche.isEmpty()) {
       return null;
     }
     return resultatRecherche.get(0);

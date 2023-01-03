@@ -29,16 +29,14 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    */
   @Override
   public Client insert(Client c) {
-    try {
-      // Un client a forcément un nom et une adresse
-      if(c.getNom() == null || c.getAdresse() == null){
-        return null;
-      }
-      // La requête
-      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO clients " +
-                      "(nom, tel, email, siret, particulier, idAdresse) " +
-                      "VALUES (?,?,?,?,?,?)",
-              PreparedStatement.RETURN_GENERATED_KEYS);
+    // Un client a forcément un nom et une adresse
+    if (c.getNom() == null || c.getAdresse() == null) {
+      return null;
+    }
+    String sql = "INSERT INTO clients (nom, tel, email, siret, particulier, idAdresse) "
+            + "VALUES (?,?,?,?,?,?)";
+    try (PreparedStatement req = this.getCo()
+            .prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
       // L'ajout des valeurs
       req.setString(1, c.getNom());
       req.setString(2, c.getTel());
@@ -50,7 +48,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.execute();
       // Récupération de la clé primaire
       ResultSet rs = req.getGeneratedKeys();
-      if(rs.next()){
+      if (rs.next()) {
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
         return new Client(rs.getInt(1), c.getNom(), c.getTel(),
                 c.getEmail(), c.getSiret(), c.isParticulier(), c.getAdresse());
@@ -70,10 +68,10 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    */
   @Override
   public boolean update(Client c) {
-    try {
-      PreparedStatement req  = this.getCo().prepareStatement("UPDATE clients " +
-              "SET nom = ?, tel = ?, email = ?, siret = ?, particulier = ?, idAdresse = ? " +
-              "WHERE idClient = ?");
+    String sql = "UPDATE clients "
+            + "SET nom = ?, tel = ?, email = ?, siret = ?, particulier = ?, idAdresse = ? "
+            + "WHERE idClient = ?";
+    try (PreparedStatement req  = this.getCo().prepareStatement(sql)) {
       // L'ajout des valeurs
       req.setString(1, c.getNom());
       req.setString(2, c.getTel());
@@ -91,22 +89,18 @@ public class DAOClient extends DAO<Client, Client.Champs> {
   }
 
   /**
-   * Suppression d'un client de la base
+   * Suppression d'un client de la base.
    *
    * @param id L'identifiant du client à supprimer.
    * @return true si la ligne a été supprimée, false sinon.
    */
   @Override
   public boolean delete(int id) {
-    try {
-      PreparedStatement req = this.getCo().prepareStatement("DELETE FROM clients WHERE idClient = ?");
+    String sql = "DELETE FROM clients WHERE idClient = ?";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       req.setInt(1, id);
-      if (req.executeUpdate() == 1) {
-        // Si l'entrée a été supprimée, on retourne true
-        return true;
-      }
-      // Sinon, on retourne false
-      return false;
+
+      return req.executeUpdate() == 1; // Si l'entrée a été supprimée, on retourne true
     } catch (SQLException e) {
       return false;
     } catch (Exception e) {
@@ -122,11 +116,9 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    */
   @Override
   public ArrayList<Client> find(HashMap<Client.Champs, String> criteres) {
-    PreparedStatement req;
-    try {
-      // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT * FROM clients WHERE 1=1 " +
-              criteresPourWHERE(criteres));
+    // On fait une requête avec les critères de recherche
+    String sql = "SELECT * FROM clients WHERE 1=1 " + criteresPourWHERE(criteres);
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
@@ -159,10 +151,10 @@ public class DAOClient extends DAO<Client, Client.Champs> {
   @Override
   public Client findById(int id) {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Client.Champs, String> criteres = new HashMap<Client.Champs, String>();
+    HashMap<Client.Champs, String> criteres = new HashMap<>();
     criteres.put(Client.Champs.idClient, String.valueOf(id));
     ArrayList<Client> resultatRecherche = find(criteres);
-    if(resultatRecherche.isEmpty()){
+    if (resultatRecherche.isEmpty()) {
       return null;
     }
     return resultatRecherche.get(0);

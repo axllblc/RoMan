@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-
 /**
 * DAO pour la classe Adresse.
 */
@@ -28,15 +27,18 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    */
   @Override
   public Adresse insert(Adresse a) {
-    try {
-      if(a.getCoordonneesGPS() == null){
-        // Une adresse a au minimum des coordonnées GPS
-        return null;
-      }
-      PreparedStatement req = this.getCo().prepareStatement("INSERT INTO adresses " +
-              "(coordonneesGPS, libelle, numeroVoie, complementNumero, voie, complementAdresse," +
-              " codePostal, ville) VALUES (ST_GeomFromText(?, 4326),?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
-      req.setString(1, "Point(" + a.getCoordonneesGPS()[0] + " " + a.getCoordonneesGPS()[1] + ")");
+    if (a.getCoordonneesGPS() == null) {
+      // Une adresse a au minimum des coordonnées GPS
+      return null;
+    }
+    String sql = "INSERT INTO adresses "
+            + "(coordonneesGPS, libelle, numeroVoie, complementNumero, voie, complementAdresse,"
+            + " codePostal, ville) VALUES (ST_GeomFromText(?, 4326),?,?,?,?,?,?,?)";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql,
+            PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+      req.setString(1, "Point(" + a.getCoordonneesGPS()[0] + " "
+              + a.getCoordonneesGPS()[1] + ")");
       req.setString(2, a.getLibelle());
       req.setInt(3, a.getNumeroVoie());
       req.setString(4, a.getComplementNumero());
@@ -48,10 +50,11 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
       req.execute();
       // Récupération de la clé primaire
       ResultSet rs = req.getGeneratedKeys();
-      if(rs.next()){
+      if (rs.next()) {
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
-        return new Adresse(rs.getInt(1), a.getCoordonneesGPS(), a.getLibelle(), a.getNumeroVoie(),
-        a.getComplementNumero(), a.getVoie(), a.getComplementAdresse(), a.getCodePostal(), a.getVille());
+        return new Adresse(rs.getInt(1), a.getCoordonneesGPS(), a.getLibelle(),
+                a.getNumeroVoie(), a.getComplementNumero(), a.getVoie(), a.getComplementAdresse(),
+                a.getCodePostal(), a.getVille());
       }
       // En cas d'échec de l'ajout, on ne renvoie rien
       return null;
@@ -69,11 +72,10 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    */
   @Override
   public boolean update(Adresse a) {
-    try {
-      PreparedStatement req  = this.getCo().prepareStatement("UPDATE adresses " +
-              "SET coordonneesGPS = ST_GeomFromText(?, 4326), libelle = ?, numeroVoie = ?, complementNumero = ?, " +
-              "voie = ?, complementAdresse = ?, codePostal = ?, ville = ? " +
-              "WHERE idAdresse = ?");
+    String sql = "UPDATE adresses SET coordonneesGPS = ST_GeomFromText(?, 4326), libelle = ?, "
+                + "numeroVoie = ?, complementNumero = ?, voie = ?, complementAdresse = ?, "
+                + "codePostal = ?, ville = ? WHERE idAdresse = ?";
+    try (PreparedStatement req  = this.getCo().prepareStatement(sql)) {
       req.setString(1, "Point(" + a.getCoordonneesGPS()[0] + " " + a.getCoordonneesGPS()[1] + ")");
       req.setString(2, a.getLibelle());
       req.setInt(3, a.getNumeroVoie());
@@ -100,8 +102,8 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    */
   @Override
   public boolean delete(int id) {
-    try {
-      PreparedStatement req = this.getCo().prepareStatement("DELETE FROM adresses WHERE idAdresse = ?");
+    String sql = "DELETE FROM adresses WHERE idAdresse = ?";
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       req.setInt(1, id);
       // Si l'entrée a été supprimée, on retourne true
       return req.executeUpdate() == 1;
@@ -121,21 +123,19 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    */
   @Override
   public ArrayList<Adresse> find(HashMap<Adresse.Champs, String> criteres) {
-    PreparedStatement req;
-    try {
-      // On fait une requête avec les critères de recherche
-      req = this.getCo().prepareStatement("SELECT idAdresse, ST_X(coordonneesGPS) AS 'coX'," +
-              "ST_Y(coordonneesGPS) AS 'coY', libelle, numeroVoie, complementNumero, voie, " +
-              "complementAdresse, codePostal, ville FROM adresses WHERE 1=1 " +
-              criteresPourWHERE(criteres));
+    // On fait une requête avec les critères de recherche
+    String sql = "SELECT idAdresse, ST_X(coordonneesGPS) AS 'coX',"
+            + "ST_Y(coordonneesGPS) AS 'coY', libelle, numeroVoie, complementNumero, voie, "
+            + "complementAdresse, codePostal, ville FROM adresses WHERE 1=1 "
+            + criteresPourWHERE(criteres);
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
-
       // On les stockera dans un ArrayList de commandes
       ArrayList<Adresse> adresses = new ArrayList<Adresse>();
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        adresses.add( new Adresse(rs.getInt("idAdresse"),
+        adresses.add(new Adresse(rs.getInt("idAdresse"),
                 new double[] { rs.getDouble("coX"), rs.getDouble("coY") },
                 rs.getString("libelle"), rs.getInt("numeroVoie"),
                 rs.getString("complementNumero"), rs.getString("voie"),
@@ -150,7 +150,7 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
   }
 
   /**
-   * Recherche d'une adresse à partir de sa clé primaire
+   * Recherche d'une adresse à partir de sa clé primaire.
    *
    * @param id L'identifiant de l'adresse.
    * @return L'objet Adresse contenant les informations de la ligne.
@@ -159,10 +159,10 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
   @Override
   public Adresse findById(int id) {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Adresse.Champs, String> criteres = new HashMap<Adresse.Champs, String>();
+    HashMap<Adresse.Champs, String> criteres = new HashMap<>();
     criteres.put(Adresse.Champs.idAdresse, String.valueOf(id));
     ArrayList<Adresse> resultatRecherche = find(criteres);
-    if(resultatRecherche.isEmpty()){
+    if (resultatRecherche.isEmpty()) {
       return null;
     }
     return resultatRecherche.get(0);
