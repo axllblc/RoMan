@@ -16,7 +16,9 @@ import javafx.scene.image.ImageView;
  * @author Axel Leblanc
  */
 public enum Icone {
-  COMPTE("file:src/main/resources/icons/account_circle_24.png");
+  COMPTE("file:src/main/resources/icons/account_circle_24.png"),
+  ATTENTION("file:src/main/resources/icons/warning_24.png"),
+  OK("file:src/main/resources/icons/ok_24.png");
 
   private final Image image;
 

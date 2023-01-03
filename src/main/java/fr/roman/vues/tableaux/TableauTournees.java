@@ -1,18 +1,18 @@
 package fr.roman.vues.tableaux;
 
 import fr.roman.modeles.Tournee;
+import fr.roman.vues.composants.FabriqueIcone;
+import fr.roman.vues.composants.Icone;
 import java.text.DateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
 
 /**
  * Tableau de tournées.
@@ -34,24 +34,11 @@ import javafx.scene.image.ImageView;
  * @author Axel Leblanc
  */
 public class TableauTournees extends Tableau<Tournee> {
-  private static final ImageView IC_ERREUR =
-      new ImageView("file:src/main/resources/icons/warning_24.png");
-  private static final ImageView IC_OK =
-      new ImageView("file:src/main/resources/icons/ok_24.png");
-
   /**
    * Construire un tableau permettant de lister des tournées.
    */
   public TableauTournees() {
     super();
-
-    // Définition de la taille des icônes
-    Stream.of(IC_ERREUR, IC_OK).forEach(ic -> {
-      ic.setFitWidth(16);
-      ic.setPreserveRatio(true);
-      ic.setSmooth(true);
-      ic.setCache(true);
-    });
 
     // Création des colonnes
 
@@ -64,7 +51,9 @@ public class TableauTournees extends Tableau<Tournee> {
       @Override
       protected void updateItem(Boolean valide, boolean empty) {
         if (!empty) {
-          setGraphic(valide ? IC_OK : IC_ERREUR);
+          setGraphic(valide
+              ? FabriqueIcone.get(Icone.OK, TAILLE_ICONE)
+              : FabriqueIcone.get(Icone.ATTENTION, TAILLE_ICONE));
           setTooltip(new Tooltip(valide ? "Tournée valide" : "La tournée contient des erreurs"));
           setAlignment(Pos.CENTER);
         }

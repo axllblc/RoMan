@@ -28,6 +28,10 @@ import javafx.scene.control.TableView;
  */
 public abstract class Tableau<T extends Modele> {
   /**
+   * Taille des icônes affichées dans le tableau : 16 pixels.
+   */
+  static final double TAILLE_ICONE = 16;
+  /**
    * Le tableau JavaFX ({@link TableView}).
    */
   private final TableView<T> tableau;
