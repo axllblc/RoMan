@@ -1,13 +1,16 @@
 package fr.roman.vues.metiers;
 
 import fr.roman.controleurs.metiers.CtrlTournee;
-import javafx.stage.Stage;
+import fr.roman.modeles.Tournee;
+import javafx.scene.control.Label;
+
+import java.util.ArrayList;
 
 /**
  * Classe de l'objet tournee, elle nous permettra de visualiser les objets de ce type
  * et de rediriger vers une  suppression ou une modification.
  */
-public class VueTournee {
+public class VueTournee extends VueMetier {
 
   /**
    * Contrôleur de la vue Tournee.
@@ -15,13 +18,80 @@ public class VueTournee {
   private CtrlTournee ctrl = null;
 
   /**
+   * Tableau de label qui sera envoyé en paramètre à la méthode structure.
+   */
+  private final ArrayList<Label> labels;
+
+  /**
+   * Horaire de début de la tournée.
+   */
+  private final Label horaireDebut;
+
+  /**
+   * Horaire de fin de la tournée.
+   */
+  private final Label horaireFin;
+
+  /**
+   * Durée estimée de la tournée.
+   */
+  private final Label dureeEstimee;
+
+  /**
+   * Notes associées à la tournée.
+   */
+  private final Label notes;
+
+  /**
+   * Validité de la tournée.
+   */
+  private final Label valide;
+
+  /**
+   * Nom et prénom du producteur associé à la tournée.
+   */
+  private final Label producteur;
+
+
+  /**
+   * Libéllé de véhicule associé à la tournée.
+   */
+  private final Label vehicule;
+
+  /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object tournee.
-   *
-   * @param stage stage de l'application
    */
-  public VueTournee(Stage stage){
+  public VueTournee(Tournee tournee) {
 
+    if (tournee.isValide()) {
+      valide = new Label("La tournée est valide");
+    } else {
+      valide = new Label("La tournée n'est pas valide");
+    }
+    horaireDebut = new Label("Horaire Début : " + tournee.getHoraireDebut());
+    horaireFin = new Label("Horaire Fin : " + tournee.getHoraireFin());
+    dureeEstimee = new Label("Durée estimée : " + tournee.getDureeEstimee());
+    notes = new Label("Notes : " + tournee.getNote());
+    producteur = new Label("Producteur : " + tournee.getProducteur().getUtilisateur().getNom()
+    + tournee.getProducteur().getUtilisateur().getPrenom());
+    vehicule = new Label("Vehicule : " + tournee.getVehicule());
+
+    labels = new ArrayList<>();
+
+    labels.add(valide);
+    labels.add(horaireDebut);
+    labels.add(horaireFin);
+    labels.add(dureeEstimee);
+    labels.add(notes);
+    labels.add(producteur);
+    labels.add(vehicule);
+
+    structure(labels);
+
+    btnOui.setOnAction((event) -> {
+      ctrl.removeTournee(tournee);
+    });
   }
 
   public void setCtrl(CtrlTournee ctrl) {
