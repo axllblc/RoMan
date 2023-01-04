@@ -2,13 +2,13 @@ package fr.roman.vues.accueil;
 
 import fr.roman.controleurs.accueil.CtrlTabBordProducteur;
 import fr.roman.modeles.ModuleApplication;
+import fr.roman.vues.composants.FabriqueIcone;
+import fr.roman.vues.composants.Icone;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -21,10 +21,6 @@ import javafx.scene.layout.VBox;
  * @author Axel Leblanc
  */
 public class TableauDeBordProducteur implements VueOngletAccueil {
-  /**
-   * Icône pour les boutons d'ajout.
-   */
-  private static final Image IC_NOUVEAU = new Image("file:src/main/resources/icons/add_24.png");
   /**
    * URL de la feuille de styles (CSS) du tableau de bord.
    */
@@ -96,8 +92,8 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
     conteneurBtnCommandes = new HBox();
     conteneurBtnTournees = new HBox();
 
-    btnNouvelleCommande = new Button("Nouvelle commande", new ImageView(IC_NOUVEAU));
-    btnNouvelleTournee = new Button("Nouvelle tournée", new ImageView(IC_NOUVEAU));
+    btnNouvelleCommande = new Button("Nouvelle commande", FabriqueIcone.get(Icone.NOUVEAU));
+    btnNouvelleTournee = new Button("Nouvelle tournée", FabriqueIcone.get(Icone.NOUVEAU));
 
     btnGestionCommandes = new Button("Gérer les commandes");
     btnGestionTournees = new Button("Gérer les tournées");
