@@ -83,17 +83,10 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getChampsFormulaire().put(Commande.Champs.libelle, libelle);
 
         // poids
-        TextField poids = new TextField();
-        if(getTypeEdition() == TypeEdition.MODIFICATION){
-            poids.setText(String.valueOf((int) getModele().getPoids()));
-        }
-        poids.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d{0,3}")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
+        Spinner<Double> poids = new Spinner<>();
+        poids.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 255, 1));
+        poids.setEditable(true);
+        poids.setTooltip(new Tooltip("en kg"));
         getChampsFormulaire().put(Commande.Champs.poids, poids);
 
         // horaireDebut
@@ -154,44 +147,50 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getChampsFormulaire().put(Commande.Champs.dateLivraison, dateLivraison);
 
         // producteur
-        TextField idProducteur = new TextField();
-        idProducteur.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d*")) {
+        Spinner<Integer> idProducteur = new Spinner<>();
+        idProducteur.setEditable(true);
+        idProducteur.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 9999999, 0));
+        idProducteur.getEditor().setTextFormatter(new TextFormatter<>(change -> {
+            if (!change.getControlNewText().matches("\\d{1,50}")) {
                 return null;
             } else {
                 return change;
             }
         }));
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            idProducteur.setText(String.valueOf(getModele().getProducteur().getIdProducteur()));
+            idProducteur.getValueFactory().setValue(getModele().getProducteur().getIdProducteur());
         }
         getChampsFormulaire().put(Commande.Champs.idProducteur, idProducteur);
 
         // client
-        TextField idClient = new TextField();
-        idClient.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d*")) {
+        Spinner<Integer> idClient = new Spinner<>();
+        idClient.setEditable(true);
+        idClient.getEditor().setTextFormatter(new TextFormatter<>(change -> {
+            if (!change.getControlNewText().matches("\\d{1,50}")) {
                 return null;
             } else {
                 return change;
             }
         }));
+        idClient.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 9999999, 0));
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            idClient.setText(String.valueOf(getModele().getClient().getIdClient()));
+            idClient.getValueFactory().setValue(getModele().getClient().getIdClient());
         }
         getChampsFormulaire().put(Commande.Champs.idClient, idClient);
 
         // tournee
-        TextField idTournee = new TextField();
-        idTournee.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d*")) {
+        Spinner<Integer> idTournee = new Spinner<>();
+        idTournee.setEditable(true);
+        idTournee.getEditor().setTextFormatter(new TextFormatter<>(change -> {
+            if (!change.getControlNewText().matches("\\d{1,50}")) {
                 return null;
             } else {
                 return change;
             }
         }));
-        if(getTypeEdition() == TypeEdition.MODIFICATION){
-            idTournee.setText(String.valueOf(getModele().getTournee().getIdTournee()));
+        idTournee.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 9999999, 0));
+        if(getTypeEdition() == TypeEdition.MODIFICATION && getModele().getTournee() != null){
+            idTournee.getValueFactory().setValue(getModele().getTournee().getIdTournee());
         }
         getChampsFormulaire().put(Commande.Champs.idTournee, idTournee);
 
@@ -211,8 +210,8 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getModele().setLibelle(((TextField) champsFormulaire.get(Commande.Champs.libelle)).getText());
 
         // poids
-        getModele().setPoids(Double.parseDouble(((TextField) champsFormulaire
-                .get(Commande.Champs.poids)).getText()));
+        getModele().setPoids(((Spinner<Double>) champsFormulaire
+                .get(Commande.Champs.poids)).getValue());
 
         // horaireDebut
         Calendar horaireDebut = ((CalendarTimeTextField) champsFormulaire
@@ -242,21 +241,16 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getModele().setDateLivraison(calendar);
 
         // idProducteur
-        Producteur p = daoProducteur.findById(Integer.parseInt(((TextField) champsFormulaire
-                                                     .get(Commande.Champs.idProducteur)).getText()));
-        getModele().setProducteur(p);
+        getModele().setProducteur(daoProducteur.findById(((Spinner<Integer>) champsFormulaire
+                        .get(Commande.Champs.idProducteur)).getValue()));
 
         // idClient
-        Client c = daoClient.findById(Integer.parseInt(((TextField) champsFormulaire
-                .get(Commande.Champs.idClient)).getText()));
-        getModele().setClient(c);
+        getModele().setClient(daoClient.findById(((Spinner<Integer>) champsFormulaire
+                .get(Commande.Champs.idClient)).getValue()));
 
         // idTournee
-        if(((TextField) champsFormulaire.get(Commande.Champs.idTournee)).getText().equals("")){
-            Tournee t = daoTournee.findById(Integer.parseInt(((TextField) champsFormulaire
-                    .get(Commande.Champs.idTournee)).getText()));
-            getModele().setTournee(t);
-        }
+        getModele().setTournee(daoTournee.findById(((Spinner<Integer>) champsFormulaire
+                .get(Commande.Champs.idTournee)).getValue()));
 
         Commande commande = null;
         switch (getTypeEdition()){
