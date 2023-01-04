@@ -46,7 +46,7 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       req.setString(1, v.getImmatriculation());
       req.setInt(2, v.getPoidsMax());
       req.setString(3, v.getLibelle());
-      req.setInt(4, v.getProducteur().getIdProducteur());
+      req.setObject(4, v.getProducteur() != null ? v.getProducteur().getIdProducteur() : null);
       // L'exécution de la requête
       req.execute();
       // Récupération de la clé primaire
@@ -87,7 +87,7 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       req.setString(1, v.getImmatriculation());
       req.setInt(2, v.getPoidsMax());
       req.setString(3, v.getLibelle());
-      req.setInt(4, v.getProducteur().getIdProducteur());
+      req.setObject(4, v.getProducteur() != null ? v.getProducteur().getIdProducteur() : null);
       req.setInt(5, v.getIdVehicule());
       // L'exécution de la requête
       return (req.executeUpdate() > 0);

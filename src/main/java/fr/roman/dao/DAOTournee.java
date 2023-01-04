@@ -58,8 +58,8 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
 
       req.setString(4, t.getNote());
       req.setBoolean(5, t.isValide());
-      req.setInt(6, t.getVehicule().getIdVehicule());
-      req.setInt(7, t.getProducteur().getIdProducteur());
+      req.setObject(6, t.getVehicule() != null ? t.getVehicule().getIdVehicule() : null);
+      req.setObject(7, t.getProducteur() != null ? t.getProducteur().getIdProducteur() : null);
       // L'exécution de la requête
       req.execute();
       // Récupération de la clé primaire
@@ -106,8 +106,8 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       }
       req.setString(4, t.getNote());
       req.setBoolean(5, t.isValide());
-      req.setInt(6, t.getVehicule().getIdVehicule());
-      req.setInt(7, t.getProducteur().getIdProducteur());
+      req.setObject(6, t.getVehicule() != null ? t.getVehicule().getIdVehicule() : null);
+      req.setObject(7, t.getProducteur() != null ? t.getProducteur().getIdProducteur() : null);
       req.setInt(8, t.getIdTournee());
       // L'exécution de la requête
       return (req.executeUpdate() > 0);

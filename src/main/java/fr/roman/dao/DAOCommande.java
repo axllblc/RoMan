@@ -66,9 +66,9 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
         req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTime().getTime()));
       }
 
-      req.setInt(9, c.getProducteur().getIdProducteur());
-      req.setInt(10, c.getTournee().getIdTournee());
-      req.setInt(11, c.getClient().getIdClient());
+      req.setObject(9, c.getProducteur() != null ? c.getProducteur().getIdProducteur() : null);
+      req.setObject(10, c.getTournee() != null ? c.getTournee().getIdTournee() : null);
+      req.setObject(11, c.getClient() != null ? c.getClient().getIdClient() : null);
       // L'exécution de la requête
       req.execute();
       // Récupération de la clé primaire
@@ -127,9 +127,10 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
         req.setTimestamp(8, new Timestamp(c.getDateLivraison().getTime().getTime()));
       }
 
-      req.setInt(9, c.getProducteur().getIdProducteur());
-      req.setInt(10, c.getTournee().getIdTournee());
-      req.setInt(11, c.getClient().getIdClient());
+      req.setObject(9, c.getProducteur() != null ? c.getProducteur().getIdProducteur() : null);
+      req.setObject(10, c.getTournee() != null ? c.getTournee().getIdTournee() : null);
+      req.setObject(11, c.getClient() != null ? c.getClient().getIdClient() : null);
+
       req.setInt(12, c.getIdCommande());
       // L'exécution de la requête
 

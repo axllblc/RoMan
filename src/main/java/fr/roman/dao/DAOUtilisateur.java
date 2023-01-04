@@ -112,7 +112,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       reqProducteur.setString(1, p.getSiret());
       reqProducteur.setString(2, p.getNomEtablissement());
       reqProducteur.setString(3, p.getTel());
-      reqProducteur.setInt(4, p.getAdresse().getIdAdresse());
+      reqProducteur.setObject(4, p.getAdresse() != null ? p.getAdresse().getIdAdresse() : null);
       reqProducteur.setInt(5, p.getUtilisateur().getIdUtilisateur());
       // L'exécution de la requête
       reqProducteur.execute();

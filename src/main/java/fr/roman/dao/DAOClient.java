@@ -44,7 +44,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setString(3, c.getEmail());
       req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
-      req.setInt(6, c.getAdresse().getIdAdresse());
+      req.setObject(6, c.getAdresse() != null ? c.getAdresse().getIdAdresse() : null);
       // L'exécution de la requête
       req.execute();
       // Récupération de la clé primaire
@@ -82,7 +82,8 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setString(3, c.getEmail());
       req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
-      req.setInt(6, c.getAdresse().getIdAdresse());
+
+      req.setObject(6, c.getAdresse() != null ? c.getAdresse().getIdAdresse() : null);
       req.setInt(7, c.getIdClient());
       // L'exécution de la requête
       return req.executeUpdate() > 0;

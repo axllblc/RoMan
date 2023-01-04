@@ -60,7 +60,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       req.setString(1, p.getSiret());
       req.setString(2, p.getNomEtablissement());
       req.setString(3, p.getTel());
-      req.setInt(4, p.getAdresse().getIdAdresse());
+      req.setObject(4, p.getAdresse() != null ? p.getAdresse().getIdAdresse() : null);
       req.setInt(5, p.getIdProducteur());
       // L'exécution de la requête
       return (req.executeUpdate() > 0);
