@@ -132,7 +132,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       Adresse adresse;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        adresse = daoA.findById(Integer.parseInt(rs.getString("idAdresse")));
+        adresse = daoA.findById(rs.getInt("idAdresse"));
 
         commandes.add(new Client(rs.getInt("idClient"), rs.getString("nom"),
                 rs.getString("tel"), rs.getString("email"), rs.getString("siret"),

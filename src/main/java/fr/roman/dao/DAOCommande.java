@@ -183,9 +183,9 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       Tournee tournee;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        client = daoC.findById(Integer.parseInt(rs.getString("idClient")));
-        producteur = daoP.findById(Integer.parseInt(rs.getString("idProducteur")));
-        tournee = daoT.findById(Integer.parseInt(rs.getString("idTournee")));
+        client = daoC.findById(rs.getInt("idClient"));
+        producteur = daoP.findById(rs.getInt("idProducteur"));
+        tournee = daoT.findById(rs.getInt("idTournee"));
 
         // Pour les objets "Calendar"
         Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
