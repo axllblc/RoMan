@@ -3,9 +3,8 @@ package fr.roman.dao;
 import fr.roman.modeles.Modele;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -70,7 +69,7 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    * @return Un {@link ArrayList}d' {@link fr.roman.modeles objets métiers}
    *         qui correspond aux {@link C critères} mis en paramètre.
    */
-  public abstract ArrayList<M> find(HashMap<C, String> criteres) throws Exception;
+  public abstract ArrayList<M> find(LinkedHashMap<C, String> criteres) throws Exception;
 
   /**
    * Recherche d'une ligne dans une table de la base à partir de sa clé primaire.
@@ -88,25 +87,25 @@ public abstract class DAO<M extends Modele, C extends Enum<C>> {
    */
   public ArrayList<M> findAll() throws Exception {
     // On réutilise la méthode find avec aucun critère comme paramètre
-    return find(new HashMap<>());
+    return find(new LinkedHashMap<>());
   }
 
   /**
    * Méthode permettant construire les critères de recherches
    * (après la clause WHERE dans la requête SQL) pour la méthode {@link #find}.
    *
-   * @param criteres Un objet {@link HashMap} où {@link C C},
+   * @param criteres Un objet {@link LinkedHashMap} où {@link C C},
    *                 la clé, est le nom du critère ({@link Enum énumération} des champs dans
    *                 l'objet métier) et la {@link String valeur} est celle du critère.
    * @return         Une {@link String chaine de caractères} correspondant
    *                 à ce qu'il faut mettre après la clause WHERE.
    */
-  String criteresPourWHERE(final HashMap<C, String> criteres) {
+  String criteresPourWHERE(final LinkedHashMap<C, String> criteres) {
     // Réalisé à l'aide d'expressions régulières et de l'API Stream.
     return criteres.entrySet()
             .stream()
             .filter(c -> !c.getValue().isBlank()) // On retire les critères sans valeurs
-            .map(c -> " AND " + c.getKey() + " LIKE '" + c.getValue() + "'")
+            .map(c -> " AND " + c.getKey() + " LIKE ?")
             .collect(Collectors.joining()); // On concatène les conditions
   }
 }

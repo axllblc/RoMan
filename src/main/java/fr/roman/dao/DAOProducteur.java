@@ -7,7 +7,7 @@ import fr.roman.modeles.Utilisateur;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
 * DAO pour la classe Producteur.
@@ -48,7 +48,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       throw new Exception("Adresse et/ou utilisateur non renseignés");
     }
     // On vérifie que le Siret (si modifié) n'existe pas déjà dans la base
-    HashMap critereSiret = new HashMap<>();
+    LinkedHashMap<Producteur.Champs, String> critereSiret = new LinkedHashMap<>();
     critereSiret.put(Producteur.Champs.siret, p.getSiret());
     ArrayList<Producteur> resRech = find(critereSiret);
     if (!find(critereSiret).isEmpty() && resRech.get(0).getIdProducteur() != p.getIdProducteur()) {
@@ -90,14 +90,19 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
    * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Producteur> find(HashMap<Producteur.Champs, String> criteres) throws Exception {
+  public ArrayList<Producteur> find(LinkedHashMap<Producteur.Champs, String> criteres) throws Exception {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT * FROM producteurs WHERE 1=1 " + criteresPourWHERE(criteres);
     try(PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList d'utilisateurs
-      ArrayList<Producteur> producteurs = new ArrayList<Producteur>();
+      ArrayList<Producteur> producteurs = new ArrayList<>();
       // On aura besoin de créer les objets Adresse et Utilisateur pour chaque producteur trouvé
       DAOUtilisateur daoU = new DAOUtilisateur();
       DAOAdresse daoA = new DAOAdresse();
@@ -126,7 +131,7 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
   @Override
   public Producteur findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Producteur.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Producteur.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Producteur.Champs.idProducteur, String.valueOf(id));
     ArrayList<Producteur> resultatRecherche = find(criteres);
     if (resultatRecherche.isEmpty()) {

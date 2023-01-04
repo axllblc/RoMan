@@ -3,10 +3,7 @@ package fr.roman.dao;
 import fr.roman.modeles.*;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * DAO pour la classe Commande.
@@ -164,14 +161,19 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
    * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Commande> find(HashMap<Commande.Champs, String> criteres) throws Exception {
+  public ArrayList<Commande> find(LinkedHashMap<Commande.Champs, String> criteres) throws Exception {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT * FROM commandes WHERE 1=1 " + criteresPourWHERE(criteres);
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
-      ArrayList<Commande> commandes = new ArrayList<Commande>();
+      ArrayList<Commande> commandes = new ArrayList<>();
       // On aura besoin de créer les objets Client, Producteur et Tournee
       DAOClient daoC = new DAOClient();
       DAOProducteur daoP = new DAOProducteur();
@@ -224,7 +226,7 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
   @Override
   public Commande findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Commande.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Commande.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Commande.Champs.idCommande, String.valueOf(id));
     ArrayList<Commande> resultatRecherche = find(criteres);
     if (resultatRecherche.isEmpty()) {

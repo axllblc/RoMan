@@ -5,10 +5,7 @@ import fr.roman.modeles.*;
 import java.sql.*;
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
 * DAO pour la classe Tournee.
@@ -119,7 +116,7 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
    *
    * @param id L'identifiant de la tournée à supprimer.
    * @return True si la tournée a été supprimée, false sinon.
-   * @throws Exception Si la requête n'a pas pu avoir lieu.
+   * @throws SQLException Si la requête n'a pas pu avoir lieu.
    */
   @Override
   public boolean delete(int id) throws SQLException {
@@ -140,14 +137,19 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
    * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Tournee> find(HashMap<Tournee.Champs, String> criteres) throws Exception {
+  public ArrayList<Tournee> find(LinkedHashMap<Tournee.Champs, String> criteres) throws Exception {
     String sql = "SELECT * FROM tournees WHERE 1=1 " + criteresPourWHERE(criteres);
     // On fait une requête avec les critères de recherche
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
-      ArrayList<Tournee> tournees = new ArrayList<Tournee>();
+      ArrayList<Tournee> tournees = new ArrayList<>();
       // On aura besoin de créer les objets Vehicule et Producteur
       DAOProducteur daoP = new DAOProducteur();
       DAOVehicule daoV = new DAOVehicule();
@@ -192,7 +194,7 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
   @Override
   public Tournee findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Tournee.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Tournee.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Tournee.Champs.idTournee, String.valueOf(id));
     ArrayList<Tournee> resultatRecherche = find(criteres);
     if (resultatRecherche.isEmpty()) {

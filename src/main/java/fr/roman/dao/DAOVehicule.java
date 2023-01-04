@@ -4,7 +4,7 @@ import fr.roman.modeles.*;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * DAO pour la classe Vehicule.
@@ -32,8 +32,8 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       throw new Exception("Producteur et/ou immatriculation non renseigné");
     }
     // On vérifie que l'immatriculation n'est pas déjà existante dans la base
-    HashMap critereImmatriculation = new HashMap<>();
-    critereImmatriculation.put(Producteur.Champs.siret, v.getImmatriculation());
+    LinkedHashMap<Vehicule.Champs, String> critereImmatriculation = new LinkedHashMap<>();
+    critereImmatriculation.put(Vehicule.Champs.immatriculation, v.getImmatriculation());
     if (!find(critereImmatriculation).isEmpty()) {
       throw new Exception("Immatriculation déjà renseignée");
     }
@@ -75,8 +75,8 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       throw new Exception("Producteur et/ou immatriculation non renseigné");
     }
     // On vérifie que l'immatriculation (si modifiée) n'est pas déjà existante dans la base
-    HashMap critereImmatriculation = new HashMap<>();
-    critereImmatriculation.put(Producteur.Champs.siret, v.getImmatriculation());
+    LinkedHashMap<Vehicule.Champs, String> critereImmatriculation = new LinkedHashMap<>();
+    critereImmatriculation.put(Vehicule.Champs.immatriculation, v.getImmatriculation());
     ArrayList<Vehicule> resRech = find(critereImmatriculation);
     if (!resRech.isEmpty() && resRech.get(0).getIdVehicule() != v.getIdVehicule()) {
       throw new Exception("Immatriculation déjà renseignée");
@@ -120,10 +120,15 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
    * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Vehicule> find(HashMap<Vehicule.Champs, String> criteres) throws Exception {
+  public ArrayList<Vehicule> find(LinkedHashMap<Vehicule.Champs, String> criteres) throws Exception {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT * FROM vehicules WHERE 1=1 " + criteresPourWHERE(criteres);
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
@@ -154,7 +159,7 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
   @Override
   public Vehicule findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Vehicule.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Vehicule.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Vehicule.Champs.idVehicule, String.valueOf(id));
     ArrayList<Vehicule> resultatRecherche = find(criteres);
     if (resultatRecherche.isEmpty()) {
