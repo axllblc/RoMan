@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
 * DAO pour la classe Client.
@@ -44,7 +44,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setString(3, c.getEmail());
       req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
-      req.setInt(6, c.getAdresse().getIdAdresse());
+      req.setObject(6, c.getAdresse() != null ? c.getAdresse().getIdAdresse() : null);
       // L'exécution de la requête
       req.execute();
       // Récupération de la clé primaire
@@ -82,7 +82,8 @@ public class DAOClient extends DAO<Client, Client.Champs> {
       req.setString(3, c.getEmail());
       req.setString(4, c.getSiret());
       req.setBoolean(5, c.isParticulier());
-      req.setInt(6, c.getAdresse().getIdAdresse());
+
+      req.setObject(6, c.getAdresse() != null ? c.getAdresse().getIdAdresse() : null);
       req.setInt(7, c.getIdClient());
       // L'exécution de la requête
       return req.executeUpdate() > 0;
@@ -94,7 +95,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    *
    * @param id L'identifiant du client à supprimer.
    * @return true si la ligne a été supprimée, false sinon.
-   * @throws Exception Si la requête n'a pas pu avoir lieu.
+   * @throws SQLException Si la requête n'a pas pu avoir lieu.
    */
   @Override
   public boolean delete(int id) throws SQLException {
@@ -113,10 +114,15 @@ public class DAOClient extends DAO<Client, Client.Champs> {
    * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Client> find(HashMap<Client.Champs, String> criteres) throws Exception {
+  public ArrayList<Client> find(LinkedHashMap<Client.Champs, String> criteres) throws Exception {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT * FROM clients WHERE 1=1 " + criteresPourWHERE(criteres);
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
@@ -147,7 +153,7 @@ public class DAOClient extends DAO<Client, Client.Champs> {
   @Override
   public Client findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Client.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Client.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Client.Champs.idClient, String.valueOf(id));
     ArrayList<Client> resultatRecherche = find(criteres);
     if (resultatRecherche.isEmpty()) {

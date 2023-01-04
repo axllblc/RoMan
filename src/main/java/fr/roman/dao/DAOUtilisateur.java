@@ -89,9 +89,10 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       throw new Exception("Adresse et/ou utilisateur non renseignés");
     }
     // On vérifie que le Siret n'existe pas déjà dans la base
-    HashMap critereSiret = new HashMap<>();
+    LinkedHashMap<Producteur.Champs, String> critereSiret = new LinkedHashMap<>();
     critereSiret.put(Producteur.Champs.siret, p.getSiret());
-    if (!find(critereSiret).isEmpty()) {
+    DAOProducteur daoProducteur = new DAOProducteur();
+    if (!daoProducteur.find(critereSiret).isEmpty()) {
       throw new Exception("Siret déjà renseignée");
     }
     // La requête (deuxième) après l'ajout de l'utilisateur
@@ -112,7 +113,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       reqProducteur.setString(1, p.getSiret());
       reqProducteur.setString(2, p.getNomEtablissement());
       reqProducteur.setString(3, p.getTel());
-      reqProducteur.setInt(4, p.getAdresse().getIdAdresse());
+      reqProducteur.setObject(4, p.getAdresse() != null ? p.getAdresse().getIdAdresse() : null);
       reqProducteur.setInt(5, p.getUtilisateur().getIdUtilisateur());
       // L'exécution de la requête
       reqProducteur.execute();
@@ -178,7 +179,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    *
    * @param id L'identifiant de l'utilisateur à supprimer.
    * @return True si l'utilisateur a été supprimé, false sinon.
-   * @throws Exception Si la requête n'a pas pu avoir lieu.
+   * @throws SQLException Si la requête n'a pas pu avoir lieu.
    */
   @Override
   public boolean delete(int id) throws SQLException {
@@ -204,10 +205,15 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    * @throws Exception Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Utilisateur> find(HashMap<Utilisateur.Champs, String> criteres) throws Exception {
+  public ArrayList<Utilisateur> find(LinkedHashMap<Utilisateur.Champs, String> criteres) throws Exception {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT * FROM utilisateurs WHERE 1=1 " + criteresPourWHERE(criteres);
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList d'utilisateurs
@@ -239,11 +245,16 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
       return Role.ROOT;
     }
     // Pour retrouver on recherche la présence de l'identifiant dans la table producteur
-    HashMap<Utilisateur.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Utilisateur.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Utilisateur.Champs.idUtilisateur, String.valueOf(idUtilisateur));
     // On fait une requête avec les critères de recherche
     String sql = "SELECT idUtilisateur FROM producteurs WHERE 1=1 " + criteresPourWHERE(criteres);
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       if (rs.next()) {
@@ -264,7 +275,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
   @Override
   public Utilisateur findById(int id) throws Exception {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Utilisateur.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Utilisateur.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Utilisateur.Champs.idUtilisateur, String.valueOf(id));
     ArrayList<Utilisateur> resultatRecherche = find(criteres);
     if (resultatRecherche.isEmpty()) {
@@ -282,7 +293,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
    */
   public Utilisateur findByNomUtilisateur(String nomUtilisateur) throws Exception {
     // On réutilise la méthode find avec comme seul critère le nom d'utilisateur
-    HashMap<Utilisateur.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Utilisateur.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Utilisateur.Champs.nomUtilisateur, String.valueOf(nomUtilisateur));
     // On récupère le résultat
     ArrayList<Utilisateur> resultatRecherche = find(criteres);

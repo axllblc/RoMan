@@ -115,16 +115,21 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    *
    * @param criteres Les critères de recherche des adresses.
    * @return Une collection d'objets qui correspond aux critères mis en paramètre.
-   * @throws Exception Si la requête n'a pas pu avoir lieu.
+   * @throws SQLException Si la requête n'a pas pu avoir lieu.
    */
   @Override
-  public ArrayList<Adresse> find(HashMap<Adresse.Champs, String> criteres) throws SQLException {
+  public ArrayList<Adresse> find(LinkedHashMap<Adresse.Champs, String> criteres) throws SQLException {
     // On fait une requête avec les critères de recherche
     String sql = "SELECT idAdresse, ST_X(coordonneesGPS) AS 'coX',"
             + "ST_Y(coordonneesGPS) AS 'coY', libelle, numeroVoie, complementNumero, voie, "
             + "complementAdresse, codePostal, ville FROM adresses WHERE 1=1 "
             + criteresPourWHERE(criteres);
     try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      int noCritere = 1;
+      for (String critere : criteres.values()) {
+        req.setString(noCritere, critere);
+        noCritere++;
+      }
       // On récupère le résultat
       ResultSet rs = req.executeQuery();
       // On les stockera dans un ArrayList de commandes
@@ -148,12 +153,12 @@ public class DAOAdresse extends DAO<Adresse, Adresse.Champs> {
    * @param id L'identifiant de l'adresse.
    * @return L'objet Adresse contenant les informations de la ligne.
    * Renvoie null si l'adresse n'a pas été trouvée.
-   * @throws Exception Si la requête n'a pas pu avoir lieu.
+   * @throws SQLException Si la requête n'a pas pu avoir lieu.
    */
   @Override
   public Adresse findById(int id) throws SQLException {
     // On réutilise la méthode find avec comme seul critère l'identifiant
-    HashMap<Adresse.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Adresse.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Adresse.Champs.idAdresse, String.valueOf(id));
     ArrayList<Adresse> resultatRecherche = find(criteres);
     if (resultatRecherche.isEmpty()) {

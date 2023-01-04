@@ -100,8 +100,6 @@ public class Client extends Modele {
     this.adresse = adresse;
   }
 
-  public enum Champs {idClient, email, nom, particulier, siret, tel, idAdresse}
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -132,5 +130,12 @@ public class Client extends Modele {
         + ", particulier=" + particulier
         + ", adresse=" + adresse
         + '}';
+  }
+
+  /**
+   * Liste des champs de la table {@code Clients} dans la base de données.
+   */
+  public enum Champs {
+    idClient, email, nom, particulier, siret, tel, idAdresse
   }
 }

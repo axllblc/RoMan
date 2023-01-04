@@ -83,6 +83,37 @@ public class Vehicule extends Modele {
     this.producteur = producteur;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Vehicule vehicule = (Vehicule) o;
+    return
+        poidsMax == vehicule.poidsMax
+        && Objects.equals(immatriculation, vehicule.immatriculation)
+        && Objects.equals(libelle, vehicule.libelle)
+        && Objects.equals(producteur, vehicule.producteur);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(immatriculation, poidsMax, libelle, producteur);
+  }
+
+  @Override
+  public String toString() {
+    return "Vehicule{"
+        + "idVehicule=" + idVehicule
+        + ", immatriculation='" + immatriculation + '\''
+        + ", poidsMax=" + poidsMax
+        + ", libelle='" + libelle + '\''
+        + ", producteur=" + producteur
+        + '}';
+  }
+
+  /**
+   * Liste des champs de la table {@code Vehicules} dans la base de données.
+   */
   public enum Champs implements ChampsModele {
     idVehicule(true, false, false, false, false),
     immatriculation(false, true, true, false, false),
@@ -147,33 +178,5 @@ public class Vehicule extends Modele {
     public boolean isNullable() {
       return this.nullable;
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Vehicule vehicule = (Vehicule) o;
-    return
-        poidsMax == vehicule.poidsMax
-        && Objects.equals(immatriculation, vehicule.immatriculation)
-        && Objects.equals(libelle, vehicule.libelle)
-        && Objects.equals(producteur, vehicule.producteur);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(immatriculation, poidsMax, libelle, producteur);
-  }
-
-  @Override
-  public String toString() {
-    return "Vehicule{"
-        + "idVehicule=" + idVehicule
-        + ", immatriculation='" + immatriculation + '\''
-        + ", poidsMax=" + poidsMax
-        + ", libelle='" + libelle + '\''
-        + ", producteur=" + producteur
-        + '}';
   }
 }
