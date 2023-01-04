@@ -85,21 +85,35 @@ class DAOProducteurTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAOAdresse.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
     testProducteur.setNomEtablissement("nomÉtablissement");
     testProducteur.setTel("0123456789");
     testProducteur.setAdresse(retourAdresse);
     testProducteur.setUtilisateur(testUtilisateur);
-    Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
-
+    Producteur retourProducteur;
+    try {
+      retourProducteur = TEST_DAOProducteur.insert(testProducteur);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // compare l'objet retourné par la méthode insert (producteur).
     assertEquals(retourProducteur, testProducteur);
     // test d'insérer un producteur déjà ajouter.
-    retourProducteur = TEST_DAOUtilisateur.insert(testProducteur);
-    assertNull(retourProducteur);
+    try {
+      TEST_DAOUtilisateur.insert(testProducteur);
+      fail();
+    } catch (Exception e) {
+      assertEquals("Nom d'utilisateur déjà renseigné", e.getMessage());
+    }
   }
 
   /**
@@ -133,7 +147,12 @@ class DAOProducteurTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAOAdresse.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
@@ -141,14 +160,28 @@ class DAOProducteurTest {
     testProducteur.setTel("0123456789");
     testProducteur.setAdresse(retourAdresse);
     testProducteur.setUtilisateur(testUtilisateur);
-    Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
-
+    Producteur retourProducteur;
+    try {
+      retourProducteur = TEST_DAOProducteur.insert(testProducteur);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // modification de l'objet Producteur.
     retourProducteur.setNomEtablissement("upgradeNomÉtablissement");
     retourProducteur.setNomEtablissement("upgradeNomÉtablissement");
-    assertTrue(TEST_DAOProducteur.update(retourProducteur));
+    try {
+      assertTrue(TEST_DAOProducteur.update(retourProducteur));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     // recherche l'objet Producteur récemment modifier.
-    Producteur updateProducteur = TEST_DAOProducteur.findById(retourProducteur.getIdProducteur());
+    Producteur updateProducteur;
+    try {
+      updateProducteur = TEST_DAOProducteur.findById(retourProducteur.getIdProducteur());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     // test l'égalité entre l'objet et les données de la BD.
     assertEquals(retourProducteur, updateProducteur);
   }
@@ -184,20 +217,38 @@ class DAOProducteurTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAOAdresse.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
     testProducteur.setNomEtablissement("nomÉtablissement"+UUID.randomUUID());
     testProducteur.setTel("0123456789");
     testProducteur.setAdresse(retourAdresse);
     testProducteur.setUtilisateur(testUtilisateur);
-    Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
-
+    Producteur retourProducteur;
+    try {
+      retourProducteur = TEST_DAOProducteur.insert(testProducteur);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // test de suppression du Producteur ajouter à la BD.
-    assertTrue(TEST_DAOProducteur.delete(retourProducteur.getIdProducteur()));
+    try {
+      assertTrue(TEST_DAOProducteur.delete(retourProducteur.getIdProducteur()));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     // test recherche de l'utilisateur supprimer.
-    assertNull(TEST_DAOProducteur.findById(retourProducteur.getIdProducteur()));
+    try {
+      assertNull(TEST_DAOProducteur.findById(retourProducteur.getIdProducteur()));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -220,8 +271,7 @@ class DAOProducteurTest {
     testUtilisateur.setPrenom("prénom");
     testUtilisateur.setEmail("email");
     testUtilisateur.setRole(Role.PRODUCTEUR);
-    Utilisateur retourUtilisateur = TEST_DAOUtilisateur.insert(testUtilisateur);
-
+  
     double[] coord = {40.0, 0.80};
     Adresse testAddresse = new Adresse();
     testAddresse.setCoordonneesGPS(coord);
@@ -232,20 +282,34 @@ class DAOProducteurTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAOAdresse.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
     testProducteur.setNomEtablissement("nomÉtablissement"+UUID.randomUUID());
     testProducteur.setTel("0123456789");
     testProducteur.setAdresse(retourAdresse);
-    testProducteur.setUtilisateur(retourUtilisateur);
-    TEST_DAOProducteur.insert(testProducteur);
-
+    testProducteur.setUtilisateur(testUtilisateur);
+    try {
+      TEST_DAOProducteur.insert(testProducteur);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // recherche les producteurs qui ont comme tel "01234567891234"
     HashMap<Producteur.Champs, String> criteres = new HashMap<>();
     criteres.put(Producteur.Champs.tel, "01234567891234");
-    ArrayList<Producteur> retourFind = TEST_DAOProducteur.find(criteres);
+    ArrayList<Producteur> retourFind;
+    try {
+      retourFind = TEST_DAOProducteur.find(criteres);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     // test si tous les producteurs retournés par find() sont corrects.
     retourFind.forEach(x -> assertEquals("01234567891234", x.getTel()));
   }
@@ -281,19 +345,37 @@ class DAOProducteurTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAOAdresse.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAOAdresse.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     Producteur testProducteur = new Producteur();
     testProducteur.setSiret(UUID.randomUUID().toString().substring(0, 14));
     testProducteur.setNomEtablissement("nomÉtablissement");
     testProducteur.setTel("0123456789");
     testProducteur.setAdresse(retourAdresse);
     testProducteur.setUtilisateur(testUtilisateur);
-    Producteur retourProducteur = TEST_DAOProducteur.insert(testProducteur);
-
+    Producteur retourProducteur;
+    try {
+      retourProducteur = TEST_DAOProducteur.insert(testProducteur);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // test rechercher du producteur ajouter.
-    assertEquals(retourProducteur, TEST_DAOProducteur.findById(retourProducteur.getIdProducteur()));
+    try {
+      assertEquals(retourProducteur, TEST_DAOProducteur.findById(retourProducteur.getIdProducteur()));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     // test recherche d'un producteur qui n'existe pas dans la BD.
-    assertNull(TEST_DAOProducteur.findById(testUtilisateur.getIdUtilisateur()));
+    try {
+      assertNull(TEST_DAOProducteur.findById(testUtilisateur.getIdUtilisateur()));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }

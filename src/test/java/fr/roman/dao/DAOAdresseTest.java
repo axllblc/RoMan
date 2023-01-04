@@ -3,6 +3,7 @@ package fr.roman.dao;
 import fr.roman.modeles.Adresse;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,8 +52,13 @@ class DAOAdresseTest {
     addresseAttendu.setComplementAdresse("adresse");
     addresseAttendu.setCodePostal(37000);
     addresseAttendu.setVille("tours");
-    Adresse retourAdresse = TEST_DAO.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAO.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // test si la méthode insert renvoi l'objet donné en paramètre.
     assertEquals(addresseAttendu, retourAdresse);
     assertNotEquals(addresseAttendu.getIdAdresse(), retourAdresse.getIdAdresse());
@@ -78,13 +84,27 @@ class DAOAdresseTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAO.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAO.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // modification de l'objet Adresse.
     retourAdresse.setVille("paris");
-    assertTrue(TEST_DAO.update(retourAdresse));
+    try {
+      assertTrue(TEST_DAO.update(retourAdresse));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     // recherche l'objet modifier
-    Adresse updateAdresse = TEST_DAO.findById(retourAdresse.getIdAdresse());
+    Adresse updateAdresse;
+    try {
+      updateAdresse = TEST_DAO.findById(retourAdresse.getIdAdresse());
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     // test si l'objet a bien été modifié.
     assertEquals(retourAdresse,updateAdresse);
   }
@@ -106,14 +126,31 @@ class DAOAdresseTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAO.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAO.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // test suppression de la dernière adresse ajouter à la BD.
-    assertTrue(TEST_DAO.delete(retourAdresse.getIdAdresse()));
+    try {
+      assertTrue(TEST_DAO.delete(retourAdresse.getIdAdresse()));
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     // test recherche de l'adresse supprimer.
-    assertNull(TEST_DAO.findById(retourAdresse.getIdAdresse()));
+    try {
+      assertNull(TEST_DAO.findById(retourAdresse.getIdAdresse()));
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     // test suppression d'une adresse qui n'existe pas dans la BD.
-    assertFalse(TEST_DAO.delete(retourAdresse.getIdAdresse()+1));
+    try {
+      assertFalse(TEST_DAO.delete(retourAdresse.getIdAdresse()+1));
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -133,12 +170,21 @@ class DAOAdresseTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    TEST_DAO.insert(testAddresse);
-
+    try {
+      TEST_DAO.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // recherche les adresses qui ont comme libelle "test".
     HashMap<Adresse.Champs, String> criteres = new HashMap<>();
     criteres.put(Adresse.Champs.libelle, "test");
-    ArrayList<Adresse> retourFind = TEST_DAO.find(criteres);
+    ArrayList<Adresse> retourFind;
+    try {
+      retourFind = TEST_DAO.find(criteres);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     // test si toutes les adresses retournées par find() sont correctes.
     retourFind.forEach(x -> assertEquals("test", x.getLibelle()));
   }
@@ -160,11 +206,24 @@ class DAOAdresseTest {
     testAddresse.setComplementAdresse("adresse");
     testAddresse.setCodePostal(37000);
     testAddresse.setVille("tours");
-    Adresse retourAdresse = TEST_DAO.insert(testAddresse);
-
+    Adresse retourAdresse;
+    try {
+      retourAdresse = TEST_DAO.insert(testAddresse);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  
     // test recherche de l'adresse ajouter.
-    assertEquals(retourAdresse, TEST_DAO.findById(retourAdresse.getIdAdresse()));
+    try {
+      assertEquals(retourAdresse, TEST_DAO.findById(retourAdresse.getIdAdresse()));
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     // test recherche d'une adresse qui n'existe pas dans la BD.
-    assertNull(TEST_DAO.findById(retourAdresse.getIdAdresse()+1));
+    try {
+      assertNull(TEST_DAO.findById(retourAdresse.getIdAdresse()+1));
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
