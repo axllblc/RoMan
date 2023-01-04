@@ -4,11 +4,12 @@ import fr.roman.controleurs.accueil.CtrlTabBordProducteur;
 import fr.roman.modeles.ModuleApplication;
 import fr.roman.vues.composants.FabriqueIcone;
 import fr.roman.vues.composants.Icone;
+import fr.roman.vues.tableaux.TableauCommandes;
+import fr.roman.vues.tableaux.TableauTournees;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -25,6 +26,10 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
    * URL de la feuille de styles (CSS) du tableau de bord.
    */
   private static final String STYLESHEET_URI = "file:src/main/resources/css/TableauDeBord.css";
+  private static final String AUCUNE_COMMANDE = """
+      Aucune commande à venir. Pour rechercher des commandes passées, cliquez sur le bouton "Gérer les commandes".""";
+  private static final String AUCUNE_TOURNEE = """
+      Aucune tournée planifiée. Pour rechercher d'autres tournées, cliquez sur le bouton "Gérer les tournées".""";
 
   /**
    * Vue qui accueille le tableau de bord ({@link VueAccueil}).
@@ -47,7 +52,8 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
    * Label de titre de la section <i>Tournées</i> du tableau de bord.
    */
   private final Label labelTournees;
-  // TODO ajouter les tableaux
+  private final TableauCommandes tableauCommandes;
+  private final TableauTournees tableauTournees;
   /**
    * Conteneur pour les boutons d'ajout et de gestion des commandes, situé en bas de la section
    * <i>Commandes</i>.
@@ -86,8 +92,11 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
     // Instanciation des éléments graphiques
     node = new VBox();
 
-    labelCommandes = new Label("Commandes à venir (non affectées à une tournée)");
+    labelCommandes = new Label("Commandes à venir");
     labelTournees = new Label("Tournées planifiées");
+
+    tableauCommandes = new TableauCommandes();
+    tableauTournees = new TableauTournees();
 
     conteneurBtnCommandes = new HBox();
     conteneurBtnTournees = new HBox();
@@ -113,11 +122,14 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
     conteneurBtnTournees.getChildren().addAll(btnNouvelleTournee, btnGestionTournees);
 
     node.getChildren().addAll(
-        labelCommandes, new TableView<>(), conteneurBtnCommandes,
+        labelCommandes, tableauCommandes.getTableau(), conteneurBtnCommandes,
         new Separator(),
-        labelTournees, new TableView<>(), conteneurBtnTournees
+        labelTournees, tableauTournees.getTableau(), conteneurBtnTournees
     );
-    // TODO les objets TableView instanciés ici sont provisoires
+
+    // Texte affiché s'il n'y a aucune donnée dans le tableau
+    tableauCommandes.getTableau().setPlaceholder(new Label(AUCUNE_COMMANDE));
+    tableauTournees.getTableau().setPlaceholder(new Label(AUCUNE_TOURNEE));
   }
 
   /**
@@ -160,5 +172,13 @@ public class TableauDeBordProducteur implements VueOngletAccueil {
    */
   public void setCtrl(CtrlTabBordProducteur ctrl) {
     this.ctrl = ctrl;
+  }
+
+  public TableauCommandes getTableauCommandes() {
+    return tableauCommandes;
+  }
+
+  public TableauTournees getTableauTournees() {
+    return tableauTournees;
   }
 }
