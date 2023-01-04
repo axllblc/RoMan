@@ -138,7 +138,7 @@ public class DAOVehicule extends DAO<Vehicule, Vehicule.Champs> {
       Producteur producteur;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        producteur = daoP.findById(Integer.parseInt(rs.getString("idProducteur")));
+        producteur = daoP.findById(rs.getInt("idProducteur"));
 
         vehicules.add(new Vehicule(rs.getInt("idVehicule"),
                 rs.getString("immatriculation"),
