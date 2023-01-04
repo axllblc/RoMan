@@ -83,7 +83,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
      */
-    public abstract M validerSaisie();
+    public abstract M validerSaisie() throws Exception;
 
     /**
      * Classe abstraite appelée par le bouton de retour du formulaire pour

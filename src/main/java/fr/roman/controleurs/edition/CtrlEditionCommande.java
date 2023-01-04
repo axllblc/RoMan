@@ -204,8 +204,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
      * @return L'objet Commande correspondant à ce qui a été ajouté dans la base de données
      */
     @Override
-    public Commande validerSaisie() {
-        // TODO: 01/01/2023 vérifier que tous les champs obligatoires sont saisis
+    public Commande validerSaisie() throws Exception {
 
         // libelle
         champsFormulaire = (Map<Commande.Champs, Node>) getVueEdition().getChamps();
@@ -259,9 +258,6 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
             getModele().setTournee(t);
         }
 
-        if (p == null || c == null){ // Le producteur ou le client n'existe pas dans la base
-            return null;
-        }
         Commande commande = null;
         switch (getTypeEdition()){
             case CREATION -> commande = daoCommande.insert(getModele());

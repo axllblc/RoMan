@@ -1,5 +1,6 @@
 package fr.roman.vues.edition;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.edition.CtrlEdition;
 import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.modeles.ChampsModele;
@@ -89,7 +90,13 @@ public class VueEdition {
         footer.add(btnValider, 0, 0);
         footer.add(btnRetour, 1, 0);
 
-        btnValider.setOnAction((event) -> ctrl.validerSaisie());
+        btnValider.setOnAction((event) -> {
+            try {
+                ctrl.validerSaisie();
+            } catch (Exception e) {
+                RoManErreur.afficher(e);
+            }
+        });
         btnRetour.setOnAction((event) -> ctrl.annulerSaisie());
 
         // Marges, espacement, alignement

@@ -120,8 +120,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
      */
     @Override
-    public Vehicule validerSaisie() {
-        // TODO: 02/01/2023 vérifier que tous les champs obligatoires sont saisis
+    public Vehicule validerSaisie() throws Exception {
 
         champsFormulaire = (Map<Vehicule.Champs, Node>) getVueEdition().getChamps();
 
