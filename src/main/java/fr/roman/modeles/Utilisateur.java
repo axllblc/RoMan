@@ -112,8 +112,6 @@ public class Utilisateur extends Modele {
     this.role = role;
   }
 
-  public enum Champs {email, mdp, nom, nomUtilisateur, prenom, role, idUtilisateur}
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -148,5 +146,19 @@ public class Utilisateur extends Modele {
         + ", email='" + email + '\''
         + ", role=" + role
         + '}';
+  }
+
+  /**
+   * Liste des champs de la table {@code Utilisateurs} dans la base de données.
+   */
+  public enum Champs {
+    idUtilisateur,
+    nomUtilisateur,
+    mdp,
+    sel,
+    nom,
+    prenom,
+    email,
+    role
   }
 }

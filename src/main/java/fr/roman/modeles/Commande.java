@@ -245,9 +245,6 @@ public class Commande extends Modele {
     }
   }
 
-  public enum Champs {dateInitiale, dateLivraison, defautLivraison, horaireDebut, horaireFin,
-    idCommande, libelle, note, poids, idProducteur, idTournee, idClient}
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -311,5 +308,23 @@ public class Commande extends Modele {
     public String getLabel() {
       return label;
     }
+  }
+
+  /**
+   * Liste des champs de la table {@code Commandes} dans la base de données.
+   */
+  public enum Champs {
+    idCommande,
+    libelle,
+    poids,
+    horaireDebut,
+    horaireFin,
+    note,
+    defautLivraison,
+    dateInitiale,
+    dateLivraison,
+    idProducteur,
+    idClient,
+    idTournee
   }
 }

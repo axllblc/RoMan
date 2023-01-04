@@ -115,8 +115,6 @@ public class Tournee extends Modele {
     this.vehicule = vehicule;
   }
 
-  public enum Champs {horaireDebut, horaireFin, idTournee, note, idProducteur, valide, idVehicule, estimationDuree}
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -151,5 +149,19 @@ public class Tournee extends Modele {
         + ", producteur=" + producteur
         + ", vehicule=" + vehicule
         + '}';
+  }
+
+  /**
+   * Liste des champs de la table {@code Tournees} dans la base de données.
+   */
+  public enum Champs {
+    idTournee,
+    horaireDebut,
+    horaireFin,
+    estimationDuree,
+    note,
+    valide,
+    idProducteur,
+    idVehicule
   }
 }
