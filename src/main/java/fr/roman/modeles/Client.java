@@ -131,4 +131,11 @@ public class Client extends Modele {
         + ", adresse=" + adresse
         + '}';
   }
+
+  /**
+   * Liste des champs de la table {@code Clients} dans la base de données.
+   */
+  public enum Champs {
+    idClient, email, nom, particulier, siret, tel, idAdresse
+  }
 }

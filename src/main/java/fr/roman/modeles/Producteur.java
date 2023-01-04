@@ -118,4 +118,16 @@ public class Producteur extends Modele {
         + ", utilisateur=" + utilisateur
         + '}';
   }
+
+  /**
+   * Liste des champs de la table {@code Producteurs} dans la base de données.
+   */
+  public enum Champs {
+    idProducteur,
+    siret,
+    nomEtablissement,
+    tel,
+    idAdresse,
+    idUtilisateur
+  }
 }

@@ -110,4 +110,15 @@ public class Vehicule extends Modele {
         + ", producteur=" + producteur
         + '}';
   }
+
+  /**
+   * Liste des champs de la table {@code Vehicules} dans la base de données.
+   */
+  public enum Champs {
+    idVehicule,
+    immatriculation,
+    poidsMax,
+    libelle,
+    idProducteur
+  }
 }

@@ -147,4 +147,18 @@ public class Utilisateur extends Modele {
         + ", role=" + role
         + '}';
   }
+
+  /**
+   * Liste des champs de la table {@code Utilisateurs} dans la base de données.
+   */
+  public enum Champs {
+    idUtilisateur,
+    nomUtilisateur,
+    mdp,
+    sel,
+    nom,
+    prenom,
+    email,
+    role
+  }
 }

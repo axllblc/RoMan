@@ -23,8 +23,8 @@ public class Commande extends Modele {
   /** Date à laquelle la commande a été livrée. */
   private Calendar dateLivraison;
   private Producteur producteur;
-  public Client client;
-  public Tournee tournee;
+  private Client client;
+  private Tournee tournee;
 
   /**
    * Constructeur sans paramètre de la classe {@link Commande}.
@@ -308,5 +308,23 @@ public class Commande extends Modele {
     public String getLabel() {
       return label;
     }
+  }
+
+  /**
+   * Liste des champs de la table {@code Commandes} dans la base de données.
+   */
+  public enum Champs {
+    idCommande,
+    libelle,
+    poids,
+    horaireDebut,
+    horaireFin,
+    note,
+    defautLivraison,
+    dateInitiale,
+    dateLivraison,
+    idProducteur,
+    idClient,
+    idTournee
   }
 }

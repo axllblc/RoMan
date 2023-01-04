@@ -210,4 +210,19 @@ public class Adresse extends Modele {
 
     return sb.toString();
   }
+
+  /**
+   * Liste des champs de la table {@code Adresses} dans la base de données.
+   */
+  public enum Champs {
+    idAdresse,
+    coordonneesGPS,
+    libelle,
+    numeroVoie,
+    complementNumero,
+    voie,
+    complementAdresse,
+    codePostal,
+    ville
+  }
 }

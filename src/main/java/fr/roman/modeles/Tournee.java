@@ -150,4 +150,18 @@ public class Tournee extends Modele {
         + ", vehicule=" + vehicule
         + '}';
   }
+
+  /**
+   * Liste des champs de la table {@code Tournees} dans la base de données.
+   */
+  public enum Champs {
+    idTournee,
+    horaireDebut,
+    horaireFin,
+    estimationDuree,
+    note,
+    valide,
+    idProducteur,
+    idVehicule
+  }
 }
