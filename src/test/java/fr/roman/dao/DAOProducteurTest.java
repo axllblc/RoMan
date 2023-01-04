@@ -1,6 +1,6 @@
 package fr.roman.dao;
 
-import fr.roman.controleurs.inscription.CtrlInscription;
+import fr.roman.controleurs.inscription.OutilsMotDePasse;
 import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
@@ -52,9 +52,7 @@ class DAOProducteurTest {
       throw new RuntimeException(e);
     }
   }
-
-  private final CtrlInscription TEST_CTRL = new CtrlInscription();
-
+  
   /**
    * Test de la méthode insert().
    */
@@ -63,10 +61,10 @@ class DAOProducteurTest {
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
-    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    testUtilisateur.setSel(OutilsMotDePasse.genererSel());
     try {
       testUtilisateur.setMdp(Base64.getEncoder()
-      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+      .encodeToString(OutilsMotDePasse.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -112,7 +110,7 @@ class DAOProducteurTest {
       TEST_DAOUtilisateur.insert(testProducteur);
       fail();
     } catch (Exception e) {
-      assertEquals("Nom d'utilisateur déjà renseigné", e.getMessage());
+      assertEquals("Siret déjà renseignée", e.getMessage());
     }
   }
 
@@ -125,10 +123,10 @@ class DAOProducteurTest {
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
-    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    testUtilisateur.setSel(OutilsMotDePasse.genererSel());
     try {
       testUtilisateur.setMdp(Base64.getEncoder()
-      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+      .encodeToString(OutilsMotDePasse.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -195,10 +193,10 @@ class DAOProducteurTest {
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur(UUID.randomUUID().toString());
-    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    testUtilisateur.setSel(OutilsMotDePasse.genererSel());
     try {
       testUtilisateur.setMdp(Base64.getEncoder()
-      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+      .encodeToString(OutilsMotDePasse.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -260,10 +258,10 @@ class DAOProducteurTest {
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
-    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    testUtilisateur.setSel(OutilsMotDePasse.genererSel());
     try {
       testUtilisateur.setMdp(Base64.getEncoder()
-      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+      .encodeToString(OutilsMotDePasse.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -323,10 +321,10 @@ class DAOProducteurTest {
     // création d'objet Utilisateur, Adresse et producteur.
     Utilisateur testUtilisateur = new Utilisateur();
     testUtilisateur.setNomUtilisateur("nomUtilisateur"+UUID.randomUUID());
-    testUtilisateur.setSel(TEST_CTRL.genererSel());
+    testUtilisateur.setSel(OutilsMotDePasse.genererSel());
     try {
       testUtilisateur.setMdp(Base64.getEncoder()
-      .encodeToString(TEST_CTRL.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
+      .encodeToString(OutilsMotDePasse.chiffrerMDP("mot de passe", testUtilisateur.getSel())));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
