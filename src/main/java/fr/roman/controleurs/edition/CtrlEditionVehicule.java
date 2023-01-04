@@ -52,7 +52,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             idVehicule.setText(String.valueOf(getModele().getIdVehicule()));
         }
-        getChampsFormulaire().put(Vehicule.Champs.idVehicule, idVehicule);
+        // getChampsFormulaire().put(Vehicule.Champs.idVehicule, idVehicule);
 
         // immatriculation
         TextField immatriculation = new TextField();
@@ -67,7 +67,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
                 return change;
             }
         }));
-        getChampsFormulaire().put(Vehicule.Champs.immatriculation, immatriculation);
+        // getChampsFormulaire().put(Vehicule.Champs.immatriculation, immatriculation);
 
         // poidsMax
         TextField poidsMax = new TextField();
@@ -81,7 +81,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
                 return change;
             }
         }));
-        getChampsFormulaire().put(Vehicule.Champs.poidsMax, poidsMax);
+        // getChampsFormulaire().put(Vehicule.Champs.poidsMax, poidsMax);
 
         // libelle
         TextField libelle = new TextField();
@@ -95,7 +95,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
                 return change;
             }
         }));
-        getChampsFormulaire().put(Vehicule.Champs.libelle, libelle);
+        // getChampsFormulaire().put(Vehicule.Champs.libelle, libelle);
 
         // producteur
         TextField idProducteur = new TextField();
@@ -109,16 +109,15 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION || getRole() == Role.PRODUCTEUR){
             idProducteur.setText(String.valueOf(getModele().getProducteur().getIdProducteur()));
         }
-        getChampsFormulaire().put(Vehicule.Champs.idProducteur, idProducteur);
+        // getChampsFormulaire().put(Vehicule.Champs.idProducteur, idProducteur);
 
-        getVueEdition().definirChamps(getChampsFormulaire(), "Véhicule");
+        // getVueEdition().definirChamps(getChampsFormulaire(), "Véhicule");
     }
 
     /**
      * Classe appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
-     */
     @Override
     public Vehicule validerSaisie() throws Exception {
 
@@ -148,4 +147,5 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         }
         return Vehicule;
     }
+    */
 }

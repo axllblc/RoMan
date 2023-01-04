@@ -53,41 +53,32 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
      */
     @Override
     public void chargerChamps() {
+        // informations sur le champ.
+        ArrayList<String> info = new ArrayList<>();
+
         // idCommande
-        TextField idCommande = new TextField();
-        idCommande.setDisable(true);
-        idCommande.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d*")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
+        info.add("textField");
+        info.add("t\\d*");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            idCommande.setText(String.valueOf(getModele().getIdCommande()));
+            info.add(String.valueOf(getModele().getIdCommande()));
         }
-        getChampsFormulaire().put(Commande.Champs.idCommande, idCommande);
+        getChampsFormulaire().put(Commande.Champs.idCommande, info);
 
         // libelle
-        TextField libelle = new TextField();
-        libelle.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches(".{0,50}")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
+        info.clear();
+        info.add("textField");
+        info.add("t.{0,50}");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            libelle.setText(getModele().getLibelle());
+            info.add(getModele().getLibelle());
         }
-        getChampsFormulaire().put(Commande.Champs.libelle, libelle);
+        getChampsFormulaire().put(Commande.Champs.libelle, info);
 
         // poids
         Spinner<Double> poids = new Spinner<>();
         poids.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 255, 1));
         poids.setEditable(true);
         poids.setTooltip(new Tooltip("en kg"));
-        getChampsFormulaire().put(Commande.Champs.poids, poids);
+        // getChampsFormulaire().put(Commande.Champs.poids, poids);
 
         // horaireDebut
         CalendarTimeTextField horaireDebut = new CalendarTimeTextField();
@@ -97,7 +88,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             horaireDebut.setCalendar(getModele().getHoraireDebut());
         }
-        getChampsFormulaire().put(Commande.Champs.horaireDebut, horaireDebut);
+        // getChampsFormulaire().put(Commande.Champs.horaireDebut, horaireDebut);
 
         // horaireFin
         CalendarTimeTextField horaireFin = new CalendarTimeTextField();
@@ -107,21 +98,23 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             horaireFin.setCalendar(getModele().getHoraireFin());
         }
-        getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
+        // getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
 
         // note
-        TextField note = new TextField();
+        info.clear();
+        info.add("textField");
+        info.add("f");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            note.setText(getModele().getNote());
+            info.add(getModele().getNote());
         }
-        getChampsFormulaire().put(Commande.Champs.note, note);
+        getChampsFormulaire().put(Commande.Champs.note, info);
 
         // defautLivraison
         CheckBox defautLivraison = new CheckBox();
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             defautLivraison.setSelected(getModele().isDefautLivraison());
         }
-        getChampsFormulaire().put(Commande.Champs.defautLivraison, defautLivraison);
+        // getChampsFormulaire().put(Commande.Champs.defautLivraison, defautLivraison);
 
         // dateInitiale
         CalendarTextField dateInitiale = new CalendarTextField();
@@ -132,7 +125,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             dateInitiale.setCalendar(getModele().getDateInitiale());
         }
-        getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
+        // getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
 
         // dateLivraison
         CalendarTextField dateLivraison = new CalendarTextField();
@@ -144,7 +137,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             dateLivraison.setCalendar(getModele().getDateLivraison());
         }
-        getChampsFormulaire().put(Commande.Champs.dateLivraison, dateLivraison);
+        // getChampsFormulaire().put(Commande.Champs.dateLivraison, dateLivraison);
 
         // producteur
         Spinner<Integer> idProducteur = new Spinner<>();
@@ -160,7 +153,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             idProducteur.getValueFactory().setValue(getModele().getProducteur().getIdProducteur());
         }
-        getChampsFormulaire().put(Commande.Champs.idProducteur, idProducteur);
+        // getChampsFormulaire().put(Commande.Champs.idProducteur, idProducteur);
 
         // client
         Spinner<Integer> idClient = new Spinner<>();
@@ -176,7 +169,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             idClient.getValueFactory().setValue(getModele().getClient().getIdClient());
         }
-        getChampsFormulaire().put(Commande.Champs.idClient, idClient);
+        // getChampsFormulaire().put(Commande.Champs.idClient, idClient);
 
         // tournee
         Spinner<Integer> idTournee = new Spinner<>();
@@ -192,16 +185,15 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION && getModele().getTournee() != null){
             idTournee.getValueFactory().setValue(getModele().getTournee().getIdTournee());
         }
-        getChampsFormulaire().put(Commande.Champs.idTournee, idTournee);
+        // getChampsFormulaire().put(Commande.Champs.idTournee, idTournee);
 
-        getVueEdition().definirChamps(getChampsFormulaire(), "Commande");
+        // getVueEdition().definirChamps(getChampsFormulaire(), "Commande");
     }
 
     /**
      * Classe appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet Commande correspondant à ce qui a été ajouté dans la base de données
-     */
     @Override
     public Commande validerSaisie() throws Exception {
 
@@ -262,4 +254,5 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         }
         return commande;
     }
+     */
 }

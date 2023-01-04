@@ -11,7 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import jfxtras.scene.control.CalendarTextField;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 /**
@@ -60,6 +63,10 @@ public class VueEdition {
      *                                           valeur : un objet {@link Node}.
      */
     private Map<? extends ChampsModele, Node> champsFormulaire;
+    /**
+     *
+     */
+    private ArrayList<Node> composants;
 
     /**
      * Construire la vue d'<i>édition</i>.
@@ -92,7 +99,8 @@ public class VueEdition {
 
         btnValider.setOnAction((event) -> {
             try {
-                ctrl.validerSaisie();
+                // TODO: validerSaisie().
+                // ctrl.validerSaisie();
             } catch (Exception e) {
                 RoManErreur.afficher(e);
             }
@@ -139,5 +147,57 @@ public class VueEdition {
      */
     public Map <? extends ChampsModele, Node> getChamps() {
         return this.champsFormulaire;
+    }
+    
+    /**
+     * Méthode qui permet de gérer les différentes méthodes de création d'élément graphique.
+     *
+     * @param champs graphique demandé par le controleur.
+     */
+    private void signalCtrlEdition(Map<? extends ChampsModele, ArrayList<String>> champs) {
+        champs.forEach((x,y) -> {
+            switch (y.get(0)) {
+                case "textField":
+                    // création d'un "textField".
+                    textField(y);
+                    break;
+                case "spinner":
+                    // création d'un "spinner".
+                    spinner();
+                    break;
+                case "calendarTextField":
+                    // création d'un "calendarTextField".
+                    calendarTextField();
+                    break;
+                default:
+                    throw new RuntimeException("L'élément graphique" + x + " est inconnue.");
+            }
+        });
+    }
+
+    private void textField(ArrayList<String> y) {
+        TextField resultat = new TextField();
+        resultat.setDisable(true);
+        if(y.get(2).substring(0,1)=="t") {
+            resultat.setTextFormatter(new TextFormatter<>(change -> {
+                if (!change.getControlNewText().matches(y.get(2).substring(1))) {
+                    return null;
+                } else {
+                    return change;
+                }
+            }));
+        }
+        if(typeEdition == TypeEdition.MODIFICATION){
+            resultat.setText(y.get(3));
+        }
+        composants.add(resultat);
+    }
+
+    private void spinner() {
+        composants.add(new Spinner<>());
+    }
+
+    private void calendarTextField() {
+        composants.add(new CalendarTextField());
     }
 }

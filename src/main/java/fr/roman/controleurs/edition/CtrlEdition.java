@@ -6,6 +6,7 @@ import fr.roman.modeles.Role;
 import fr.roman.vues.edition.VueEdition;
 import javafx.scene.Node;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     /**
      * Carte des champs du formulaire de la vue (clé : nom d'un champ dans l'énum, valeur : un objet {@link Node}
      */
-    Map<C, Node> champsFormulaire;
+    Map<C, ArrayList<String>> champsFormulaire;
 
     /**
      * Constructeur du contrôleur
@@ -57,7 +58,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
          * les champs ont été insérées. */
 
         chargerChamps();
-        accesChamps();
+        // accesChamps();
     }
 
     /**
@@ -66,10 +67,10 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
      */
     abstract void chargerChamps();
 
+    // TODO: accesChamps
     /**
      * Classe permettant de restreindre l'accessibilité (la possibilité de modifier)
      *  les champs du formulaire selon le {@link Role rôle} de l'utilisateur
-     */
     void accesChamps(){
         switch (getRole()) {
             case ADMINISTRATEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(!nom.isModifAdmin()));
@@ -77,14 +78,15 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
             case ROOT -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(nom.isId()));
         }
     }
+    */
 
     /**
      * Classe abstraite appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
-     */
     public abstract M validerSaisie() throws Exception;
-
+    */
+    
     /**
      * Classe abstraite appelée par le bouton de retour du formulaire pour
      *  annuler la saisie.
@@ -107,8 +109,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     public Role getRole() {
         return role;
     }
-
-    public Map<C, Node> getChampsFormulaire() {
+    public Map<C, ArrayList<String>> getChampsFormulaire() {
         return champsFormulaire;
     }
 }
