@@ -110,8 +110,8 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
       Adresse adresse;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        utilisateur = daoU.findById(Integer.parseInt(rs.getString("idUtilisateur")));
-        adresse = daoA.findById(Integer.parseInt(rs.getString("idAdresse")));
+        utilisateur = daoU.findById(rs.getInt("idUtilisateur"));
+        adresse = daoA.findById(rs.getInt("idAdresse"));
 
         producteurs.add(new Producteur(rs.getInt("idProducteur"), rs.getString("siret"),
                 rs.getString("nomEtablissement"), rs.getString("tel"), adresse, utilisateur));

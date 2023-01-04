@@ -157,8 +157,8 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       Producteur producteur;
       while (rs.next()) {
         // Tant qu'il y a des lignes dans le résultat
-        vehicule = daoV.findById(Integer.parseInt(rs.getString("idVehicule")));
-        producteur = daoP.findById(Integer.parseInt(rs.getString("idProducteur")));
+        vehicule = daoV.findById(rs.getInt("idVehicule"));
+        producteur = daoP.findById(rs.getInt("idProducteur"));
 
         // Pour les objets "Calendar" ou "Duration"
         Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
