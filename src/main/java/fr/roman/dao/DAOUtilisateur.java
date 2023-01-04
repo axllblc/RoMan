@@ -91,7 +91,8 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     // On vérifie que le Siret n'existe pas déjà dans la base
     HashMap critereSiret = new HashMap<>();
     critereSiret.put(Producteur.Champs.siret, p.getSiret());
-    if (!find(critereSiret).isEmpty()) {
+    DAOProducteur daoProducteur = new DAOProducteur();
+    if (!daoProducteur.find(critereSiret).isEmpty()) {
       throw new Exception("Siret déjà renseignée");
     }
     // La requête (deuxième) après l'ajout de l'utilisateur
