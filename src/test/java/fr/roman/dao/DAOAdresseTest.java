@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -177,7 +177,7 @@ class DAOAdresseTest {
     }
   
     // recherche les adresses qui ont comme libelle "test".
-    HashMap<Adresse.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Adresse.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Adresse.Champs.libelle, "test");
     ArrayList<Adresse> retourFind;
     try {

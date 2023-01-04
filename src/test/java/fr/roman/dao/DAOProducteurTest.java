@@ -1,6 +1,6 @@
 package fr.roman.dao;
 
-import fr.roman.controleurs.inscription.OutilsMotDePasse;
+import fr.roman.controleurs.comptes.OutilsMotDePasse;
 import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
@@ -9,10 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,7 +49,6 @@ class DAOProducteurTest {
       throw new RuntimeException(e);
     }
   }
-  
   /**
    * Test de la méthode insert().
    */
@@ -300,7 +296,7 @@ class DAOProducteurTest {
     }
   
     // recherche les producteurs qui ont comme tel "01234567891234"
-    HashMap<Producteur.Champs, String> criteres = new HashMap<>();
+    LinkedHashMap<Producteur.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Producteur.Champs.tel, "01234567891234");
     ArrayList<Producteur> retourFind;
     try {
