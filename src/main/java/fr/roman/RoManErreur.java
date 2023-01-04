@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 /**
  * Classe permettant de gérer les erreurs de l'application RoMan.
@@ -34,7 +35,7 @@ public class RoManErreur {
               L'application Roman a rencontré un problème.
   
               """);
-      if(messagePersonalise != null){
+      if(Arrays.stream(messagePersonalise).findAny().isPresent()){
         // Un message personnalisé a été passé en appel
         for (String l : messagePersonalise) {
           contenuErreur.append(l).append("\n");
