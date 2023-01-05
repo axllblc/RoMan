@@ -89,7 +89,10 @@ public class TableauCommandes extends Tableau<Commande> {
     /* Colonne affichant la date de livraison initialement fixée. */
     TableColumn<Commande, Date> colJourLivraison = new TableColumn<>("Date");
     colJourLivraison.setCellValueFactory(c ->
-        new ReadOnlyObjectWrapper<>(c.getValue().getDateInitiale().getTime())
+        new ReadOnlyObjectWrapper<>(
+            c.getValue().getDateInitiale() != null
+                ? c.getValue().getDateInitiale().getTime() : null
+        )
     );
     colJourLivraison.setCellFactory(tableColumn ->
         new TextFieldTableCell<>() {
@@ -98,7 +101,9 @@ public class TableauCommandes extends Tableau<Commande> {
             super.updateItem(date, empty);
 
             if (!empty) {
-              setText(DateFormat.getDateInstance(DateFormat.LONG).format(date));
+              setText(date != null
+                  ? DateFormat.getDateInstance(DateFormat.LONG).format(date)
+                  : "Date non fixée");
             }
           }
         }
