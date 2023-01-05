@@ -4,6 +4,7 @@ import fr.roman.RoManErreur;
 import fr.roman.controleurs.edition.CtrlEdition;
 import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.modeles.ChampsModele;
+import fr.roman.modeles.TypeChamp;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -152,35 +153,39 @@ public class VueEdition {
     /**
      * Méthode qui permet de gérer les différentes méthodes de création d'élément graphique.
      *
-     * @param champs graphique demandé par le controleur.
+     * @param signal des composants demandés par le contrôleur.
      */
-    private void signalCtrlEdition(Map<? extends ChampsModele, ArrayList<String>> champs) {
-        champs.forEach((x,y) -> {
-            switch (y.get(0)) {
+    private void signalCtrlEdition(Map<? extends ChampsModele, TypeChamp> signal) {
+        signal.forEach((c,t) -> {
+            switch (t.getLibelle()) {
                 case "textField":
                     // création d'un "textField".
-                    textField(y);
+                    textField(t);
                     break;
-                case "spinner":
-                    // création d'un "spinner".
-                    spinner();
+                case "spinnerDouble":
+                    // création d'un "spinner" de Double.
+                    spinnerDouble(t);
+                    break;
+                case "spinnerInteger":
+                    // création d'un "spinner" de Integer.
+                    spinnerInteger(t);
                     break;
                 case "calendarTextField":
                     // création d'un "calendarTextField".
                     calendarTextField();
                     break;
                 default:
-                    throw new RuntimeException("L'élément graphique" + x + " est inconnue.");
+                    throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
             }
         });
     }
 
-    private void textField(ArrayList<String> y) {
+    private void textField(TypeChamp t) {
         TextField resultat = new TextField();
         resultat.setDisable(true);
-        if(y.get(2).substring(0,1)=="t") {
+        if(!t.getRegex().isEmpty()) {
             resultat.setTextFormatter(new TextFormatter<>(change -> {
-                if (!change.getControlNewText().matches(y.get(2).substring(1))) {
+                if (!change.getControlNewText().matches(t.getRegex())) {
                     return null;
                 } else {
                     return change;
@@ -188,13 +193,43 @@ public class VueEdition {
             }));
         }
         if(typeEdition == TypeEdition.MODIFICATION){
-            resultat.setText(y.get(3));
+            resultat.setText(t.getValue());
         }
         composants.add(resultat);
     }
 
-    private void spinner() {
-        composants.add(new Spinner<>());
+    private void spinnerDouble(TypeChamp t) {
+        Spinner<Double> resultat = new Spinner<>();
+        resultat.setEditable(true);
+        resultat.setValueFactory(new SpinnerValueFactory
+            .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getInitDouble()));
+        if(!t.getRegex().isEmpty()){
+            resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
+                if (!change.getControlNewText().matches(t.getRegex())) {
+                    return null;
+                } else {
+                    return change;
+                }
+            }));
+        }
+        resultat.setTooltip(new Tooltip(t.getPlaceholder()));
+        composants.add(resultat);
+    }
+    private void spinnerInteger(TypeChamp t) {
+        Spinner<Integer> resultat = new Spinner<>();
+        resultat.setEditable(true);
+        resultat.setValueFactory(new SpinnerValueFactory
+            .IntegerSpinnerValueFactory(t.getMinInt(), t.getMaxInt(), t.getInitInt()));
+        if(!t.getRegex().isEmpty()){
+            resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
+                if (!change.getControlNewText().matches(t.getRegex())) {
+                    return null;
+                } else {
+                    return change;
+                }
+            }));
+        }
+        composants.add(resultat);
     }
 
     private void calendarTextField() {

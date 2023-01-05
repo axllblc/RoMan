@@ -3,10 +3,10 @@ package fr.roman.controleurs.edition;
 import fr.roman.modeles.ChampsModele;
 import fr.roman.modeles.Modele;
 import fr.roman.modeles.Role;
+import fr.roman.modeles.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     /**
      * Carte des champs du formulaire de la vue (clé : nom d'un champ dans l'énum, valeur : un objet {@link Node}
      */
-    Map<C, ArrayList<String>> champsFormulaire;
+    Map<C, TypeChamp> champsFormulaire;
 
     /**
      * Constructeur du contrôleur
@@ -109,7 +109,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     public Role getRole() {
         return role;
     }
-    public Map<C, ArrayList<String>> getChampsFormulaire() {
+    public Map<C, TypeChamp> getChampsFormulaire() {
         return champsFormulaire;
     }
 }
