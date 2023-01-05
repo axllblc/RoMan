@@ -10,6 +10,7 @@ import fr.roman.modeles.Role;
 import fr.roman.modeles.Tournee;
 import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.accueil.TableauDeBordProducteur;
+import fr.roman.vues.composants.BoutonAction;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -54,6 +55,14 @@ public class CtrlTabBordProducteur {
       // Remplissage des tableaux
       tableauCommandes();
       tableauTournees();
+
+      // Activation de la sélection multiple
+      vue.getTableauTournees().autoriserSelectionMultiple(true);
+      vue.getTableauCommandes().autoriserSelectionMultiple(true);
+
+      // Menus contextuels des tableaux
+      menuCommandes();
+      menuTournees();
     } catch (Exception e) {
       RoManErreur.afficher(e);
       e.printStackTrace();
@@ -93,6 +102,39 @@ public class CtrlTabBordProducteur {
 
     // Ajout des tournées au tableau
     vue.getTableauTournees().setContenu(tournees);
+  }
+
+  /*
+   * Les actions du menu contextuel du tableau des commandes ne seront pas les mêmes que pour
+   * celles du menu du tableau des tournées.
+   */
+
+  /**
+   * Ajout du menu contextuel du tableau des commandes.
+   */
+  private void menuCommandes() {
+    BoutonAction modifier = new BoutonAction("Modifier la commande", () -> {
+      // TODO à implémenter
+    });
+    BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
+      // TODO à implémenter
+    });
+
+    vue.getTableauCommandes().setMenu(List.of(modifier, supprimer));
+  }
+
+  /**
+   * Ajout du menu contextuel du tableau des tournées.
+   */
+  private void menuTournees() {
+    BoutonAction modifier = new BoutonAction("Modifier la tournée", () -> {
+      // TODO à implémenter
+    });
+    BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
+      // TODO à implémenter
+    });
+
+    vue.getTableauTournees().setMenu(List.of(modifier, supprimer));
   }
 
   public void nouvelleCommande() {
