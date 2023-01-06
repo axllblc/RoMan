@@ -6,122 +6,107 @@ import java.util.Calendar;
  * Classe qui défini un type de champ avec des informations complémentaires.
  */
 public class TypeChamp {
-  private String libelle;
+  private LibelleChamp libelle;
   private String valeur = null;
   private boolean valeurBool = false;
   private String regex = null;
   private String placeholder;
-  
+
   private double minDouble, maxDouble, initDouble, valeurDouble;
   private int minInt, maxInt, initInt, valeurInt;
   private Calendar calendar = null;
 
-  // TEXTFIELD
-  public TypeChamp(String regex) {
-    this.libelle = "textField";
-    setRegex(regex);
+  public TypeChamp(LibelleChamp libelle) {
+    this.libelle = libelle;
   }
 
   // SPINNER
-  public TypeChamp(Double min,Double max,Double valeurInitial) {
-    this.libelle = "spinnerDouble";
+  public void setSpinnerDouble(Double min,Double max,Double valeurInitial) {
     setMinDouble(min);
     setMaxDouble(max);
     setInitDouble(valeurInitial);
   }
   
-  public TypeChamp(int min,int max,int valeurInitial) {
-    this.libelle = "spinnerInteger";
+  public void setSpinnerInt(int min,int max,int valeurInitial) {
     setMinInt(min);
     setMaxInt(max);
     setInitInt(valeurInitial);
   }
-  
-  // CALENDARTIMETEXTFIELD
-  public TypeChamp() {
-    this.libelle = "calendarTimeTextField";
-  }
-
-  // CheckBox
-  public TypeChamp(boolean valeurBool) {
-    this.libelle = "checkBox";
-    this.valeurBool = valeurBool;
-  }
 
   // GETTER SETTER
-  
-  public String getLibelle() {
+
+  public LibelleChamp getLibelle() {
     return libelle;
   }
-  
-  public void setLibelle(String libelle) {
+
+  public void setLibelle(LibelleChamp libelle) {
     this.libelle = libelle;
   }
-  
+
   public String getValeur() {
     return valeur;
   }
-  
+
   public void setValeur(String valeur) {
     this.valeur = valeur;
   }
-  
+
   public boolean isValeurBool() {
     return valeurBool;
   }
-  
+
   public void setValeurBool(boolean valeurBool) {
     this.valeurBool = valeurBool;
   }
-  
+
   public String getRegex() {
     return regex;
   }
-  
+
   public void setRegex(String regex) {
     this.regex = regex;
   }
-  
+
   public String getPlaceholder() {
     return placeholder;
   }
-  
+
   public void setPlaceholder(String placeholder) {
     this.placeholder = placeholder;
   }
-  
+
   public double getMinDouble() {
     return minDouble;
   }
-  
+
   public void setMinDouble(double minDouble) {
     this.minDouble = minDouble;
   }
-  
+
   public double getMaxDouble() {
     return maxDouble;
   }
-  
+
   public void setMaxDouble(double maxDouble) {
     this.maxDouble = maxDouble;
   }
-  
+
   public double getInitDouble() {
     return initDouble;
   }
-  
+
   public void setInitDouble(double initDouble) {
     this.initDouble = initDouble;
   }
-  
+
   public double getValeurDouble() {
     return valeurDouble;
   }
-  
+
   public void setValeurDouble(double valeurDouble) {
     this.valeurDouble = valeurDouble;
   }
-  
+
   public int getMinInt() {
     return minInt;
   }

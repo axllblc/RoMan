@@ -7,11 +7,6 @@ import fr.roman.dao.DAOTournee;
 import fr.roman.modeles.*;
 import fr.roman.vues.edition.VueEdition;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import jfxtras.scene.control.CalendarTextField;
-
 public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> {
 
     // Les DAOs nécessaire pour le fonctionnement du contrôleur
@@ -55,14 +50,16 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         boolean valeurBool;
 
         // idCommande
-        TypeChamp idCommande = new TypeChamp("\\d*");
+        TypeChamp idCommande = new TypeChamp(LibelleChamp.TEXTFIELD);
+        idCommande.setRegex("\\d*");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             idCommande.setValeur(String.valueOf(getModele().getIdCommande()));
         }
         getChampsFormulaire().put(Commande.Champs.idCommande, idCommande);
 
         // libelle
-        TypeChamp libelle = new TypeChamp(".{0,50}");
+        TypeChamp libelle = new TypeChamp(LibelleChamp.TEXTFIELD);
+        libelle.setRegex(".{0,50}");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             libelle.setValeur(getModele().getLibelle());
         }
@@ -73,12 +70,13 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION) {
             valeurDouble = getModele().getPoids();
         }
-        TypeChamp poids = new TypeChamp(0.,255.,valeurDouble);
+        TypeChamp poids = new TypeChamp(LibelleChamp.SPINNERDOUBLE);
+        poids.setSpinnerDouble(0., 255., valeurDouble);
         poids.setPlaceholder("en kg");
         getChampsFormulaire().put(Commande.Champs.poids, poids);
 
         // horaireDebut
-        TypeChamp horaireDebut = new TypeChamp();
+        TypeChamp horaireDebut = new TypeChamp(LibelleChamp.CALENDEARTIMETEXTFIELD);
         horaireDebut.setRegex("HH:mm");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             horaireDebut.setCalendar(getModele().getHoraireDebut());
@@ -86,7 +84,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getChampsFormulaire().put(Commande.Champs.horaireDebut, horaireDebut);
 
         // horaireFin
-        TypeChamp horaireFin = new TypeChamp();
+        TypeChamp horaireFin = new TypeChamp(LibelleChamp.CALENDEARTIMETEXTFIELD);
         horaireFin.setRegex("HH:mm");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             horaireFin.setCalendar(getModele().getHoraireDebut());
@@ -94,7 +92,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
 
         // note
-        TypeChamp note = new TypeChamp("");
+        TypeChamp note = new TypeChamp(LibelleChamp.TEXTFIELD);
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             note.setValeur(getModele().getNote());
         }
@@ -105,45 +103,33 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             valeurBool = (getModele().isDefautLivraison());
         }
-        TypeChamp defautLivraison = new TypeChamp(valeurBool);
+        TypeChamp defautLivraison = new TypeChamp(LibelleChamp.CHECKBOX);
+        defautLivraison.setValeurBool(valeurBool);
         getChampsFormulaire().put(Commande.Champs.defautLivraison, defautLivraison);
 
-        // TODO: dateInitiale
-        TypeChamp dateInitiale = new TypeChamp();
+        // dateInitiale
+        TypeChamp dateInitiale = new TypeChamp(LibelleChamp.CALENDEARTEXTFIELD);
         dateInitiale.setRegex("dd/MM/yyyy");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             dateInitiale.setCalendar(getModele().getHoraireDebut());
         }
         getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
-        /*
-        CalendarTextField dateInitiale = new CalendarTextField();
-        dateInitiale.autosize();
-        dateInitiale.setLocale(Locale.FRANCE);
-        dateInitiale.setDateFormat(new SimpleDateFormat("dd/MM/yyyy"));
-        dateInitiale.setAllowNull(true);
-        if(getTypeEdition() == TypeEdition.MODIFICATION){
-            dateInitiale.setCalendar(getModele().getDateInitiale());
-        }
-        */
 
-        // TODO: dateLivraison
-        CalendarTextField dateLivraison = new CalendarTextField();
-        dateLivraison.setShowTime(true);
-        dateLivraison.autosize();
-        dateLivraison.setLocale(Locale.FRANCE);
-        dateLivraison.setDateFormat(new SimpleDateFormat("dd/MM/yyyy HH:mm"));
-        dateLivraison.setAllowNull(true);
+        // dateLivraison
+        TypeChamp dateLivraison = new TypeChamp(LibelleChamp.CALENDEARTEXTFIELD);
+        dateLivraison.setRegex("dd/MM/yyyy HH:mm");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             dateLivraison.setCalendar(getModele().getDateLivraison());
         }
-        // getChampsFormulaire().put(Commande.Champs.dateLivraison, dateLivraison);
+        getChampsFormulaire().put(Commande.Champs.dateLivraison, dateLivraison);
 
         // producteur
         valeurInt = 0;
         if(getTypeEdition() == TypeEdition.MODIFICATION) {
             valeurInt = getModele().getProducteur().getIdProducteur();
         }
-        TypeChamp producteur = new TypeChamp(0,9999999,valeurInt);
+        TypeChamp producteur = new TypeChamp(LibelleChamp.SPINNERINT);
+        producteur.setSpinnerInt(0,9999999,valeurInt);
         getChampsFormulaire().put(Commande.Champs.idProducteur, producteur);
 
         // client
@@ -151,7 +137,8 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             valeurInt = getModele().getClient().getIdClient();
         }
-        TypeChamp client = new TypeChamp(0, 9999999, valeurInt);
+        TypeChamp client = new TypeChamp(LibelleChamp.SPINNERINT);
+        client.setSpinnerInt(0, 9999999, valeurInt);
         client.setRegex("\\d{1,50}");
         getChampsFormulaire().put(Commande.Champs.idClient, client);
 
@@ -160,7 +147,8 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             valeurInt = getModele().getTournee().getIdTournee();
         }
-        TypeChamp tournee = new TypeChamp(0, 9999999, valeurInt);
+        TypeChamp tournee = new TypeChamp(LibelleChamp.SPINNERINT);
+        tournee.setSpinnerInt(0, 9999999, valeurInt);
         client.setRegex("\\d{1,50}");
         getChampsFormulaire().put(Commande.Champs.idTournee, tournee);
 
@@ -176,7 +164,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     public Commande validerSaisie() throws Exception {
 
         // libelle
-        getModele().setLibelle(getChampsFormulaire().get(Commande.Champs.libelle).getLibelle());
+        getModele().setLibelle(getChampsFormulaire().get(Commande.Champs.libelle).getValeur());
 
         // poids
         getModele().setPoids(getChampsFormulaire().get(Commande.Champs.poids).getValeurDouble());
