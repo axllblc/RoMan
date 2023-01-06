@@ -153,7 +153,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         client.setRegex("\\d{1,50}");
         getChampsFormulaire().put(Commande.Champs.idTournee, tournee);
 
-        // TODO: création de la vue.
+        // TODO : création de la vue.
     }
 
     /**
