@@ -1,5 +1,6 @@
 package fr.roman.controleurs.edition;
 
+import fr.roman.RoManErreur;
 import fr.roman.dao.DAOClient;
 import fr.roman.dao.DAOVehicule;
 import fr.roman.dao.DAOProducteur;
@@ -24,7 +25,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
             daoClient = new DAOClient();
             daoProducteur = new DAOProducteur();
         } catch (Exception e) {
-            e.printStackTrace();
+            RoManErreur.afficher(e);
         }
     }
 
