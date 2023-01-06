@@ -192,7 +192,7 @@ public class VueEdition {
         resultat.setDisable(t.isDiseble());
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
-            .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getInitDouble()));
+            .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getValeurDouble()));
         if(t.getRegex() != null){
             resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
@@ -210,7 +210,7 @@ public class VueEdition {
         resultat.setDisable(t.isDiseble());
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
-            .IntegerSpinnerValueFactory(t.getMinInt(), t.getMaxInt(), t.getInitInt()));
+            .IntegerSpinnerValueFactory(t.getMinInt(), t.getMaxInt(), t.getValeurInt()));
         if(t.getRegex()!= null){
             resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {

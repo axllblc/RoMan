@@ -11,10 +11,9 @@ public class TypeChamp {
   private boolean valeurBool, disable;
   private String regex = null;
   private String placeholder;
-
-  private double minDouble, maxDouble, initDouble, valeurDouble;
+  private double minDouble, maxDouble, valeurDouble;
   private double[] initDoubleTab1x2, valeurDoubleTab1x2;
-  private int minInt, maxInt, initInt, valeurInt;
+  private int minInt, maxInt, valeurInt;
   private Calendar calendar = null;
 
   public TypeChamp(LibelleChamp libelle) {
@@ -25,13 +24,13 @@ public class TypeChamp {
   public void setSpinnerDouble(Double min,Double max,Double valeurInitial) {
     setMinDouble(min);
     setMaxDouble(max);
-    setInitDouble(valeurInitial);
+    setValeurDouble(valeurInitial);
   }
   
   public void setSpinnerInt(int min,int max,int valeurInitial) {
     setMinInt(min);
     setMaxInt(max);
-    setInitInt(valeurInitial);
+    setValeurInt(valeurInitial);
   }
 
   public void setDoubleTab1x2(double[] valeurInitial) {
@@ -95,15 +94,6 @@ public class TypeChamp {
   public void setMaxDouble(double maxDouble) {
     this.maxDouble = maxDouble;
   }
-
-  public double getInitDouble() {
-    return initDouble;
-  }
-
-  public void setInitDouble(double initDouble) {
-    this.initDouble = initDouble;
-  }
-
   public double getValeurDouble() {
     return valeurDouble;
   }
@@ -142,15 +132,6 @@ public class TypeChamp {
   public void setMaxInt(int maxInt) {
     this.maxInt = maxInt;
   }
-
-  public int getInitInt() {
-    return initInt;
-  }
-
-  public void setInitInt(int initInt) {
-    this.initInt = initInt;
-  }
-
   public int getValeurInt() {
     return valeurInt;
   }

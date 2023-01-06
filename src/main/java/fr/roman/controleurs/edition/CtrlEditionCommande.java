@@ -196,15 +196,15 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
 
         // idProducteur
         getModele().setProducteur(daoProducteur.findById(
-                getChampsFormulaire().get(Commande.Champs.idProducteur).getInitInt()));
+                getChampsFormulaire().get(Commande.Champs.idProducteur).getValeurInt()));
 
         // idClient
         getModele().setClient(daoClient.findById(
-                getChampsFormulaire().get(Commande.Champs.idClient).getInitInt()));
+                getChampsFormulaire().get(Commande.Champs.idClient).getValeurInt()));
 
         // idTournee
         getModele().setTournee(daoTournee.findById(
-                getChampsFormulaire().get(Commande.Champs.idTournee).getInitInt()));
+                getChampsFormulaire().get(Commande.Champs.idTournee).getValeurInt()));
 
         Commande commande = null;
         switch (getTypeEdition()){
