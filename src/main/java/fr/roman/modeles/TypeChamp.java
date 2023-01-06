@@ -13,7 +13,7 @@ public class TypeChamp {
   private String placeholder;
 
   private double minDouble, maxDouble, initDouble, valeurDouble;
-  private double[] initDoubleTab1x2;
+  private double[] initDoubleTab1x2, valeurDoubleTab1x2;
   private int minInt, maxInt, initInt, valeurInt;
   private Calendar calendar = null;
 
@@ -115,9 +115,16 @@ public class TypeChamp {
   public double[] getInitDoubleTab1x2() {
     return initDoubleTab1x2;
   }
-
   public void setInitDoubleTab1x2(double[] initDoubleTab1x2) {
     this.initDoubleTab1x2 = initDoubleTab1x2;
+  }
+
+  public double[] getValeurDoubleTab1x2() {
+    return valeurDoubleTab1x2;
+  }
+
+  public void setValeurDoubleTab1x2(double[] valeurDoubleTab1x2) {
+    this.valeurDoubleTab1x2 = valeurDoubleTab1x2;
   }
 
   public int getMinInt() {
