@@ -8,7 +8,7 @@ import java.util.Calendar;
 public class TypeChamp {
   private LibelleChamp libelle;
   private String valeur = null;
-  private boolean valeurBool = false;
+  private boolean valeurBool, disable;
   private String regex = null;
   private String placeholder;
 
@@ -118,32 +118,40 @@ public class TypeChamp {
   public int getMaxInt() {
     return maxInt;
   }
-  
+
   public void setMaxInt(int maxInt) {
     this.maxInt = maxInt;
   }
-  
+
   public int getInitInt() {
     return initInt;
   }
-  
+
   public void setInitInt(int initInt) {
     this.initInt = initInt;
   }
-  
+
   public int getValeurInt() {
     return valeurInt;
   }
-  
+
   public void setValeurInt(int valeurInt) {
     this.valeurInt = valeurInt;
   }
-  
+
   public Calendar getCalendar() {
     return calendar;
   }
-  
+
   public void setCalendar(Calendar calendar) {
     this.calendar = calendar;
+  }
+
+  public boolean isDiseble() {
+    return disable;
+  }
+
+  public void setDisable(boolean disable) {
+    this.disable = disable;
   }
 }

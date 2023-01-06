@@ -16,7 +16,6 @@ import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.CalendarTimeTextField;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -62,19 +61,15 @@ public class VueEdition {
      */
     private final Button btnRetour;
     /**
-     * Carte des champs du formulaire de la vue (clé : nom d'un champ dans l'énum,
+     * Liste des champs du formulaire de la vue (clé : nom d'un champ dans l'énum,
      *                                           valeur : un objet {@link Node}.
      */
-    private Map<? extends ChampsModele, Node> champsFormulaire;
-    /**
-     *
-     */
-    private ArrayList<Node> composants = new ArrayList<>();
+    private Map<String, Node> composants;
 
     /**
      * Construire la vue d'<i>édition</i>.
      */
-    public VueEdition(TypeEdition typeEdition) {
+    public VueEdition(TypeEdition typeEdition, Map<? extends ChampsModele, TypeChamp> signal) {
 
         // Définition des éléments de la vue
         this.typeEdition = typeEdition;
@@ -85,6 +80,8 @@ public class VueEdition {
         btnValider = new Button("Valider");
         btnRetour = new Button("Retour");
         structureEdition();
+        // création des composants graphique
+        signalCtrlEdition(signal);
     }
 
     /**
@@ -102,8 +99,7 @@ public class VueEdition {
 
         btnValider.setOnAction((event) -> {
             try {
-                // TODO: validerSaisie().
-                // ctrl.validerSaisie();
+                ctrl.validerSaisie();
             } catch (Exception e) {
                 RoManErreur.afficher(e);
             }
@@ -126,15 +122,11 @@ public class VueEdition {
     /**
      * Définir et ajouter les champs du formulaire qui seront affichés
      *
-     * @param champsFormulaire Carte des champs du formulaire de la vue
-     *                         (clé : nom d'un champ dans l'énum,
-     *                         valeur : un objet {@link Node})
      * @param label le nom du métier qui va être édité
      */
-    public void definirChamps(Map <? extends ChampsModele, Node> champsFormulaire, String label) {
-        this.champsFormulaire = champsFormulaire;
+    public void definirChamps(String label) {
         this.titre.setText(this.typeEdition.libelle + " : " + label);
-        this.champsFormulaire.forEach((nom, noeud) -> formulaire.getChildren().addAll(new Label(nom.toString()),noeud));
+        this.composants.forEach((nom, noeud) -> formulaire.getChildren().addAll(new Label(nom),noeud));
     }
 
     /**
@@ -145,14 +137,6 @@ public class VueEdition {
     }
 
     /**
-     * Retourner la carte des champs du formulaire de la vue (clé : nom d'un champ dans l'énum,
-     *                         valeur : un objet {@link Node})
-     */
-    public Map <? extends ChampsModele, Node> getChamps() {
-        return this.champsFormulaire;
-    }
-    
-    /**
      * Méthode qui permet de gérer les différentes méthodes de création d'élément graphique.
      *
      * @param signal des composants demandés par le contrôleur.
@@ -162,27 +146,27 @@ public class VueEdition {
             switch (t.getLibelle()) {
                 case TEXTFIELD:
                     // création d'un "textField".
-                    textField(t);
+                    this.composants.put(c.toString(),textField(t));
                     break;
                 case SPINNERDOUBLE:
                     // création d'un "spinner" de Double.
-                    spinnerDouble(t);
+                    this.composants.put(c.toString(),spinnerDouble(t));
                     break;
                 case SPINNERINT:
                     // création d'un "spinner" de Integer.
-                    spinnerInteger(t);
+                    this.composants.put(c.toString(),spinnerInteger(t));
                     break;
                 case CALENDEARTIMETEXTFIELD:
                     // création d'un "calendarTimeTextField".
-                    calendarTimeTextField(t);
+                    this.composants.put(c.toString(),calendarTimeTextField(t));
                     break;
                 case CALENDEARTEXTFIELD:
                     // création d'un "calendarTextField".
-                    calendarTextField(t);
+                    this.composants.put(c.toString(),calendarTextField(t));
                     break;
                 case CHECKBOX:
                     // création d'une "checkbox"
-                    checkBox(t);
+                    this.composants.put(c.toString(),checkBox(t));
                     break;
                 default:
                     throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
@@ -190,8 +174,9 @@ public class VueEdition {
         });
     }
 
-    private void textField(TypeChamp t) {
+    private Node textField(TypeChamp t) {
         TextField resultat = new TextField();
+        resultat.setDisable(t.isDiseble());
         resultat.setDisable(true);
         if(!t.getRegex().isEmpty()) {
             resultat.setTextFormatter(new TextFormatter<>(change -> {
@@ -205,11 +190,12 @@ public class VueEdition {
         if(typeEdition == TypeEdition.MODIFICATION){
             resultat.setText(t.getValeur());
         }
-        composants.add(resultat);
+        return resultat;
     }
 
-    private void spinnerDouble(TypeChamp t) {
+    private Node spinnerDouble(TypeChamp t) {
         Spinner<Double> resultat = new Spinner<>();
+        resultat.setDisable(t.isDiseble());
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
             .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getInitDouble()));
@@ -223,10 +209,11 @@ public class VueEdition {
             }));
         }
         resultat.setTooltip(new Tooltip(t.getPlaceholder()));
-        composants.add(resultat);
+        return resultat;
     }
-    private void spinnerInteger(TypeChamp t) {
+    private Node spinnerInteger(TypeChamp t) {
         Spinner<Integer> resultat = new Spinner<>();
+        resultat.setDisable(t.isDiseble());
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
             .IntegerSpinnerValueFactory(t.getMinInt(), t.getMaxInt(), t.getInitInt()));
@@ -239,11 +226,12 @@ public class VueEdition {
                 }
             }));
         }
-        composants.add(resultat);
+        return resultat;
     }
 
-    private void calendarTimeTextField(TypeChamp t) {
+    private Node calendarTimeTextField(TypeChamp t) {
         CalendarTimeTextField resultat = new CalendarTimeTextField();
+        resultat.setDisable(t.isDiseble());
         resultat.setLocale(Locale.FRANCE);
         resultat.setMinuteStep(15);
         if(!(t.getRegex().isEmpty())){
@@ -252,11 +240,12 @@ public class VueEdition {
         if(!(t.getCalendar().getAvailableCalendarTypes().isEmpty())){
             resultat.setCalendar(t.getCalendar());
         }
-        composants.add(resultat);
+        return resultat;
     }
 
-    public void calendarTextField(TypeChamp t) {
+    public Node calendarTextField(TypeChamp t) {
         CalendarTextField resultat = new CalendarTextField();
+        resultat.setDisable(t.isDiseble());
         resultat.setShowTime(true);
         resultat.autosize();
         resultat.setLocale(Locale.FRANCE);
@@ -265,10 +254,12 @@ public class VueEdition {
         if(!(t.getCalendar().getAvailableCalendarTypes().isEmpty())){
             resultat.setCalendar(t.getCalendar());
         }
+        return resultat;
     }
-    private void checkBox(TypeChamp t) {
+    private Node checkBox(TypeChamp t) {
         CheckBox resultat = new CheckBox();
+        resultat.setDisable(t.isDiseble());
         resultat.setSelected(t.isValeurBool());
-        composants.add(resultat);
+        return resultat;
     }
 }

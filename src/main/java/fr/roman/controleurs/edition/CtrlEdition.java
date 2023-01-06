@@ -57,7 +57,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
          * les champs ont été insérées. */
 
         chargerChamps();
-        // accesChamps();
+        accesChamps();
     }
 
     /**
@@ -65,27 +65,29 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
      *  c.-à-d. les champs du formulaire (préremplis le cas échéant)
      */
     abstract void chargerChamps();
-    public abstract M validerSaisie() throws Exception;
 
-    // TODO: accesChamps
+    // accesChamps
     /**
      * Classe permettant de restreindre l'accessibilité (la possibilité de modifier)
      *  les champs du formulaire selon le {@link Role rôle} de l'utilisateur
+    */
     void accesChamps(){
         switch (getRole()) {
-            case ADMINISTRATEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(!nom.isModifAdmin()));
-            case PRODUCTEUR -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(!nom.isModifProd()));
-            case ROOT -> getChampsFormulaire().forEach((nom, noeud) -> noeud.setDisable(nom.isId()));
+            case ADMINISTRATEUR -> getChampsFormulaire().forEach((nom, typeChamp) ->
+                    typeChamp.setDisable(!nom.isModifAdmin()));
+            case PRODUCTEUR -> getChampsFormulaire().forEach((nom, typeChamp) ->
+                    typeChamp.setDisable(!nom.isModifProd()));
+            case ROOT -> getChampsFormulaire().forEach((nom, typeChamp) ->
+                    typeChamp.setDisable(nom.isId()));
         }
     }
-    */
 
     /**
      * Classe abstraite appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
-    public abstract M validerSaisie() throws Exception;
     */
+    public abstract M validerSaisie() throws Exception;
     
     /**
      * Classe abstraite appelée par le bouton de retour du formulaire pour
