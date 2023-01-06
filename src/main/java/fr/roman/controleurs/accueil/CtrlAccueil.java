@@ -3,7 +3,7 @@ package fr.roman.controleurs.accueil;
 import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.accueil.VueAccueil;
-import fr.roman.vues.accueil.VueOngletAccueil;
+import fr.roman.vues.VueIntegrable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javafx.scene.Node;
@@ -28,7 +28,7 @@ public class CtrlAccueil {
    * Liste des modules accessibles par l'utilisateur (matérialisés par des onglets dans la vue
    * <i>Accueil</i>), associés à la vue qui leur correspond.
    */
-  private final Map<ModuleApplication, VueOngletAccueil> mapModuleVue;
+  private final Map<ModuleApplication, VueIntegrable> mapModuleVue;
 
   /**
    * Créer un contrôleur pour la vue Accueil.
@@ -77,7 +77,7 @@ public class CtrlAccueil {
   private void modulesRoot() {
     // Gestion des administrateurs
     // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.ADMINISTRATEURS, new VueOngletAccueil() {
+    mapModuleVue.put(ModuleApplication.ADMINISTRATEURS, new VueIntegrable() {
       @Override
       public Node getNode() {
         return new Label("Gestion des administrateurs (à implémenter)");
@@ -91,7 +91,7 @@ public class CtrlAccueil {
   private void modulesAdministrateur() {
     // Gestion des producteurs
     // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.PRODUCTEURS, new VueOngletAccueil() {
+    mapModuleVue.put(ModuleApplication.PRODUCTEURS, new VueIntegrable() {
       @Override
       public Node getNode() {
         return new Label("Gestion des producteurs (à implémenter)");
@@ -100,7 +100,7 @@ public class CtrlAccueil {
 
     // Gestion des clients
     // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.CLIENTS, new VueOngletAccueil() {
+    mapModuleVue.put(ModuleApplication.CLIENTS, new VueIntegrable() {
       @Override
       public Node getNode() {
         return new Label("Gestion des clients (à implémenter)");
@@ -114,7 +114,7 @@ public class CtrlAccueil {
   private void modulesProducteur() {
     // Tableau de bord
     // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, new VueOngletAccueil() {
+    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, new VueIntegrable() {
       @Override
       public Node getNode() {
         return new Label("Tableau de bord (à implémenter)");
@@ -123,7 +123,7 @@ public class CtrlAccueil {
 
     // Gestion des commandes
     // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.COMMANDES, new VueOngletAccueil() {
+    mapModuleVue.put(ModuleApplication.COMMANDES, new VueIntegrable() {
       @Override
       public Node getNode() {
         return new Label("Commandes (à implémenter)");
@@ -132,7 +132,7 @@ public class CtrlAccueil {
 
     // Gestion des tournées
     // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.TOURNEES, new VueOngletAccueil() {
+    mapModuleVue.put(ModuleApplication.TOURNEES, new VueIntegrable() {
       @Override
       public Node getNode() {
         return new Label("Tournées (à implémenter)");
@@ -141,7 +141,7 @@ public class CtrlAccueil {
 
     // Gestion des véhicules
     // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.VEHICULES, new VueOngletAccueil() {
+    mapModuleVue.put(ModuleApplication.VEHICULES, new VueIntegrable() {
       @Override
       public Node getNode() {
         return new Label("Gestion des véhicules (à implémenter)");
