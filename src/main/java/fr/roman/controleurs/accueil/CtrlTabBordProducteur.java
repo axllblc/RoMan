@@ -11,7 +11,6 @@ import fr.roman.modeles.Tournee;
 import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.accueil.TableauDeBordProducteur;
 import fr.roman.vues.composants.BoutonAction;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -74,12 +73,16 @@ public class CtrlTabBordProducteur {
    * Remplissage du tableau des commandes.
    */
   private void tableauCommandes() throws Exception {
-    // Récupération des commandes (non livrées)
+    // Récupération des commandes
     DAOCommande daoCommande = new DAOCommande();
     LinkedHashMap<Commande.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Commande.Champs.idProducteur, String.valueOf(producteur.getId()));
-    criteres.put(Commande.Champs.dateLivraison, null);
-    ArrayList<Commande> commandes = daoCommande.find(criteres);
+    List<Commande> commandes = daoCommande.find(criteres);
+
+    // Ne conserver que les commandes non livrées (le DAO ne permet pas ce filtrage)
+    commandes = commandes.stream()
+        .filter(commande -> commande.getDateLivraison() == null)
+        .toList();
 
     // Ajout des commandes au tableau
     vue.getTableauCommandes().setContenu(commandes);
@@ -89,7 +92,7 @@ public class CtrlTabBordProducteur {
    * Remplissage du tableau des tournées.
    */
   private void tableauTournees() throws Exception {
-    // Récupération des tournées
+    // Récupération des tournées (non livrées)
     DAOTournee daoTournee = new DAOTournee();
     LinkedHashMap<Tournee.Champs, String> criteres = new LinkedHashMap<>();
     criteres.put(Tournee.Champs.idProducteur, String.valueOf(producteur.getId()));
