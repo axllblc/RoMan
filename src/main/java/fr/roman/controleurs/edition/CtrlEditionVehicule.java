@@ -7,10 +7,7 @@ import fr.roman.dao.DAOProducteur;
 import fr.roman.modeles.*;
 import fr.roman.vues.edition.VueEdition;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 
-import java.util.*;
 
 public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> {
 
@@ -87,6 +84,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION && getModele().getProducteur() != null){
             idPro = getModele().getProducteur().getIdProducteur();
         }
+        idProducteur.setSpinnerInt(0, 9999999,idPro);
         getChampsFormulaire().put(Vehicule.Champs.idProducteur, idProducteur);
 
         // TODO : création de la vue.
@@ -113,14 +111,14 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         Producteur p = daoProducteur.findById(champsFormulaire.get(Vehicule.Champs.idProducteur).getValeurInt());
         getModele().setProducteur(p);
 
-        Vehicule Vehicule = null;
+        Vehicule vehicule = null;
         switch (getTypeEdition()){
-            case CREATION -> Vehicule = daoVehicule.insert(getModele());
+            case CREATION -> vehicule = daoVehicule.insert(getModele());
             case MODIFICATION -> {  if(daoVehicule.update(getModele()))
-                                        Vehicule = getModele();
+                                        vehicule = getModele();
                                  }
 
         }
-        return Vehicule;
+        return vehicule;
     }
 }

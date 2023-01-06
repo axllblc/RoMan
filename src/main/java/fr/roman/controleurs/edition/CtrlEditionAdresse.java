@@ -149,14 +149,14 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
         // codePostal
         getModele().setCodePostal(getChampsFormulaire().get(Adresse.Champs.codePostal).getValeurInt());
 
-        Adresse Adresse = null;
+        Adresse adresse = null;
         switch (getTypeEdition()){
-            case CREATION -> Adresse = daoAdresse.insert(getModele());
+            case CREATION -> adresse = daoAdresse.insert(getModele());
             case MODIFICATION -> {  if(daoAdresse.update(getModele()))
-                                        Adresse = getModele();
+                                        adresse = getModele();
                                  }
 
         }
-        return Adresse;
+        return adresse;
     }
 }
