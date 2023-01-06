@@ -97,6 +97,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             note.setValeur(getModele().getNote());
         }
+        note.setRegex(".{0,500}");
         getChampsFormulaire().put(Commande.Champs.note, note);
 
         // defautLivraison
@@ -195,15 +196,15 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
 
         // idProducteur
         getModele().setProducteur(daoProducteur.findById(
-                getChampsFormulaire().get(Commande.Champs.idProducteur).getValeurInt()));
+                getChampsFormulaire().get(Commande.Champs.idProducteur).getInitInt()));
 
         // idClient
         getModele().setClient(daoClient.findById(
-                getChampsFormulaire().get(Commande.Champs.idClient).getValeurInt()));
+                getChampsFormulaire().get(Commande.Champs.idClient).getInitInt()));
 
         // idTournee
         getModele().setTournee(daoTournee.findById(
-                getChampsFormulaire().get(Commande.Champs.idTournee).getValeurInt()));
+                getChampsFormulaire().get(Commande.Champs.idTournee).getInitInt()));
 
         Commande commande = null;
         switch (getTypeEdition()){

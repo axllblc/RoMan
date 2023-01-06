@@ -58,6 +58,8 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
 
         chargerChamps();
         accesChamps();
+        getVueEdition().signalCtrlEdition(getChampsFormulaire());
+        getVueEdition().definirChamps(m.getClass().getSimpleName());
     }
 
     /**

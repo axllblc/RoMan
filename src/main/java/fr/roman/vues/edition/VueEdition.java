@@ -16,6 +16,7 @@ import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.CalendarTimeTextField;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -64,12 +65,12 @@ public class VueEdition {
      * Liste des champs du formulaire de la vue (clé : nom d'un champ dans l'énum,
      *                                           valeur : un objet {@link Node}.
      */
-    private Map<String, Node> composants;
+    private final Map<String, Node> composants = new HashMap<>();
 
     /**
      * Construire la vue d'<i>édition</i>.
      */
-    public VueEdition(TypeEdition typeEdition, Map<? extends ChampsModele, TypeChamp> signal) {
+    public VueEdition(TypeEdition typeEdition) {
 
         // Définition des éléments de la vue
         this.typeEdition = typeEdition;
@@ -81,7 +82,7 @@ public class VueEdition {
         btnRetour = new Button("Retour");
         structureEdition();
         // création des composants graphique
-        signalCtrlEdition(signal);
+        //signalCtrlEdition(signal);
     }
 
     /**
@@ -141,35 +142,28 @@ public class VueEdition {
      *
      * @param signal des composants demandés par le contrôleur.
      */
-    private void signalCtrlEdition(Map<? extends ChampsModele, TypeChamp> signal) {
+    public void signalCtrlEdition(Map<? extends ChampsModele, TypeChamp> signal) {
         signal.forEach((c,t) -> {
             switch (t.getLibelle()) {
-                case TEXTFIELD:
+                case TEXTFIELD ->
                     // création d'un "textField".
-                    this.composants.put(c.toString(),textField(t));
-                    break;
-                case SPINNERDOUBLE:
+                        this.composants.put(c.toString(), textField(t));
+                case SPINNERDOUBLE ->
                     // création d'un "spinner" de Double.
-                    this.composants.put(c.toString(),spinnerDouble(t));
-                    break;
-                case SPINNERINT:
+                        this.composants.put(c.toString(), spinnerDouble(t));
+                case SPINNERINT ->
                     // création d'un "spinner" de Integer.
-                    this.composants.put(c.toString(),spinnerInteger(t));
-                    break;
-                case CALENDEARTIMETEXTFIELD:
+                        this.composants.put(c.toString(), spinnerInteger(t));
+                case CALENDEARTIMETEXTFIELD ->
                     // création d'un "calendarTimeTextField".
-                    this.composants.put(c.toString(),calendarTimeTextField(t));
-                    break;
-                case CALENDEARTEXTFIELD:
+                        this.composants.put(c.toString(), calendarTimeTextField(t));
+                case CALENDEARTEXTFIELD ->
                     // création d'un "calendarTextField".
-                    this.composants.put(c.toString(),calendarTextField(t));
-                    break;
-                case CHECKBOX:
+                        this.composants.put(c.toString(), calendarTextField(t));
+                case CHECKBOX ->
                     // création d'une "checkbox"
-                    this.composants.put(c.toString(),checkBox(t));
-                    break;
-                default:
-                    throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
+                        this.composants.put(c.toString(), checkBox(t));
+                default -> throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
             }
         });
     }
@@ -178,7 +172,7 @@ public class VueEdition {
         TextField resultat = new TextField();
         resultat.setDisable(t.isDiseble());
         resultat.setDisable(true);
-        if(!t.getRegex().isEmpty()) {
+        if(t.getRegex() == null) {
             resultat.setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
                     return null;
@@ -199,7 +193,7 @@ public class VueEdition {
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
             .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getInitDouble()));
-        if(!t.getRegex().isEmpty()){
+        if(t.getRegex() != null){
             resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
                     return null;
@@ -217,7 +211,7 @@ public class VueEdition {
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
             .IntegerSpinnerValueFactory(t.getMinInt(), t.getMaxInt(), t.getInitInt()));
-        if(!t.getRegex().isEmpty()){
+        if(t.getRegex()!= null){
             resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
                     return null;
