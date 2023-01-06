@@ -236,7 +236,7 @@ public class Commande extends Modele {
   public Statut getStatut() {
     if (dateLivraison != null) {
       return Statut.LIVREE;
-    } else if (dateInitiale.before(Calendar.getInstance())) {
+    } else if (dateInitiale != null && dateInitiale.before(Calendar.getInstance())) {
       return Statut.EN_RETARD;
     } else if (defautLivraison) {
       return Statut.REPORTEE;

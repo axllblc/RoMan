@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
 /**
@@ -50,10 +51,19 @@ public abstract class Tableau<T extends Modele> {
    */
   public Tableau() {
     tableau = new TableView<>();
+
+    // Définition de la collection représentant le contenu du tableau
     contenu = FXCollections.observableArrayList();
     tableau.setItems(contenu);
+
+    // Définition du menu contextuel, appliqué sur les lignes du tableau
     menu = new ContextMenu();
-    tableau.setContextMenu(menu);
+    tableau.setRowFactory(tableView -> {
+          TableRow<T> row = new TableRow<>();
+          row.setContextMenu(menu);
+          return row;
+        }
+    );
   }
 
   /**
@@ -181,7 +191,7 @@ public abstract class Tableau<T extends Modele> {
    * @param items Éléments du menu contextuel
    */
   public void setMenu(List<BoutonAction> items) {
-    tableau.getContextMenu().getItems().setAll(
+    menu.getItems().setAll(
         items.stream().map(BoutonAction::asMenuItem).toList()
     );
   }
