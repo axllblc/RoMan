@@ -1,8 +1,11 @@
 package fr.roman.controleurs.authentification;
 
+import fr.roman.controleurs.comptes.OutilsMotDePasse;
+import fr.roman.dao.DAOUtilisateur;
 import fr.roman.modeles.Utilisateur;
-//import fr.roman.dao.DAOUtilisateur;
 import fr.roman.vues.authentification.VueAuthentification;
+import java.util.Arrays;
+import java.util.Base64;
 
 /**
  * Controlleur de la partie Authentification.
@@ -61,13 +64,13 @@ public class CtrlAuthentification {
    * @return Un objet utilisateur correspondant au nom d'utilisateur.
    *         Renvoie null si le nom d'utilisateur et/ou le mot de passe est incorrect.
    */
-  /*public Utilisateur authentification(String nomUtilisateur, String mdp) {
+  public Utilisateur authentification(String nomUtilisateur, String mdp) {
     try {
       DAOUtilisateur daoU = new DAOUtilisateur();
       Utilisateur u = daoU.findByNomUtilisateur(nomUtilisateur);
       if (u != null){ // Si le nom d'utilisateur existe
         // Note : on utilise Base64 pour convertir le mot de passe (chaine de caractère) en tableau de bits
-        if (Arrays.equals(CtrlInscription.chiffrerMDP(mdp, u.getSel()) , Base64.getDecoder().decode(u.getMdp()))){
+        if (Arrays.equals(OutilsMotDePasse.chiffrerMDP(mdp, u.getSel()) , Base64.getDecoder().decode(u.getMdp()))){
           // Et si le mot de passe est correct, on retourne l'objet Utilisateur
           return u;
         }
@@ -78,5 +81,5 @@ public class CtrlAuthentification {
       // En cas d'erreur pour le processus d'authentification, on ne renvoie rien
       return null;
     }
-  }*/
+  }
 }

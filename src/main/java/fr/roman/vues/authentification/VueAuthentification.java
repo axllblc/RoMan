@@ -160,6 +160,7 @@ public class VueAuthentification {
       vbox.getChildren().add(labelErreurConnexion);
       erreurIdAdd = true;
     }
+    passwordField.setText("");
 
 
   }
