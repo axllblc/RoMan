@@ -151,14 +151,74 @@ public class Utilisateur extends Modele {
   /**
    * Liste des champs de la table {@code Utilisateurs} dans la base de données.
    */
-  public enum Champs {
-    idUtilisateur,
-    nomUtilisateur,
-    mdp,
-    sel,
+  public enum Champs implements ChampsModele {
+    idUtilisateur(true, false, false, false, false),
+    nomUtilisateur(false, false, true, false, false),
+    mdp(false, true, true, false, false),
+    sel(false, false, false, false, false),
     nom,
     prenom,
     email,
-    role
+    role(false, false, false, false, false);
+
+    private final boolean modifProd;
+    private final boolean modifAdmin;
+    private final boolean id;
+    private final boolean idExt;
+    private final boolean nullable;
+
+    /**
+     * Constructeur pour désigner des propriétés du champ
+     *
+     * @param id True si il s'agit de l'identifiant, false sinon
+     * @param modifProd True si le champ est modifiable par un producteur, false sinon
+     * @param modifAdmin True si le champ est modifiable par un administrateur, false sinon
+     * @param idExt True s'il s'agit d'un identifiant qui correspond
+     *              à une clé étrangère dans la BDD, false sinon
+     * @param nullable True si le champ peut être null, false sinon
+     */
+    Champs(boolean id, boolean modifProd, boolean modifAdmin, boolean idExt, boolean nullable) {
+      this.id = id;
+      this.modifProd = modifProd;
+      this.modifAdmin = modifAdmin;
+      this.idExt = idExt;
+      this.nullable = nullable;
+    }
+    /**
+     * Par défaut, tous les utilisateurs peuvent modifier le champ,
+     * ce n'est pas un id et il est nullable
+     */
+    Champs(){
+      modifProd = true;
+      modifAdmin = true;
+      id = false;
+      idExt = false;
+      nullable = true;
+    }
+
+    @Override
+    public boolean isModifProd() {
+      return this.modifProd;
+    }
+
+    @Override
+    public boolean isModifAdmin() {
+      return this.modifAdmin;
+    }
+
+    @Override
+    public boolean isId() {
+      return this.id;
+    }
+
+    @Override
+    public boolean isIdExt() {
+      return this.idExt;
+    }
+
+    @Override
+    public boolean isNullable() {
+      return false;
+    }
   }
 }

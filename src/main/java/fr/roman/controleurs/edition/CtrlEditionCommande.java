@@ -1,5 +1,6 @@
 package fr.roman.controleurs.edition;
 
+import fr.roman.RoManErreur;
 import fr.roman.dao.DAOClient;
 import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
@@ -22,7 +23,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
             daoTournee = new DAOTournee();
             daoCommande = new DAOCommande();
         } catch (Exception e) {
-            e.printStackTrace();
+            RoManErreur.afficher(e);
         }
     }
 
@@ -152,7 +153,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         client.setRegex("\\d{1,50}");
         getChampsFormulaire().put(Commande.Champs.idTournee, tournee);
 
-        // TODO: création de la vue.
+        // TODO : création de la vue.
     }
 
     /**

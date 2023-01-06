@@ -3,7 +3,6 @@ package fr.roman.dao;
 import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Utilisateur;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -117,6 +116,25 @@ public class DAOProducteur extends DAO<Producteur, Producteur.Champs> {
                 rs.getString("nomEtablissement"), rs.getString("tel"), adresse, utilisateur));
       }
       return producteurs;
+    }
+  }
+
+  /**
+   * Rechercher le producteur lié à un compte utilisateur.
+   *
+   * @param utilisateur Utilisateur correspondant à un producteur
+   * @return Producteur lié au compte utilisateur, ou {@code null} si le compte n'est lié à aucun
+   *         producteur
+   * @throws Exception Si la requête n'a pas pu être effectuée
+   */
+  public Producteur find(Utilisateur utilisateur) throws Exception {
+    LinkedHashMap<Producteur.Champs, String> criteres = new LinkedHashMap<>();
+    criteres.put(Producteur.Champs.idUtilisateur, String.valueOf(utilisateur.getId()));
+    ArrayList<Producteur> resultat = find(criteres);
+    if (resultat.size() == 0) {
+      return null;
+    } else {
+      return resultat.get(0);
     }
   }
 

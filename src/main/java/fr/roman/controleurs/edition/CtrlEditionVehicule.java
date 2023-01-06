@@ -1,5 +1,6 @@
 package fr.roman.controleurs.edition;
 
+import fr.roman.RoManErreur;
 import fr.roman.dao.DAOClient;
 import fr.roman.dao.DAOVehicule;
 import fr.roman.dao.DAOProducteur;
@@ -24,7 +25,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
             daoClient = new DAOClient();
             daoProducteur = new DAOProducteur();
         } catch (Exception e) {
-            e.printStackTrace();
+            RoManErreur.afficher(e);
         }
     }
 
@@ -48,93 +49,68 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
     @Override
     public void chargerChamps() {
         // idVehicule
-        TextField idVehicule = new TextField();
+        TypeChamp idVehicule = new TypeChamp(LibelleChamp.TEXTFIELD);
+        idVehicule.setRegex("\\d*");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            idVehicule.setText(String.valueOf(getModele().getIdVehicule()));
+            idVehicule.setValeur(String.valueOf(getModele().getIdVehicule()));
         }
-        // getChampsFormulaire().put(Vehicule.Champs.idVehicule, idVehicule);
+        getChampsFormulaire().put(Vehicule.Champs.idVehicule, idVehicule);
 
         // immatriculation
-        TextField immatriculation = new TextField();
+        TypeChamp immatriculation = new TypeChamp(LibelleChamp.TEXTFIELD);
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            immatriculation.setText(getModele().getImmatriculation());
+            immatriculation.setValeur(getModele().getImmatriculation());
         }
-        immatriculation.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("[0-9A-Za-z]{0,7}")) {
-                return null;
-            } else {
-                change.setText(change.getText().toUpperCase());
-                return change;
-            }
-        }));
-        // getChampsFormulaire().put(Vehicule.Champs.immatriculation, immatriculation);
+        immatriculation.setRegex("[0-9A-Za-z]{0,7}");
+        getChampsFormulaire().put(Vehicule.Champs.immatriculation, immatriculation);
 
         // poidsMax
-        TextField poidsMax = new TextField();
+        TypeChamp poidsMax = new TypeChamp(LibelleChamp.SPINNERINT);
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            poidsMax.setText(String.valueOf(getModele().getPoidsMax()));
+            poidsMax.setValeurInt(getModele().getPoidsMax());
+            poidsMax.setSpinnerInt(1,10000,getModele().getPoidsMax());
         }
-        poidsMax.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d{0,5}")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
-        // getChampsFormulaire().put(Vehicule.Champs.poidsMax, poidsMax);
+        poidsMax.setRegex("\\d{0,5}");
+        getChampsFormulaire().put(Vehicule.Champs.poidsMax, poidsMax);
 
         // libelle
-        TextField libelle = new TextField();
+        TypeChamp libelle = new TypeChamp(LibelleChamp.TEXTFIELD);
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            libelle.setText(getModele().getLibelle());
+            libelle.setValeur(getModele().getLibelle());
         }
-        libelle.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches(".{0,50}")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
-        // getChampsFormulaire().put(Vehicule.Champs.libelle, libelle);
+        libelle.setRegex(".{0,50}");
+        getChampsFormulaire().put(Vehicule.Champs.libelle, libelle);
 
         // producteur
-        TextField idProducteur = new TextField();
-        idProducteur.setTextFormatter(new TextFormatter<>(change -> {
-            if (!change.getControlNewText().matches("\\d*")) {
-                return null;
-            } else {
-                return change;
-            }
-        }));
-        if(getTypeEdition() == TypeEdition.MODIFICATION || getRole() == Role.PRODUCTEUR){
-            idProducteur.setText(String.valueOf(getModele().getProducteur().getIdProducteur()));
+        TypeChamp idProducteur = new TypeChamp(LibelleChamp.SPINNERINT);
+        int idPro = 0;
+        if(getTypeEdition() == TypeEdition.MODIFICATION && getModele().getProducteur() != null){
+            idPro = getModele().getProducteur().getIdProducteur();
         }
-        // getChampsFormulaire().put(Vehicule.Champs.idProducteur, idProducteur);
+        getChampsFormulaire().put(Vehicule.Champs.idProducteur, idProducteur);
 
-        // getVueEdition().definirChamps(getChampsFormulaire(), "Véhicule");
+        // TODO : création de la vue.
     }
 
     /**
      * Classe appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
+     */
     @Override
     public Vehicule validerSaisie() throws Exception {
 
-        champsFormulaire = (Map<Vehicule.Champs, Node>) getVueEdition().getChamps();
-
         // immatriculation
-        getModele().setImmatriculation(((TextField) champsFormulaire.get(Vehicule.Champs.immatriculation)).getText());
+        getModele().setImmatriculation(champsFormulaire.get(Vehicule.Champs.immatriculation).getValeur());
 
         // poids
-        getModele().setPoidsMax(Integer.parseInt(((TextField) champsFormulaire.get(Vehicule.Champs.poidsMax)).getText()));
+        getModele().setPoidsMax(champsFormulaire.get(Vehicule.Champs.poidsMax).getValeurInt());
 
         // libelle
-        getModele().setLibelle(((TextField) champsFormulaire.get(Vehicule.Champs.libelle)).getText());
+        getModele().setLibelle(champsFormulaire.get(Vehicule.Champs.libelle).getValeur());
 
         // idProducteur
-        Producteur p = daoProducteur.findById(Integer.parseInt(((TextField) champsFormulaire
-                                                     .get(Vehicule.Champs.idProducteur)).getText()));
+        Producteur p = daoProducteur.findById(champsFormulaire.get(Vehicule.Champs.idProducteur).getValeurInt());
         getModele().setProducteur(p);
 
         Vehicule Vehicule = null;
@@ -147,5 +123,4 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         }
         return Vehicule;
     }
-    */
 }

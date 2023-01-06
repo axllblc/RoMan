@@ -161,12 +161,14 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
         producteur = daoP.findById(rs.getInt("idProducteur"));
 
         // Pour les objets "Calendar" ou "Duration"
-        Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        Calendar horaireDebut = null;
         if (rs.getTimestamp("horaireDebut") != null) {
+          horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
           horaireDebut.setTime(rs.getTimestamp("horaireDebut"));
         }
-        Calendar horaireFin = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        Calendar horaireFin = null;
         if (rs.getTimestamp("horaireFin") != null) {
+          horaireFin = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
           horaireFin.setTime(rs.getTimestamp("horaireFin"));
         }
         Duration estimationDuree = Duration.ZERO;
