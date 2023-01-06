@@ -3,6 +3,7 @@ package fr.roman.vues.accueil;
 import fr.roman.controleurs.accueil.CtrlAccueil;
 import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Utilisateur;
+import fr.roman.vues.VueIntegrable;
 import fr.roman.vues.composants.FabriqueIcone;
 import fr.roman.vues.composants.Icone;
 import java.util.HashMap;
@@ -134,7 +135,7 @@ public class VueAccueil {
    *
    * @param mapModuleVue Modules associés à la vue qui leur correspond.
    */
-  public void afficherModules(Map<ModuleApplication, VueOngletAccueil> mapModuleVue) {
+  public void afficherModules(Map<ModuleApplication, VueIntegrable> mapModuleVue) {
     for (ModuleApplication module : mapModuleVue.keySet()) {
       Tab onglet = new Tab(module.getTitre(), mapModuleVue.get(module).getNode());
       onglet.setTooltip(new Tooltip(module.getDescription()));

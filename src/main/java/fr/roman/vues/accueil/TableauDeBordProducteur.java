@@ -2,6 +2,7 @@ package fr.roman.vues.accueil;
 
 import fr.roman.controleurs.accueil.CtrlTabBordProducteur;
 import fr.roman.modeles.ModuleApplication;
+import fr.roman.vues.VueIntegrable;
 import fr.roman.vues.composants.FabriqueIcone;
 import fr.roman.vues.composants.Icone;
 import fr.roman.vues.tableaux.TableauCommandes;
@@ -21,7 +22,7 @@ import javafx.scene.layout.VBox;
  *
  * @author Axel Leblanc
  */
-public class TableauDeBordProducteur implements VueOngletAccueil {
+public class TableauDeBordProducteur implements VueIntegrable {
   /**
    * URL de la feuille de styles (CSS) du tableau de bord.
    */
