@@ -1,4 +1,4 @@
-package fr.roman.controleurs.carte;
+package fr.roman.controleurs.lieux;
 import com.google.gson.*;
 import fr.roman.modeles.Adresse;
 
