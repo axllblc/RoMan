@@ -6,14 +6,11 @@ import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
 import fr.roman.modeles.*;
 import fr.roman.vues.edition.VueEdition;
-import javafx.scene.Node;
-import javafx.scene.control.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import jfxtras.scene.control.CalendarTextField;
-import jfxtras.scene.control.CalendarTimeTextField;
 
 public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> {
 
@@ -48,25 +45,26 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     }
 
     /**
-     * Classe à implémenter qui construit les objets {@link Node} à mettre dans la vue,
+     * Classe à implémenter qui construit les objets {@link TypeChamp} à mettre dans la vue,
      *  c.-à-d. les champs du formulaire (préremplis le cas échéant)
      */
     @Override
     public void chargerChamps() {
-        Double valeurDouble;
+        double valeurDouble;
         int valeurInt;
+        boolean valeurBool;
 
         // idCommande
         TypeChamp idCommande = new TypeChamp("\\d*");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            idCommande.setValue(String.valueOf(getModele().getIdCommande()));
+            idCommande.setValeur(String.valueOf(getModele().getIdCommande()));
         }
         getChampsFormulaire().put(Commande.Champs.idCommande, idCommande);
 
         // libelle
         TypeChamp libelle = new TypeChamp(".{0,50}");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            libelle.setValue(getModele().getLibelle());
+            libelle.setValeur(getModele().getLibelle());
         }
         getChampsFormulaire().put(Commande.Champs.libelle, libelle);
 
@@ -80,40 +78,44 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         getChampsFormulaire().put(Commande.Champs.poids, poids);
 
         // horaireDebut
-        CalendarTimeTextField horaireDebut = new CalendarTimeTextField();
-        horaireDebut.setLocale(Locale.FRANCE);
-        horaireDebut.setMinuteStep(15);
-        horaireDebut.setDateFormat(new SimpleDateFormat("HH:mm"));
+        TypeChamp horaireDebut = new TypeChamp();
+        horaireDebut.setRegex("HH:mm");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             horaireDebut.setCalendar(getModele().getHoraireDebut());
         }
-        // getChampsFormulaire().put(Commande.Champs.horaireDebut, horaireDebut);
+        getChampsFormulaire().put(Commande.Champs.horaireDebut, horaireDebut);
 
         // horaireFin
-        CalendarTimeTextField horaireFin = new CalendarTimeTextField();
-        horaireFin.setLocale(Locale.FRANCE);
-        horaireFin.setMinuteStep(15);
-        horaireFin.setDateFormat(new SimpleDateFormat("HH:mm"));
+        TypeChamp horaireFin = new TypeChamp();
+        horaireFin.setRegex("HH:mm");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            horaireFin.setCalendar(getModele().getHoraireFin());
+            horaireFin.setCalendar(getModele().getHoraireDebut());
         }
-        // getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
+        getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
 
         // note
         TypeChamp note = new TypeChamp("");
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            note.setValue(getModele().getNote());
+            note.setValeur(getModele().getNote());
         }
         getChampsFormulaire().put(Commande.Champs.note, note);
 
         // defautLivraison
-        CheckBox defautLivraison = new CheckBox();
+        valeurBool = false;
         if(getTypeEdition() == TypeEdition.MODIFICATION){
-            defautLivraison.setSelected(getModele().isDefautLivraison());
+            valeurBool = (getModele().isDefautLivraison());
         }
-        // getChampsFormulaire().put(Commande.Champs.defautLivraison, defautLivraison);
+        TypeChamp defautLivraison = new TypeChamp(valeurBool);
+        getChampsFormulaire().put(Commande.Champs.defautLivraison, defautLivraison);
 
-        // dateInitiale
+        // TODO: dateInitiale
+        TypeChamp dateInitiale = new TypeChamp();
+        dateInitiale.setRegex("dd/MM/yyyy");
+        if(getTypeEdition() == TypeEdition.MODIFICATION){
+            dateInitiale.setCalendar(getModele().getHoraireDebut());
+        }
+        getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
+        /*
         CalendarTextField dateInitiale = new CalendarTextField();
         dateInitiale.autosize();
         dateInitiale.setLocale(Locale.FRANCE);
@@ -122,9 +124,9 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             dateInitiale.setCalendar(getModele().getDateInitiale());
         }
-        // getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
+        */
 
-        // dateLivraison
+        // TODO: dateLivraison
         CalendarTextField dateLivraison = new CalendarTextField();
         dateLivraison.setShowTime(true);
         dateLivraison.autosize();
@@ -142,7 +144,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
             valeurInt = getModele().getProducteur().getIdProducteur();
         }
         TypeChamp producteur = new TypeChamp(0,9999999,valeurInt);
-        getChampsFormulaire().put(Commande.Champs.poids, poids);
+        getChampsFormulaire().put(Commande.Champs.idProducteur, producteur);
 
         // client
         valeurInt = 0;
@@ -169,55 +171,50 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
      * Classe appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet Commande correspondant à ce qui a été ajouté dans la base de données
+    */
     @Override
     public Commande validerSaisie() throws Exception {
 
         // libelle
-        champsFormulaire = (Map<Commande.Champs, Node>) getVueEdition().getChamps();
-        getModele().setLibelle(((TextField) champsFormulaire.get(Commande.Champs.libelle)).getText());
+        getModele().setLibelle(getChampsFormulaire().get(Commande.Champs.libelle).getLibelle());
 
         // poids
-        getModele().setPoids(((Spinner<Double>) champsFormulaire
-                .get(Commande.Champs.poids)).getValue());
+        getModele().setPoids(getChampsFormulaire().get(Commande.Champs.poids).getValeurDouble());
 
         // horaireDebut
-        Calendar horaireDebut = ((CalendarTimeTextField) champsFormulaire
-                .get(Commande.Champs.horaireDebut)).getCalendar();
-        getModele().setHoraireDebut(horaireDebut);
+        getModele().setHoraireDebut(getChampsFormulaire().get(Commande.Champs.horaireDebut)
+                .getCalendar());
 
         // horaireFin
-        Calendar horaireFin = ((CalendarTimeTextField) champsFormulaire
-                .get(Commande.Champs.horaireFin)).getCalendar();
-        getModele().setHoraireFin(horaireFin);
+        getModele().setHoraireFin(getChampsFormulaire().get(Commande.Champs.horaireFin)
+                .getCalendar());
 
         // note
-        getModele().setNote(((TextField) champsFormulaire.get(Commande.Champs.note)).getText());
+        getModele().setNote(getChampsFormulaire().get(Commande.Champs.note).getValeur());
 
         // defautLivraison
-        getModele().setDefautLivraison(((CheckBox) champsFormulaire
-                .get(Commande.Champs.defautLivraison)).isSelected());
+        getModele().setDefautLivraison(getChampsFormulaire().get(Commande.Champs.defautLivraison)
+                .isValeurBool());
 
         // dateInitiale
-        Calendar dateInitiale = ((CalendarTextField) champsFormulaire
-                .get(Commande.Champs.dateInitiale)).getCalendar();
-        getModele().setDateInitiale(dateInitiale);
+        getModele().setDateInitiale(getChampsFormulaire().get(Commande.Champs.dateInitiale)
+                .getCalendar());
 
         // dateLivraison
-        Calendar calendar = ((CalendarTextField) champsFormulaire
-                .get(Commande.Champs.dateLivraison)).getCalendar();
-        getModele().setDateLivraison(calendar);
+        getModele().setDateLivraison(getChampsFormulaire().get(Commande.Champs.dateLivraison)
+                .getCalendar());
 
         // idProducteur
-        getModele().setProducteur(daoProducteur.findById(((Spinner<Integer>) champsFormulaire
-                        .get(Commande.Champs.idProducteur)).getValue()));
+        getModele().setProducteur(daoProducteur.findById(
+                getChampsFormulaire().get(Commande.Champs.idProducteur).getValeurInt()));
 
         // idClient
-        getModele().setClient(daoClient.findById(((Spinner<Integer>) champsFormulaire
-                .get(Commande.Champs.idClient)).getValue()));
+        getModele().setClient(daoClient.findById(
+                getChampsFormulaire().get(Commande.Champs.idClient).getValeurInt()));
 
         // idTournee
-        getModele().setTournee(daoTournee.findById(((Spinner<Integer>) champsFormulaire
-                .get(Commande.Champs.idTournee)).getValue()));
+        getModele().setTournee(daoTournee.findById(
+                getChampsFormulaire().get(Commande.Champs.idTournee).getValeurInt()));
 
         Commande commande = null;
         switch (getTypeEdition()){
@@ -229,5 +226,4 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         }
         return commande;
     }
-     */
 }

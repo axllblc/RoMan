@@ -5,7 +5,6 @@ import fr.roman.modeles.Modele;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
-import javafx.scene.Node;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,7 +33,7 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
      */
     private M modele;
     /**
-     * Carte des champs du formulaire de la vue (clé : nom d'un champ dans l'énum, valeur : un objet {@link Node}
+     * Carte des champs du formulaire de la vue (clé : nom d'un champ dans l'énum, valeur : un objet {@link TypeChamp}
      */
     Map<C, TypeChamp> champsFormulaire;
 
@@ -62,10 +61,11 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     }
 
     /**
-     * Classe à implémenter qui construit les objets {@link Node} à mettre dans la vue,
+     * Classe à implémenter qui construit les objets {@link TypeChamp} à mettre dans la vue,
      *  c.-à-d. les champs du formulaire (préremplis le cas échéant)
      */
     abstract void chargerChamps();
+    public abstract M validerSaisie() throws Exception;
 
     // TODO: accesChamps
     /**
@@ -93,7 +93,6 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
      */
     public void annulerSaisie() {
     }
-
     public TypeEdition getTypeEdition() {
         return typeEdition;
     }
