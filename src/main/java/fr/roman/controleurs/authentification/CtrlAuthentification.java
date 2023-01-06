@@ -46,12 +46,12 @@ public class CtrlAuthentification {
   public void verify() {
     this.nomUtilisateur = vueAuthentification.getNomUtilisateur();
     this.mdp = vueAuthentification.getPassword();
-    /*Utilisateur u = CtrlInscription.authentification(this.nomUtilisateur, this.mdp);
+    Utilisateur u = authentification(this.nomUtilisateur, this.mdp);
     if(u == null)
       this.vueAuthentification.erreurSaisie();
     else
-      appel accueil
-     */
+      //appel accueil
+
     this.vueAuthentification.erreurSaisie();
 
 
