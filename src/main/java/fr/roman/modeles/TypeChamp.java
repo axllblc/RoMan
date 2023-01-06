@@ -1,81 +1,164 @@
 package fr.roman.modeles;
 
+import java.util.Calendar;
+
 /**
  * Classe qui défini un type de champ avec des informations complémentaires.
  */
 public class TypeChamp {
   private String libelle;
-  private String valeur;
-  private String regex;
+  private String valeur = null;
+  private boolean valeurBool = false;
+  private String regex = null;
   private String placeholder;
   
-  private Double minDouble, maxDouble, initDouble;
-  private int minInt, maxInt, initInt;
-  
+  private double minDouble, maxDouble, initDouble, valeurDouble;
+  private int minInt, maxInt, initInt, valeurInt;
+  private Calendar calendar = null;
+
   // TEXTFIELD
   public TypeChamp(String regex) {
     this.libelle = "textField";
     setRegex(regex);
   }
-  
+
   // SPINNER
   public TypeChamp(Double min,Double max,Double valeurInitial) {
     this.libelle = "spinnerDouble";
-    this.minDouble = min;
-    this.maxDouble = max;
-    this.initDouble = valeurInitial;
-  
+    setMinDouble(min);
+    setMaxDouble(max);
+    setInitDouble(valeurInitial);
   }
+  
   public TypeChamp(int min,int max,int valeurInitial) {
     this.libelle = "spinnerInteger";
-    this.minInt = min;
-    this.maxInt = max;
-    this.initInt = valeurInitial;
+    setMinInt(min);
+    setMaxInt(max);
+    setInitInt(valeurInitial);
   }
   
-  // CALENDARTEXTFIELD
+  // CALENDARTIMETEXTFIELD
   public TypeChamp() {
-    this.libelle = "calendarTextField";
+    this.libelle = "calendarTimeTextField";
+  }
+
+  // CheckBox
+  public TypeChamp(boolean valeurBool) {
+    this.libelle = "checkBox";
+    this.valeurBool = valeurBool;
+  }
+
+  // GETTER SETTER
+  
+  public String getLibelle() {
+    return libelle;
   }
   
-  // GETTER SETTER
-  public void setValue(String valeur) {
+  public void setLibelle(String libelle) {
+    this.libelle = libelle;
+  }
+  
+  public String getValeur() {
+    return valeur;
+  }
+  
+  public void setValeur(String valeur) {
     this.valeur = valeur;
   }
-  public String getValue() {
-    return this.valeur;
+  
+  public boolean isValeurBool() {
+    return valeurBool;
   }
-  public String getLibelle() {
-    return this.libelle;
+  
+  public void setValeurBool(boolean valeurBool) {
+    this.valeurBool = valeurBool;
   }
+  
+  public String getRegex() {
+    return regex;
+  }
+  
   public void setRegex(String regex) {
     this.regex = regex;
   }
-  public String getRegex() {
-    return this.regex;
+  
+  public String getPlaceholder() {
+    return placeholder;
   }
+  
   public void setPlaceholder(String placeholder) {
     this.placeholder = placeholder;
   }
-  public String getPlaceholder() {
-    return this.placeholder;
+  
+  public double getMinDouble() {
+    return minDouble;
   }
-  public Double getMinDouble() {
-    return this.minDouble;
+  
+  public void setMinDouble(double minDouble) {
+    this.minDouble = minDouble;
   }
-  public Double getMaxDouble() {
-    return this.maxDouble;
+  
+  public double getMaxDouble() {
+    return maxDouble;
   }
-  public Double getInitDouble() {
-    return this.initDouble;
+  
+  public void setMaxDouble(double maxDouble) {
+    this.maxDouble = maxDouble;
   }
+  
+  public double getInitDouble() {
+    return initDouble;
+  }
+  
+  public void setInitDouble(double initDouble) {
+    this.initDouble = initDouble;
+  }
+  
+  public double getValeurDouble() {
+    return valeurDouble;
+  }
+  
+  public void setValeurDouble(double valeurDouble) {
+    this.valeurDouble = valeurDouble;
+  }
+  
   public int getMinInt() {
-    return this.minInt;
+    return minInt;
   }
+  
+  public void setMinInt(int minInt) {
+    this.minInt = minInt;
+  }
+  
   public int getMaxInt() {
-    return this.maxInt;
+    return maxInt;
   }
+  
+  public void setMaxInt(int maxInt) {
+    this.maxInt = maxInt;
+  }
+  
   public int getInitInt() {
-    return this.initInt;
+    return initInt;
+  }
+  
+  public void setInitInt(int initInt) {
+    this.initInt = initInt;
+  }
+  
+  public int getValeurInt() {
+    return valeurInt;
+  }
+  
+  public void setValeurInt(int valeurInt) {
+    this.valeurInt = valeurInt;
+  }
+  
+  public Calendar getCalendar() {
+    return calendar;
+  }
+  
+  public void setCalendar(Calendar calendar) {
+    this.calendar = calendar;
   }
 }

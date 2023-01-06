@@ -12,10 +12,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.CalendarTimeTextField;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -67,7 +68,7 @@ public class VueEdition {
     /**
      *
      */
-    private ArrayList<Node> composants;
+    private ArrayList<Node> composants = new ArrayList<>();
 
     /**
      * Construire la vue d'<i>édition</i>.
@@ -170,9 +171,13 @@ public class VueEdition {
                     // création d'un "spinner" de Integer.
                     spinnerInteger(t);
                     break;
-                case "calendarTextField":
+                case "calendarTimeTextField":
                     // création d'un "calendarTextField".
-                    calendarTextField();
+                    calendarTimeTextField(t);
+                    break;
+                case "checkBox":
+                    // création d'une "checkbox"
+                    checkBox(t);
                     break;
                 default:
                     throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
@@ -193,7 +198,7 @@ public class VueEdition {
             }));
         }
         if(typeEdition == TypeEdition.MODIFICATION){
-            resultat.setText(t.getValue());
+            resultat.setText(t.getValeur());
         }
         composants.add(resultat);
     }
@@ -232,7 +237,21 @@ public class VueEdition {
         composants.add(resultat);
     }
 
-    private void calendarTextField() {
-        composants.add(new CalendarTextField());
+    private void calendarTimeTextField(TypeChamp t) {
+        CalendarTimeTextField resultat = new CalendarTimeTextField();
+        resultat.setLocale(Locale.FRANCE);
+        resultat.setMinuteStep(15);
+        if(!(t.getRegex().isEmpty())){
+            resultat.setDateFormat(new SimpleDateFormat(t.getRegex()));
+        }
+        if(!(t.getCalendar().getAvailableCalendarTypes().isEmpty())){
+            resultat.setCalendar(t.getCalendar());
+        }
+        composants.add(resultat);
+    }
+    private void checkBox(TypeChamp t) {
+        CheckBox resultat = new CheckBox();
+        resultat.setSelected(t.isValeurBool());
+        composants.add(resultat);
     }
 }
