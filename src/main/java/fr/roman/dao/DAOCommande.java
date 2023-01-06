@@ -188,20 +188,24 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
         tournee = daoT.findById(rs.getInt("idTournee"));
 
         // Pour les objets "Calendar"
-        Calendar horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        Calendar horaireDebut = null;
         if (rs.getTimestamp("horaireDebut") != null) {
+          horaireDebut = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
           horaireDebut.setTime(rs.getTimestamp("horaireDebut"));
         }
-        Calendar horaireFin = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        Calendar horaireFin = null;
         if (rs.getTimestamp("horaireFin") != null) {
+          horaireFin = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
           horaireFin.setTime(rs.getTimestamp("horaireFin"));
         }
-        Calendar dateInitiale = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        Calendar dateInitiale = null;
         if (rs.getTimestamp("dateInitiale") != null) {
+          dateInitiale = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
           dateInitiale.setTime(rs.getTimestamp("dateInitiale"));
         }
-        Calendar dateLivraison = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+        Calendar dateLivraison = null;
         if (rs.getTimestamp("dateLivraison") != null) {
+          dateLivraison = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
           dateLivraison.setTime(rs.getTimestamp("dateLivraison"));
         }
 
