@@ -10,15 +10,21 @@ import javafx.stage.Stage;
  */
 public class RoMan extends Application {
   public static void main(String[] args) {
-    Application.launch(args);
-
+    launch(args);
   }
 
   @Override
-  public void start(Stage primaryStage) throws Exception {
-    VueAuthentification launcher = new VueAuthentification(primaryStage);
-    CtrlAuthentification ctrlAuthentification = new CtrlAuthentification(launcher);
-    launcher.setCtrl(ctrlAuthentification);
+  public void start(Stage primaryStage) {
+    try {
+      // Instanciation de la vue d'authentification et de son contrôleur
+      VueAuthentification vueAuthentification = new VueAuthentification(primaryStage);
+      CtrlAuthentification ctrlAuthentification = new CtrlAuthentification(vueAuthentification);
+      vueAuthentification.setCtrl(ctrlAuthentification);
+    } catch (Exception e) {
+      // En cas d'exception, une fenêtre d'erreur est affichée
+      RoManErreur.afficher(e);
+      e.printStackTrace();
+    }
   }
 
 }
