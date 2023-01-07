@@ -2,6 +2,7 @@ package fr.roman.controleurs.accueil;
 
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.recherche.CtrlRechercheCommande;
+import fr.roman.controleurs.recherche.CtrlRechercheTournee;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Producteur;
@@ -9,8 +10,11 @@ import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.VueIntegrable;
 import fr.roman.vues.accueil.VueAccueil;
 import fr.roman.vues.recherche.VueRechercheCommande;
+import fr.roman.vues.recherche.VueRechercheTournee;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+// Imports provisoires
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 
@@ -142,13 +146,9 @@ public class CtrlAccueil {
     mapModuleVue.put(ModuleApplication.COMMANDES, rechercheCommande);
 
     // Gestion des tournées
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.TOURNEES, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Tournées (à implémenter)");
-      }
-    });
+    VueRechercheTournee rechercheTournee = new VueRechercheTournee();
+    new CtrlRechercheTournee(producteur, rechercheTournee);
+    mapModuleVue.put(ModuleApplication.TOURNEES, rechercheTournee);
 
     // Gestion des véhicules
     // TODO à implémenter
