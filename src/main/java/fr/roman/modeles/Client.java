@@ -200,7 +200,7 @@ public class Client extends Modele {
 
     @Override
     public boolean isNullable() {
-      return false;
+      return this.nullable;
     }
   }
 }
