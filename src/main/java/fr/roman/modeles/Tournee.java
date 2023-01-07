@@ -75,7 +75,7 @@ public class Tournee extends Modele {
     this.horaireFin = horaireFin;
     this.estimationDuree = estimationDuree;
     this.note = note;
-    this.valide = valide;
+    this.valide = valide && (poidsTotal <= vehicule.getPoidsMax());
     this.producteur = producteur;
     this.vehicule = vehicule;
     this.nbCommandes = nbCommandes;
@@ -183,7 +183,8 @@ public class Tournee extends Modele {
   @Override
   public int hashCode() {
     return Objects.hash(
-        horaireDebut, horaireFin, estimationDuree, note, valide, producteur, vehicule, nbCommandes,poidsTotal
+        horaireDebut, horaireFin, estimationDuree, note, valide, producteur, vehicule,
+        nbCommandes, poidsTotal
     );
   }
 
