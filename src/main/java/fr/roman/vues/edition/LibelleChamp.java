@@ -1,4 +1,4 @@
-package fr.roman.modeles;
+package fr.roman.vues.edition;
 
 public enum LibelleChamp {
   TEXTFIELD, SPINNERDOUBLE, SPINNERINT, CALENDEARTIMETEXTFIELD, CALENDEARTEXTFIELD,CHECKBOX, DOUBLESPINNERDOUBLE

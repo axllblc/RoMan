@@ -4,7 +4,6 @@ import fr.roman.RoManErreur;
 import fr.roman.controleurs.edition.CtrlEdition;
 import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.modeles.ChampsModele;
-import fr.roman.modeles.TypeChamp;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -16,9 +15,7 @@ import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.CalendarTimeTextField;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Classe qui définit la vue pour les contrôleurs d'édition (ajout ou modification de métiers)
@@ -65,7 +62,8 @@ public class VueEdition {
      * Liste des champs du formulaire de la vue (clé : nom d'un champ dans l'énum,
      *                                           valeur : un objet {@link Node}.
      */
-    private final Map<String, Node> composants = new HashMap<>();
+    private final Map<String, Node> composants = new LinkedHashMap<>();
+    private Map<? extends ChampsModele, TypeChamp> signal = new LinkedHashMap<>();
 
     /**
      * Construire la vue d'<i>édition</i>.
@@ -82,7 +80,6 @@ public class VueEdition {
         btnRetour = new Button("Retour");
         structureEdition();
         // création des composants graphique
-        //signalCtrlEdition(signal);
     }
 
     /**
@@ -99,6 +96,8 @@ public class VueEdition {
         footer.add(btnRetour, 1, 0);
 
         btnValider.setOnAction((event) -> {
+            actualiser();
+            ctrl.setChampsFormulaire(this.signal);
             try {
                 ctrl.validerSaisie();
             } catch (Exception e) {
@@ -143,26 +142,28 @@ public class VueEdition {
      * @param signal des composants demandés par le contrôleur.
      */
     public void signalCtrlEdition(Map<? extends ChampsModele, TypeChamp> signal) {
+        signal.forEach((c,t)-> System.out.println(c+" : "+t));
+        this.signal = signal;
         signal.forEach((c,t) -> {
             switch (t.getLibelle()) {
                 case TEXTFIELD ->
                     // création d'un "textField".
-                        this.composants.put(c.toString(), textField(t));
+                    this.composants.put(c.toString(), textField(t));
                 case SPINNERDOUBLE ->
                     // création d'un "spinner" de Double.
-                        this.composants.put(c.toString(), spinnerDouble(t));
+                    this.composants.put(c.toString(), spinnerDouble(t));
                 case SPINNERINT ->
                     // création d'un "spinner" de Integer.
-                        this.composants.put(c.toString(), spinnerInteger(t));
+                    this.composants.put(c.toString(), spinnerInteger(t));
                 case CALENDEARTIMETEXTFIELD ->
                     // création d'un "calendarTimeTextField".
-                        this.composants.put(c.toString(), calendarTimeTextField(t));
+                    this.composants.put(c.toString(), calendarTimeTextField(t));
                 case CALENDEARTEXTFIELD ->
                     // création d'un "calendarTextField".
-                        this.composants.put(c.toString(), calendarTextField(t));
+                    this.composants.put(c.toString(), calendarTextField(t));
                 case CHECKBOX ->
                     // création d'une "checkbox"
-                        this.composants.put(c.toString(), checkBox(t));
+                    this.composants.put(c.toString(), checkBox(t));
                 default -> throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
             }
         });
@@ -172,7 +173,7 @@ public class VueEdition {
         TextField resultat = new TextField();
         resultat.setDisable(t.isDiseble());
         resultat.setDisable(true);
-        if(t.getRegex() == null) {
+        if(!t.getRegex().isEmpty()) {
             resultat.setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
                     return null;
@@ -193,7 +194,7 @@ public class VueEdition {
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
             .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getValeurDouble()));
-        if(t.getRegex() != null){
+        if(!t.getRegex().isEmpty()){
             resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
                     return null;
@@ -211,7 +212,7 @@ public class VueEdition {
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
             .IntegerSpinnerValueFactory(t.getMinInt(), t.getMaxInt(), t.getValeurInt()));
-        if(t.getRegex()!= null){
+        if(!t.getRegex().isEmpty()){
             resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
                     return null;
@@ -255,5 +256,33 @@ public class VueEdition {
         resultat.setDisable(t.isDiseble());
         resultat.setSelected(t.isValeurBool());
         return resultat;
+    }
+
+    public void actualiser() {
+        for (Map.Entry<? extends ChampsModele, TypeChamp> signal : this.signal.entrySet()) {
+            TypeChamp value = signal.getValue();
+            Node c = this.composants.get(String.valueOf(signal.getKey()));
+            if(c instanceof TextField){
+                if(!((TextField) c).getText().isEmpty()){
+                    value.setValeur(((TextField) c).getText());
+                }
+            } else if(c instanceof CalendarTextField){
+                if(!((CalendarTextField) c).getCalendar().getAvailableCalendarTypes().isEmpty()) {
+                    value.setCalendar(((CalendarTextField) c).getCalendar());
+                }
+            } else if(c instanceof CalendarTimeTextField){
+                if(!((CalendarTimeTextField) c).getCalendar().getAvailableCalendarTypes().isEmpty()){
+                    value.setCalendar(((CalendarTimeTextField) c).getCalendar());
+                }
+            } else if(c instanceof Spinner<?>){
+                if(((Spinner<?>) c).getValue() instanceof Integer){
+                    value.setValeurInt(((Spinner<Integer>) c).getValue());
+                } else if (((Spinner<?>) c).getValue() instanceof Double){
+                    value.setValeurDouble(((Spinner<Double>) c).getValue());
+                }
+            } else if(c instanceof CheckBox){
+                value.setValeurBool(((CheckBox) c).isIndeterminate());
+            }
+        }
     }
 }

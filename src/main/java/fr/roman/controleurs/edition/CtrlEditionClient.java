@@ -4,6 +4,8 @@ import fr.roman.RoManErreur;
 import fr.roman.dao.DAOAdresse;
 import fr.roman.dao.DAOClient;
 import fr.roman.modeles.*;
+import fr.roman.vues.edition.LibelleChamp;
+import fr.roman.vues.edition.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 
 public class CtrlEditionClient extends CtrlEdition<Client, Client.Champs> {

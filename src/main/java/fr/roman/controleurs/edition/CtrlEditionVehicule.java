@@ -5,6 +5,8 @@ import fr.roman.dao.DAOClient;
 import fr.roman.dao.DAOVehicule;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.modeles.*;
+import fr.roman.vues.edition.LibelleChamp;
+import fr.roman.vues.edition.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 import javafx.scene.Node;
 

@@ -1,5 +1,6 @@
-package fr.roman.modeles;
+package fr.roman.vues.edition;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -7,9 +8,31 @@ import java.util.Calendar;
  */
 public class TypeChamp {
   private LibelleChamp libelle;
-  private String valeur = null;
+  
+  @Override
+  public String toString() {
+    return "TypeChamp{" +
+            "libelle=" + libelle +
+            ", valeur='" + valeur + '\'' +
+            ", valeurBool=" + valeurBool +
+            ", disable=" + disable +
+            ", regex='" + regex + '\'' +
+            ", placeholder='" + placeholder + '\'' +
+            ", minDouble=" + minDouble +
+            ", maxDouble=" + maxDouble +
+            ", valeurDouble=" + valeurDouble +
+            ", initDoubleTab1x2=" + Arrays.toString(initDoubleTab1x2) +
+            ", valeurDoubleTab1x2=" + Arrays.toString(valeurDoubleTab1x2) +
+            ", minInt=" + minInt +
+            ", maxInt=" + maxInt +
+            ", valeurInt=" + valeurInt +
+            ", calendar=" + calendar +
+            '}';
+  }
+  
+  private String valeur = "";
   private boolean valeurBool, disable;
-  private String regex = null;
+  private String regex = "";
   private String placeholder;
   private double minDouble, maxDouble, valeurDouble;
   private double[] initDoubleTab1x2, valeurDoubleTab1x2;
@@ -21,13 +44,15 @@ public class TypeChamp {
   }
 
   // SPINNER
-  public void setSpinnerDouble(Double min,Double max,Double valeurInitial) {
+  public void setSpinnerDouble(double min,double max,double valeurInitial) {
+    System.err.println("min "+min+" max "+max+" valeurInitial "+valeurInitial);
     setMinDouble(min);
     setMaxDouble(max);
     setValeurDouble(valeurInitial);
   }
-  
+
   public void setSpinnerInt(int min,int max,int valeurInitial) {
+    System.err.println("min "+min+" max "+max+" valeurInitial "+valeurInitial);
     setMinInt(min);
     setMaxInt(max);
     setValeurInt(valeurInitial);

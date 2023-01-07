@@ -4,6 +4,8 @@ import fr.roman.RoManErreur;
 import fr.roman.dao.*;
 import fr.roman.modeles.*;
 import fr.roman.modeles.Adresse;
+import fr.roman.vues.edition.LibelleChamp;
+import fr.roman.vues.edition.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 
 public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {

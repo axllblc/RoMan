@@ -3,7 +3,7 @@ package fr.roman.controleurs.edition;
 import fr.roman.modeles.ChampsModele;
 import fr.roman.modeles.Modele;
 import fr.roman.modeles.Role;
-import fr.roman.modeles.TypeChamp;
+import fr.roman.vues.edition.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 
 import java.util.LinkedHashMap;
@@ -104,7 +104,11 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     public VueEdition getVueEdition() {
         return vueEdition;
     }
-
+    
+    public void setChampsFormulaire(Map<C, TypeChamp> champsFormulaire) {
+        this.champsFormulaire = champsFormulaire;
+    }
+    
     public M getModele() {
         return modele;
     }

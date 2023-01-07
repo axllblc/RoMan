@@ -6,6 +6,8 @@ import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
 import fr.roman.modeles.*;
+import fr.roman.vues.edition.LibelleChamp;
+import fr.roman.vues.edition.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 
 public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> {
@@ -164,9 +166,9 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     */
     @Override
     public Commande validerSaisie() throws Exception {
-
         // libelle
-        getModele().setLibelle(getChampsFormulaire().get(Commande.Champs.libelle).getValeur());
+        getModele().setLibelle(getChampsFormulaire().get((Commande.Champs.libelle))
+                .getValeur());
 
         // poids
         getModele().setPoids(getChampsFormulaire().get(Commande.Champs.poids).getValeurDouble());
