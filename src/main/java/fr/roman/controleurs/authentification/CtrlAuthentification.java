@@ -1,5 +1,6 @@
 package fr.roman.controleurs.authentification;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.accueil.CtrlAccueil;
 import fr.roman.controleurs.comptes.OutilsMotDePasse;
 import fr.roman.dao.DAOUtilisateur;
@@ -10,28 +11,16 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * Controlleur de la partie Authentification.
+ * Contrôleur de la partie Authentification.
  */
 public class CtrlAuthentification {
-
   /**
    * Instance de VueAuthentification.
    */
   private final VueAuthentification vueAuthentification;
 
   /**
-   * Nom de l'utilisateur à vérifier.
-   */
-  private String nomUtilisateur;
-
-  /**
-   * Mot de passe de l'utilisateur à verifier.
-   */
-  private String mdp;
-
-
-  /**
-   * Constructeur de la classe qui nours permettra de faire les traitements de la partie
+   * Constructeur de la classe qui nous permettra de faire les traitements de la partie
    * authentification et de gérer sa logique.
    *
    * @param vueAuthentification Instance de la vue authentification.
@@ -41,42 +30,52 @@ public class CtrlAuthentification {
   }
 
   /**
-   * Cette methode permet de verifier si l'utilisateur est un utilisateur valide :
-   * - Si il est valide on renvoie vers l'accueil
-   * - Si il ne l'est pas on affiche un message d'erreur .
+   * Verifier si l'utilisateur est un utilisateur valide.
+   *
+   * <ul>
+   *   <li>S'il est valide on renvoie vers l'accueil</li>
+   *   <li>S'il ne l'est pas on affiche un message d'erreur</li>
+   * </ul>
    */
   public void verify() {
-    this.nomUtilisateur = vueAuthentification.getNomUtilisateur();
-    this.mdp = vueAuthentification.getPassword();
-    Utilisateur u = authentification(this.nomUtilisateur, this.mdp);
+    // Récupération du nom d'utilisateur et du mot de passe saisis dans la vue
+    String nomUtilisateur = vueAuthentification.getNomUtilisateur();
+    String mdp = vueAuthentification.getPassword();
+
+    Utilisateur u = authentification(nomUtilisateur, mdp);
+
     if (u == null) {
       this.vueAuthentification.erreurSaisie();
     } else {
-      System.out.println("On appel accueil");
+      // Instanciation et affichage de l'accueil
       VueAccueil vueAccueil = new VueAccueil();
-      CtrlAccueil ctrlAccueil = new CtrlAccueil(u, vueAccueil);
+      new CtrlAccueil(u, vueAccueil);
       vueAuthentification.close();
       vueAccueil.show();
     }
-
-
-
   }
 
   /**
+   * Authentifier l'utilisateur.
    *
    * @param nomUtilisateur Le nom d'utilisateur
    * @param mdp Le mot de passe renseigné (non chiffré)
    * @return Un objet utilisateur correspondant au nom d'utilisateur.
    *         Renvoie null si le nom d'utilisateur et/ou le mot de passe est incorrect.
    */
-  public Utilisateur authentification(String nomUtilisateur, String mdp) {
+  public static Utilisateur authentification(String nomUtilisateur, String mdp) {
     try {
       DAOUtilisateur daoU = new DAOUtilisateur();
       Utilisateur u = daoU.findByNomUtilisateur(nomUtilisateur);
-      if (u != null){ // Si le nom d'utilisateur existe
-        // Note : on utilise Base64 pour convertir le mot de passe (chaine de caractère) en tableau de bits
-        if (Arrays.equals(OutilsMotDePasse.chiffrerMDP(mdp, u.getSel()) , Base64.getDecoder().decode(u.getMdp()))){
+
+      if (u != null) {
+        // Si le nom d'utilisateur existe
+        /* Note : on utilise Base64 pour convertir le mot de passe (chaine de caractère) en tableau
+           d'octets */
+        if (Arrays.equals(
+            OutilsMotDePasse.chiffrerMDP(mdp, u.getSel()),
+            Base64.getDecoder().decode(u.getMdp()))
+            ) {
           // Et si le mot de passe est correct, on retourne l'objet Utilisateur
           return u;
         }
@@ -85,6 +84,8 @@ public class CtrlAuthentification {
       return null;
     } catch (Exception e) {
       // En cas d'erreur pour le processus d'authentification, on ne renvoie rien
+      RoManErreur.afficher(e);
+      e.printStackTrace();
       return null;
     }
   }
