@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -77,9 +79,14 @@ public abstract class VueMetier {
   private boolean validationIsDisable;
 
   /**
-   * Stage de la vue
+   * Stage de la vue.
    */
   private final Stage stage;
+
+  /**
+   * Panneau d'introduction.
+   */
+  private final VBox introductionBox;
 
 
   /**
@@ -97,10 +104,11 @@ public abstract class VueMetier {
     vbox = new VBox();
     validationBox = new HBox();
     rootVbox = new VBox();
+    introductionBox = new VBox();
     isValidationAdd = false;
     validationIsDisable = true;
     scene = new Scene(rootVbox);
-    rootVbox.getChildren().addAll(vbox, hbox);
+    rootVbox.getChildren().addAll(introductionBox, vbox, hbox);
     stage = new Stage();
 
   }
@@ -110,24 +118,31 @@ public abstract class VueMetier {
    *
    * @param labels tableau de label qui contiendra tout les lables à ajouter à la scène.
    */
-  public void structure(ArrayList<Label> labels) {
+  public void structure(ArrayList<Label> labels, Label introduction) {
 
+    introductionBox.getChildren().add(introduction);
     // (int numLabel = 0; numLabel  < labels.length; numLabel++)
     for (Label label : labels) {
       vbox.getChildren().add(label);
+      label.setFont(new Font("Arial", 30));
     }
     hbox.getChildren().add(btnModifier);
     hbox.getChildren().add(btnSupprimer);
 
-    // Gestion espacements + alignement dans la box
-    vbox.setSpacing(5);
+    // Gestion espacements + alignement des éléments
+    introduction.setFont(new Font("Arial", 40));
+    introductionBox.setAlignment(Pos.TOP_CENTER);
+
+    vbox.setSpacing(20);
     Insets padding = new Insets(20);
     vbox.setPadding(padding);
     vbox.setAlignment(Pos.CENTER_LEFT);
 
-    hbox.setSpacing(5);
+    hbox.setSpacing(40);
     hbox.setPadding(padding);
     hbox.setAlignment(Pos.CENTER);
+
+    rootVbox.setAlignment(Pos.CENTER);
 
     validation.setPadding(padding);
     validation.setAlignment(Pos.CENTER);
@@ -136,11 +151,18 @@ public abstract class VueMetier {
     validationBox.setPadding(padding);
     validationBox.setAlignment(Pos.CENTER);
 
+    btnSupprimer.setMinWidth(100);
+    btnSupprimer.setMinHeight(30);
+
+    btnModifier.setMinWidth(100);
+    btnModifier.setMinHeight(30);
+
     // Gestion scène
     stage.setScene(scene);
-    stage.sizeToScene();
-    stage.setResizable(false);
     stage.setTitle("RoMan");
+    stage.setMinWidth(1024);
+    stage.setMinHeight(660);
+
 
     // Affichage scène
     stage.show();
@@ -152,7 +174,6 @@ public abstract class VueMetier {
         rootVbox.getChildren().addAll(validation, validationBox);
         validation.setDisable(true);
         isValidationAdd = true;
-        stage.sizeToScene();
       }
 
       if (validationIsDisable) {
@@ -166,7 +187,6 @@ public abstract class VueMetier {
         validationBox.setDisable(true);
         validation.setDisable(true);
         validationIsDisable = true;
-        stage.sizeToScene();
       }
     });
 

@@ -43,12 +43,12 @@ public class VueVehicule extends VueMetier {
    */
   private final Label producteur;
 
+  /**
+   * Label introduction Vehicule.
+   */
+  private final Label introduction;
 
-  /* @param idVehicule L'identifiant du véhicule
-      * @param immatriculation L'immatriculation du véhicule
-      * @param poidsMax Le poids maximal de chargement du véhicule (en kg)
-   * @param libelle Le libellé du véhicule.
-   * @param producteur Le producteur propriétaire du véhicule.*/
+
 
   /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
@@ -61,6 +61,7 @@ public class VueVehicule extends VueMetier {
     libelle = new Label("Libellé : " + vehicule.getLibelle());
     producteur = new Label("Producteur : " + vehicule.getProducteur().getUtilisateur().getNom()
         + vehicule.getProducteur().getUtilisateur().getPrenom());
+    introduction = new Label("Information du " + vehicule.getLibelle());
 
     labels = new ArrayList<>();
 
@@ -69,7 +70,7 @@ public class VueVehicule extends VueMetier {
     labels.add(libelle);
     labels.add(producteur);
 
-    structure(labels);
+    structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
       ctrl.removeVehicule(vehicule);

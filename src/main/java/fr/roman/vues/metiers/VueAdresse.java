@@ -57,6 +57,11 @@ public class VueAdresse extends VueMetier {
   private final ArrayList<Label> labels;
 
   /**
+   * Label introduction adresse.
+   */
+  private final Label introduction;
+
+  /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object adresse.
    */
@@ -67,6 +72,7 @@ public class VueAdresse extends VueMetier {
     complementNumero = new Label("Complément numéro : " + adresse.getComplementNumero());
     codePostal = new Label("Code postal : " + String.valueOf(adresse.getCodePostal()));
     ville = new Label("Ville : " + adresse.getVille());
+    introduction = new Label("Informations adresse : " + adresse.getLibelle());
 
     labels = new ArrayList<>();
 
@@ -78,7 +84,7 @@ public class VueAdresse extends VueMetier {
     labels.add(ville);
 
 
-    structure(labels);
+    structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
       ctrl.removeAdresse(adresse);

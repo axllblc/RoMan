@@ -59,6 +59,11 @@ public class VueTournee extends VueMetier {
   private final Label vehicule;
 
   /**
+   * Label introduction tournée.
+   */
+  private final Label introduction;
+
+  /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object tournee.
    */
@@ -76,6 +81,9 @@ public class VueTournee extends VueMetier {
     producteur = new Label("Producteur : " + tournee.getProducteur().getUtilisateur().getNom()
     + tournee.getProducteur().getUtilisateur().getPrenom());
     vehicule = new Label("Vehicule : " + tournee.getVehicule());
+    introduction = new Label("Informations de la tournée de : "
+        + tournee.getProducteur().getUtilisateur().getNom() + " "
+        + tournee.getProducteur().getUtilisateur().getPrenom());
 
     labels = new ArrayList<>();
 
@@ -87,7 +95,7 @@ public class VueTournee extends VueMetier {
     labels.add(producteur);
     labels.add(vehicule);
 
-    structure(labels);
+    structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
       ctrl.removeTournee(tournee);

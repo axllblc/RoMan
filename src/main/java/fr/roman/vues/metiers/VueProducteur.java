@@ -52,11 +52,11 @@ public class VueProducteur extends VueMetier {
    */
   private final Label email;
 
-  /* @param idProducteur L'identifiant du producteur dans la base.
-      * @param siret Le SIRET du producteur.
-   * @param tel Le numéro de téléphone du producteur.
-   * @param adresse L'adresse du producteur.
-      * @param utilisateur L'utilisateur associé au producteur.*/
+  /**
+   * Label introduction producteur
+   */
+  private final Label introduction;
+
 
   /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
@@ -70,6 +70,9 @@ public class VueProducteur extends VueMetier {
     nom = new Label("Nom : " + producteur.getUtilisateur().getNom());
     prenom = new Label("Prenom : " + producteur.getUtilisateur().getPrenom());
     email = new Label("E-mail : " + producteur.getUtilisateur().getMail());
+    introduction = new Label("Informations de : " + producteur.getUtilisateur().getNom() + " "
+        + producteur.getUtilisateur().getPrenom());
+
 
     labels = new ArrayList<>();
 
@@ -80,7 +83,7 @@ public class VueProducteur extends VueMetier {
     labels.add(prenom);
     labels.add(email);
 
-    structure(labels);
+    structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
       ctrl.removeProducteur(producteur);

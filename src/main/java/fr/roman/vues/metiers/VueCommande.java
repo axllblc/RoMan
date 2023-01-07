@@ -64,6 +64,11 @@ public class VueCommande extends VueMetier {
    */
   private final ArrayList<Label> labels;
 
+  /**
+   * Label introduction commande.
+   */
+  private final Label introduction;
+
 
   /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
@@ -86,6 +91,7 @@ public class VueCommande extends VueMetier {
         + commande.getProducteur().getUtilisateur().getPrenom());
     client = new Label("Client : " + commande.getClient().getNom()
         + commande.getClient().getPrenom());
+    introduction = new Label("Information commmane : "  + commande.getLibelle());
 
     labels = new ArrayList<>();
 
@@ -98,7 +104,7 @@ public class VueCommande extends VueMetier {
     labels.add(producteur);
     labels.add(client);
 
-    structure(labels);
+    structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
       ctrl.removeCommande(commande);

@@ -47,6 +47,11 @@ public class VueClient extends VueMetier {
    */
   private final ArrayList<Label> labels;
 
+  /**
+   * Label introduction client.
+   */
+  private final Label introduction;
+
 
   /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
@@ -58,6 +63,7 @@ public class VueClient extends VueMetier {
     telephone = new Label("Téléphone : " + client.getTel());
     email = new Label("E-mail : " + client.getMail());
     adresse = new Label("Adresse : " + client.getAdresse().getLibelle());
+    introduction = new Label("Informations de : " + client.getNom() + " " + client.getPrenom());
 
     labels = new ArrayList<>();
 
@@ -68,7 +74,9 @@ public class VueClient extends VueMetier {
     labels.add(adresse);
 
 
-    structure(labels);
+
+
+    structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
       ctrl.removeClient(client);
