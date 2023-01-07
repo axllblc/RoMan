@@ -171,7 +171,7 @@ public class VueEdition {
 
     private Node textField(TypeChamp t) {
         TextField resultat = new TextField();
-        resultat.setDisable(!t.isDiseble());
+        resultat.setDisable(t.isDiseble());
         if(!t.getRegex().isEmpty()) {
             resultat.setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
