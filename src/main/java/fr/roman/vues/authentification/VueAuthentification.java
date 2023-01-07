@@ -60,6 +60,11 @@ public class VueAuthentification {
    */
   private boolean erreurIdAdd;
 
+  /**
+   * Stage auhentification
+   */
+  private final Stage stageAuthentification;
+
 
   /**
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
@@ -77,8 +82,9 @@ public class VueAuthentification {
     vbox = new VBox();
     scene = new Scene(vbox);
     erreurIdAdd = false;
+    stageAuthentification = stage;
 
-    stuctureAuthentification(stage);
+    stuctureAuthentification(stageAuthentification);
   }
 
   /**
@@ -162,6 +168,11 @@ public class VueAuthentification {
     }
     passwordField.setText("");
 
+
+  }
+
+  public void close() {
+    stageAuthentification.close();
 
   }
 

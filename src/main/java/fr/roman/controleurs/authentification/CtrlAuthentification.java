@@ -1,8 +1,10 @@
 package fr.roman.controleurs.authentification;
 
+import fr.roman.controleurs.accueil.CtrlAccueil;
 import fr.roman.controleurs.comptes.OutilsMotDePasse;
 import fr.roman.dao.DAOUtilisateur;
 import fr.roman.modeles.Utilisateur;
+import fr.roman.vues.accueil.VueAccueil;
 import fr.roman.vues.authentification.VueAuthentification;
 import java.util.Arrays;
 import java.util.Base64;
@@ -47,12 +49,16 @@ public class CtrlAuthentification {
     this.nomUtilisateur = vueAuthentification.getNomUtilisateur();
     this.mdp = vueAuthentification.getPassword();
     Utilisateur u = authentification(this.nomUtilisateur, this.mdp);
-    if(u == null)
+    if (u == null) {
       this.vueAuthentification.erreurSaisie();
-    else
-      //appel accueil
+    } else {
+      System.out.println("On appel accueil");
+      VueAccueil vueAccueil = new VueAccueil();
+      CtrlAccueil ctrlAccueil = new CtrlAccueil(u, vueAccueil);
+      vueAuthentification.close();
+      vueAccueil.show();
+    }
 
-    this.vueAuthentification.erreurSaisie();
 
 
   }
