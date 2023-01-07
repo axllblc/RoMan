@@ -109,6 +109,7 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
         }
         TypeChamp codePostal = new TypeChamp(LibelleChamp.SPINNERINT);
         codePostal.setPlaceholder("en kg");
+        codePostal.setSpinnerInt(0,99999, 0);
         codePostal.setValeurInt(valeurInt);
         getChampsFormulaire().put(Adresse.Champs.codePostal, codePostal);
 
