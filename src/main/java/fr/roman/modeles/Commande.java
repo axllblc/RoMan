@@ -376,7 +376,7 @@ public class Commande extends Modele {
 
     @Override
     public boolean isNullable() {
-      return false;
+      return this.nullable;
     }
   }
 }
