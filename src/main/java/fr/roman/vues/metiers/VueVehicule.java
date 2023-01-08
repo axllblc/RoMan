@@ -58,8 +58,8 @@ public class VueVehicule extends VueMetier {
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object vehicule.
    */
-  public VueVehicule(Vehicule vehicule) {
-    super(new Utilisateur());
+  public VueVehicule(Vehicule vehicule, Utilisateur utilisateur) {
+    super(utilisateur);
 
     immatriculation = new Label("Immatriculation : " + vehicule.getImmatriculation());
     poidsMax = new Label("Poids Max : " + vehicule.getPoidsMax());
@@ -89,7 +89,7 @@ public class VueVehicule extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(vehicule);
+        ctrl.modification(vehicule, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

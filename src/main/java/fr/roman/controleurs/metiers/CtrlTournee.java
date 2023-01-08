@@ -41,9 +41,9 @@ public class CtrlTournee {
     daoTournee.delete(tournee.getIdTournee());
   }
 
-  public void modification(Tournee tournee) throws Exception {
+  public void modification(Tournee tournee, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    ctrlEditionTournee ctrl = new ctrlEditionTournee(tournee, vue, TypeEdition.MODIFICATION, Role.PRODUCTEUR);
+    ctrlEditionTournee ctrl = new ctrlEditionTournee(tournee, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

@@ -68,8 +68,8 @@ public class VueAdresse extends VueMetier {
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object adresse.
    */
-  public VueAdresse(Adresse adresse) {
-    super(new Utilisateur());
+  public VueAdresse(Adresse adresse, Utilisateur utilisateur) {
+    super(utilisateur);
     libelle = new Label("Libellé : " + adresse.getLibelle());
     complementAdresse = new Label("Complément d'adresse : " + adresse.getComplementAdresse());
     voie = new Label("Voie : " + adresse.getVoie());
@@ -102,7 +102,7 @@ public class VueAdresse extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(adresse);
+        ctrl.modification(adresse, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

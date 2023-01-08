@@ -65,8 +65,8 @@ public class VueProducteur extends VueMetier {
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object producteur.
    */
-  public VueProducteur(Producteur producteur) {
-    super(new Utilisateur());
+  public VueProducteur(Producteur producteur, Utilisateur utilisateur) {
+    super(utilisateur);
     siret = new Label("Siret : " + producteur.getSiret());
     telephone = new Label("Téléphone : " + producteur.getTel());
     adresse = new Label("Adresse : " + producteur.getAdresse().getLibelle());
@@ -100,7 +100,7 @@ public class VueProducteur extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(producteur);
+        ctrl.modification(producteur, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

@@ -70,8 +70,8 @@ public class VueTournee extends VueMetier {
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object tournee.
    */
-  public VueTournee(Tournee tournee) {
-    super(new Utilisateur());
+  public VueTournee(Tournee tournee, Utilisateur utilisateur) {
+    super(utilisateur);
     if (tournee.isValide()) {
       valide = new Label("La tournée est valide");
     } else {
@@ -112,7 +112,7 @@ public class VueTournee extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(tournee);
+        ctrl.modification(tournee, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

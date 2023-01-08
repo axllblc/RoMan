@@ -39,9 +39,9 @@ public class CtrlProducteur {
    daoProducteur.delete(producteur.getIdProducteur());
   }
 
-  public void modification(Producteur producteur) throws Exception {
+  public void modification(Producteur producteur, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionProducteur ctrl = new CtrlEditionProducteur(producteur, vue, TypeEdition.MODIFICATION, Role.PRODUCTEUR);
+    CtrlEditionProducteur ctrl = new CtrlEditionProducteur(producteur, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

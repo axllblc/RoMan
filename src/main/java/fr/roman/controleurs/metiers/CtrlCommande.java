@@ -38,9 +38,9 @@ public class CtrlCommande {
     daoCommande.delete(commande.getIdCommande());
   }
 
-  public void modification(Commande commande) throws Exception {
+  public void modification(Commande commande, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionCommande ctrl = new CtrlEditionCommande(commande, vue, TypeEdition.MODIFICATION, Role.PRODUCTEUR);
+    CtrlEditionCommande ctrl = new CtrlEditionCommande(commande, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

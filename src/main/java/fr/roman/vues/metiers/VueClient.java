@@ -55,8 +55,8 @@ public class VueClient extends VueMetier {
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object client.
    */
-  public VueClient(Client client) {
-    super(new Utilisateur());
+  public VueClient(Client client, Utilisateur utilisateur) {
+    super(utilisateur);
     nom = new Label("Nom : " + client.getNom());
     telephone = new Label("Téléphone : " + client.getTel());
     email = new Label("E-mail : " + client.getEmail());
@@ -87,7 +87,7 @@ public class VueClient extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(client);
+        ctrl.modification(client, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

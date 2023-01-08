@@ -77,8 +77,8 @@ public class VueCommande extends VueMetier {
    * Constructeur de la classe elle permettra de mettre en place tout les éléments
    * graphique de l'object commande.
    */
-  public VueCommande(Commande commande) {
-    super(new Utilisateur());
+  public VueCommande(Commande commande, Utilisateur utilisateur) {
+    super(utilisateur);
     if (commande.isDefautLivraison()) {
       livraison = new Label("Livraison n'a pas été effectuée");
     } else {
@@ -120,7 +120,7 @@ public class VueCommande extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(commande);
+        ctrl.modification(commande, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

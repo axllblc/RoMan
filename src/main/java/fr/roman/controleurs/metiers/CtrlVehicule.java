@@ -5,6 +5,7 @@ import fr.roman.controleurs.edition.CtrlEditionVehicule;
 import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Role;
+import fr.roman.modeles.Utilisateur;
 import fr.roman.modeles.Vehicule;
 import fr.roman.vues.edition.VueEdition;
 import fr.roman.vues.metiers.VueAdresse;
@@ -40,9 +41,9 @@ public class CtrlVehicule {
     daoVehicule.delete(vehicule.getIdVehicule());
   }
 
-  public void modification(Vehicule vehicule) throws Exception {
+  public void modification(Vehicule vehicule, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionVehicule ctrl = new CtrlEditionVehicule(vehicule, vue, TypeEdition.MODIFICATION, Role.PRODUCTEUR);
+    CtrlEditionVehicule ctrl = new CtrlEditionVehicule(vehicule, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

@@ -40,9 +40,9 @@ public class CtrlAdresse {
     daoAdresse.delete(adresse.getIdAdresse());
   }
 
-  public void modification(Adresse adresse) throws Exception {
+  public void modification(Adresse adresse, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionAdresse ctrl = new CtrlEditionAdresse(adresse, vue, TypeEdition.MODIFICATION, Role.PRODUCTEUR);
+    CtrlEditionAdresse ctrl = new CtrlEditionAdresse(adresse, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

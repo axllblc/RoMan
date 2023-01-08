@@ -42,9 +42,9 @@ public class CtrlClient {
     daoClient.delete(client.getIdClient());
   }
 
-  public void modification(Client client) throws Exception {
+  public void modification(Client client, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionClient ctrl = new CtrlEditionClient(client, vue, TypeEdition.MODIFICATION, Role.PRODUCTEUR);
+    CtrlEditionClient ctrl = new CtrlEditionClient(client, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }
