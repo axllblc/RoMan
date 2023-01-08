@@ -76,7 +76,7 @@ public class VueTournee extends VueMetier {
     }
     horaireDebut = new Label("Horaire Début : " + tournee.getHoraireDebut());
     horaireFin = new Label("Horaire Fin : " + tournee.getHoraireFin());
-    dureeEstimee = new Label("Durée estimée : " + tournee.getDureeEstimee());
+    dureeEstimee = new Label("Durée estimée : " + tournee.getEstimationDuree());
     notes = new Label("Notes : " + tournee.getNote());
     producteur = new Label("Producteur : " + tournee.getProducteur().getUtilisateur().getNom()
     + tournee.getProducteur().getUtilisateur().getPrenom());

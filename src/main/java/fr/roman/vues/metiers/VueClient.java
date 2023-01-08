@@ -23,11 +23,6 @@ public class VueClient extends VueMetier {
   private final Label nom;
 
   /**
-   * Prénom du client.
-   */
-  private final Label prenom;
-
-  /**
    * Numéro de téléphone du client.
    */
   private final Label telephone;
@@ -59,16 +54,14 @@ public class VueClient extends VueMetier {
    */
   public VueClient(Client client) {
     nom = new Label("Nom : " + client.getNom());
-    prenom = new Label("Prénom : " + client.getPrenom());
     telephone = new Label("Téléphone : " + client.getTel());
-    email = new Label("E-mail : " + client.getMail());
+    email = new Label("E-mail : " + client.getEmail());
     adresse = new Label("Adresse : " + client.getAdresse().getLibelle());
-    introduction = new Label("Informations de : " + client.getNom() + " " + client.getPrenom());
+    introduction = new Label("Informations de : " + client.getNom());
 
     labels = new ArrayList<>();
 
     labels.add(nom);
-    labels.add(prenom);
     labels.add(telephone);
     labels.add(email);
     labels.add(adresse);

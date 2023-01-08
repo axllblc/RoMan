@@ -69,7 +69,7 @@ public class VueProducteur extends VueMetier {
     adresse = new Label("Adresse : " + producteur.getAdresse().getLibelle());
     nom = new Label("Nom : " + producteur.getUtilisateur().getNom());
     prenom = new Label("Prenom : " + producteur.getUtilisateur().getPrenom());
-    email = new Label("E-mail : " + producteur.getUtilisateur().getMail());
+    email = new Label("E-mail : " + producteur.getUtilisateur().getEmail());
     introduction = new Label("Informations de : " + producteur.getUtilisateur().getNom() + " "
         + producteur.getUtilisateur().getPrenom());
 

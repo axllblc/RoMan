@@ -76,7 +76,7 @@ public class VueCommande extends VueMetier {
    */
   public VueCommande(Commande commande) {
 
-    if (commande.isDefaultLivraison()) {
+    if (commande.isDefautLivraison()) {
       livraison = new Label("Livraison n'a pas été effectuée");
     } else {
       livraison = new Label("Date Livraison : " + commande.getDateLivraison());
@@ -89,8 +89,7 @@ public class VueCommande extends VueMetier {
     notes = new Label("Notes : " + commande.getNote());
     producteur = new Label("Producteur : " + commande.getProducteur().getUtilisateur().getNom()
         + commande.getProducteur().getUtilisateur().getPrenom());
-    client = new Label("Client : " + commande.getClient().getNom()
-        + commande.getClient().getPrenom());
+    client = new Label("Client : " + commande.getClient().getNom());
     introduction = new Label("Information commmane : "  + commande.getLibelle());
 
     labels = new ArrayList<>();
