@@ -137,6 +137,7 @@ public abstract class Tableau<T extends Modele> {
       // Sinon, ajouter objetA à la fin de contenu
       contenu.add(objetA);
     }
+    tableau.sort();
   }
 
   /**
@@ -163,6 +164,8 @@ public abstract class Tableau<T extends Modele> {
 
     // Retrait de l'objet ayant l'identifiant récupéré précédemment
     contenu.removeIf(objetB -> objetB.getId() == id);
+
+    tableau.sort();
   }
 
   /**
