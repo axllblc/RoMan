@@ -4,6 +4,7 @@ import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlCommande;
 import fr.roman.modeles.Commande;
 import fr.roman.modeles.Tournee;
+import fr.roman.modeles.Utilisateur;
 import javafx.scene.control.Label;
 
 import java.sql.SQLException;
@@ -77,7 +78,7 @@ public class VueCommande extends VueMetier {
    * graphique de l'object commande.
    */
   public VueCommande(Commande commande) {
-
+    super(new Utilisateur());
     if (commande.isDefautLivraison()) {
       livraison = new Label("Livraison n'a pas été effectuée");
     } else {
@@ -113,6 +114,7 @@ public class VueCommande extends VueMetier {
       } catch (SQLException e) {
         RoManErreur.afficher(e);
       }
+      redirectionAccueil();
     });
 
 

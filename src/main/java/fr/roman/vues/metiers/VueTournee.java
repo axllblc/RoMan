@@ -3,6 +3,7 @@ package fr.roman.vues.metiers;
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlTournee;
 import fr.roman.modeles.Tournee;
+import fr.roman.modeles.Utilisateur;
 import javafx.scene.control.Label;
 
 import java.sql.SQLException;
@@ -70,7 +71,7 @@ public class VueTournee extends VueMetier {
    * graphique de l'object tournee.
    */
   public VueTournee(Tournee tournee) {
-
+    super(new Utilisateur());
     if (tournee.isValide()) {
       valide = new Label("La tournée est valide");
     } else {
@@ -105,6 +106,7 @@ public class VueTournee extends VueMetier {
       } catch (SQLException e) {
         RoManErreur.afficher(e);
       }
+      redirectionAccueil();
     });
   }
 

@@ -3,6 +3,7 @@ package fr.roman.vues.metiers;
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlClient;
 import fr.roman.modeles.Client;
+import fr.roman.modeles.Utilisateur;
 import javafx.scene.control.Label;
 
 import java.sql.SQLException;
@@ -55,6 +56,7 @@ public class VueClient extends VueMetier {
    * graphique de l'object client.
    */
   public VueClient(Client client) {
+    super(new Utilisateur());
     nom = new Label("Nom : " + client.getNom());
     telephone = new Label("Téléphone : " + client.getTel());
     email = new Label("E-mail : " + client.getEmail());
@@ -79,6 +81,7 @@ public class VueClient extends VueMetier {
       } catch (SQLException e) {
         RoManErreur.afficher(e);
       }
+      redirectionAccueil();
     });
   }
 

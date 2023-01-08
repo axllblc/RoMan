@@ -3,6 +3,7 @@ package fr.roman.vues.metiers;
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlAdresse;
 import fr.roman.modeles.Adresse;
+import fr.roman.modeles.Utilisateur;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -68,6 +69,7 @@ public class VueAdresse extends VueMetier {
    * graphique de l'object adresse.
    */
   public VueAdresse(Adresse adresse) {
+    super(new Utilisateur());
     libelle = new Label("Libellé : " + adresse.getLibelle());
     complementAdresse = new Label("Complément d'adresse : " + adresse.getComplementAdresse());
     voie = new Label("Voie : " + adresse.getVoie());
@@ -94,6 +96,7 @@ public class VueAdresse extends VueMetier {
       } catch (SQLException e) {
         RoManErreur.afficher(e);
       }
+      redirectionAccueil();
     });
   }
 

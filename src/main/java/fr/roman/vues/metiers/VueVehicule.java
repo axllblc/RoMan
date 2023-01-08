@@ -2,6 +2,7 @@ package fr.roman.vues.metiers;
 
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlVehicule;
+import fr.roman.modeles.Utilisateur;
 import fr.roman.modeles.Vehicule;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -57,6 +58,7 @@ public class VueVehicule extends VueMetier {
    * graphique de l'object vehicule.
    */
   public VueVehicule(Vehicule vehicule) {
+    super(new Utilisateur());
 
     immatriculation = new Label("Immatriculation : " + vehicule.getImmatriculation());
     poidsMax = new Label("Poids Max : " + vehicule.getPoidsMax());
@@ -80,6 +82,7 @@ public class VueVehicule extends VueMetier {
       } catch (SQLException e) {
         RoManErreur.afficher(e);
       }
+      redirectionAccueil();
     });
   }
 

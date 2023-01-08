@@ -1,5 +1,8 @@
 package fr.roman.vues.metiers;
 
+import fr.roman.controleurs.accueil.CtrlAccueil;
+import fr.roman.modeles.Utilisateur;
+import fr.roman.vues.accueil.VueAccueil;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +21,11 @@ import java.util.ArrayList;
  * méthodes de ces dernières.
  */
 public abstract class VueMetier {
+
+  /**
+   * Utilisateur actuel.
+   */
+  Utilisateur utilisateur;
 
   /**
    * Boutton redirigant l'utilisateur vers la vue de modification.
@@ -88,28 +96,60 @@ public abstract class VueMetier {
    */
   private final VBox introductionBox;
 
+  /**
+   * Scene validation suppression + redirection vers accueil.
+   */
+  private final Scene sceneSuppEffectuee;
+
+  /**
+   * Vbox annonçant à l'utilisateur que l'élément a bien été supprimé.
+   */
+  private final VBox vboxRetourAccueil;
+
+  /**
+   * Bouton redirection vers accueil.
+   */
+  private final Button btnRetourAccueil;
+
+  /**
+   * Label Supression effectuée.
+   */
+  private final Label labelSuppressionEffectuee;
+
+  /**
+   * Stage redirection accueil.
+   */
+  private final Stage stageRedirection;
+
 
   /**
    * Constructeur de la classe abstraite des objets métiers, on y ajoutera
    * les éléments communs à tout les objets.
    */
-  public VueMetier() {
+  public VueMetier(Utilisateur utilisateur) {
 
+    this.utilisateur = utilisateur;
     btnModifier = new Button("Modifier");
     btnSupprimer = new Button("Supprimer");
     btnOui = new Button("Oui");
     btnNon = new Button("Non");
+    btnRetourAccueil = new Button("Accueil");
     validation = new Label("Voulez vous vraiment supprimer cet élément ? ");
+    labelSuppressionEffectuee = new Label("L'élément à bien été supprimé");
     hbox = new HBox();
     vbox = new VBox();
     validationBox = new HBox();
     rootVbox = new VBox();
     introductionBox = new VBox();
+    vboxRetourAccueil = new VBox();
     isValidationAdd = false;
     validationIsDisable = true;
     scene = new Scene(rootVbox);
+    sceneSuppEffectuee = new Scene(vboxRetourAccueil);
     rootVbox.getChildren().addAll(introductionBox, vbox, hbox);
     stage = new Stage();
+    stageRedirection = new Stage();
+
 
   }
 
@@ -185,6 +225,16 @@ public abstract class VueMetier {
       }
     });
 
+
+
+    btnRetourAccueil.setOnAction((event) -> {
+      // Instanciation et affichage de l'accueil
+      VueAccueil vueAccueil = new VueAccueil();
+      new CtrlAccueil(this.utilisateur, vueAccueil);
+      stage.close();
+      vueAccueil.show();
+    });
+
     btnNon.setOnAction((event) -> {
       if (isValidationAdd) {
         validationBox.setDisable(true);
@@ -198,8 +248,29 @@ public abstract class VueMetier {
     });
 
 
+  }
 
+  public void redirectionAccueil() {
+    stage.close();
 
+    Insets padding = new Insets(20);
 
+    vboxRetourAccueil.setPadding(padding);
+    btnRetourAccueil.setPadding(padding);
+    labelSuppressionEffectuee.setPadding(padding);
+
+    vboxRetourAccueil.setAlignment(Pos.CENTER);
+    btnRetourAccueil.setAlignment(Pos.CENTER);
+    labelSuppressionEffectuee.setAlignment(Pos.CENTER);
+
+    labelSuppressionEffectuee.setFont(new Font("Arial", 20));
+
+    vboxRetourAccueil.getChildren().addAll(labelSuppressionEffectuee, btnRetourAccueil);
+
+    stageRedirection.setScene(sceneSuppEffectuee);
+    stageRedirection.sizeToScene();
+    stage.setTitle("RoMan");
+
+    stageRedirection.show();
   }
 }

@@ -4,6 +4,8 @@ import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlProducteur;
 import fr.roman.modeles.Producteur;
 import java.util.ArrayList;
+
+import fr.roman.modeles.Utilisateur;
 import javafx.scene.control.Label;
 
 
@@ -64,7 +66,7 @@ public class VueProducteur extends VueMetier {
    * graphique de l'object producteur.
    */
   public VueProducteur(Producteur producteur) {
-
+    super(new Utilisateur());
     siret = new Label("Siret : " + producteur.getSiret());
     telephone = new Label("Téléphone : " + producteur.getTel());
     adresse = new Label("Adresse : " + producteur.getAdresse().getLibelle());
@@ -92,6 +94,7 @@ public class VueProducteur extends VueMetier {
       } catch (Exception e) {
         RoManErreur.afficher(e);
       }
+      redirectionAccueil();
     });
 
   }
