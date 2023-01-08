@@ -1,10 +1,12 @@
 package fr.roman.vues.metiers;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlVehicule;
 import fr.roman.modeles.Vehicule;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -73,7 +75,11 @@ public class VueVehicule extends VueMetier {
     structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
-      ctrl.removeVehicule(vehicule);
+      try {
+        ctrl.removeVehicule(vehicule);
+      } catch (SQLException e) {
+        RoManErreur.afficher(e);
+      }
     });
   }
 

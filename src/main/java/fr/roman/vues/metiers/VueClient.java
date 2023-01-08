@@ -1,9 +1,11 @@
 package fr.roman.vues.metiers;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlClient;
 import fr.roman.modeles.Client;
 import javafx.scene.control.Label;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -72,7 +74,11 @@ public class VueClient extends VueMetier {
     structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
-      ctrl.removeClient(client);
+      try {
+        ctrl.removeClient(client);
+      } catch (SQLException e) {
+        RoManErreur.afficher(e);
+      }
     });
   }
 

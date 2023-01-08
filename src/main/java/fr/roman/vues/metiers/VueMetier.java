@@ -120,21 +120,23 @@ public abstract class VueMetier {
    */
   public void structure(ArrayList<Label> labels, Label introduction) {
 
+    Insets padding = new Insets(20);
+
     introductionBox.getChildren().add(introduction);
     // (int numLabel = 0; numLabel  < labels.length; numLabel++)
     for (Label label : labels) {
       vbox.getChildren().add(label);
-      label.setFont(new Font("Arial", 30));
+      label.setFont(new Font("Arial", 10));
     }
     hbox.getChildren().add(btnModifier);
     hbox.getChildren().add(btnSupprimer);
 
     // Gestion espacements + alignement des éléments
-    introduction.setFont(new Font("Arial", 40));
+    introduction.setFont(new Font("Arial", 15));
     introductionBox.setAlignment(Pos.TOP_CENTER);
+    introductionBox.setPadding(padding);
 
     vbox.setSpacing(20);
-    Insets padding = new Insets(20);
     vbox.setPadding(padding);
     vbox.setAlignment(Pos.CENTER_LEFT);
 
@@ -160,8 +162,7 @@ public abstract class VueMetier {
     // Gestion scène
     stage.setScene(scene);
     stage.setTitle("RoMan");
-    stage.setMinWidth(1024);
-    stage.setMinHeight(660);
+    stage.sizeToScene();
 
 
     // Affichage scène
@@ -172,9 +173,11 @@ public abstract class VueMetier {
         validationBox.getChildren().add(btnOui);
         validationBox.getChildren().add(btnNon);
         rootVbox.getChildren().addAll(validation, validationBox);
+        stage.sizeToScene();
         validation.setDisable(true);
         isValidationAdd = true;
       }
+
 
       if (validationIsDisable) {
         validationBox.setDisable(false);
@@ -189,6 +192,11 @@ public abstract class VueMetier {
         validationIsDisable = true;
       }
     });
+
+    btnModifier.setOnAction((event) -> {
+
+    });
+
 
 
 

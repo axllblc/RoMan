@@ -1,5 +1,6 @@
 package fr.roman.vues.metiers;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlProducteur;
 import fr.roman.modeles.Producteur;
 import java.util.ArrayList;
@@ -86,7 +87,11 @@ public class VueProducteur extends VueMetier {
     structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
-      ctrl.removeProducteur(producteur);
+      try {
+        ctrl.removeProducteur(producteur);
+      } catch (Exception e) {
+        RoManErreur.afficher(e);
+      }
     });
 
   }

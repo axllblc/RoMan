@@ -1,9 +1,11 @@
 package fr.roman.vues.metiers;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlTournee;
 import fr.roman.modeles.Tournee;
 import javafx.scene.control.Label;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -98,7 +100,11 @@ public class VueTournee extends VueMetier {
     structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
-      ctrl.removeTournee(tournee);
+      try {
+        ctrl.removeTournee(tournee);
+      } catch (SQLException e) {
+        RoManErreur.afficher(e);
+      }
     });
   }
 

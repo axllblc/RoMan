@@ -1,11 +1,13 @@
 package fr.roman.vues.metiers;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlAdresse;
 import fr.roman.modeles.Adresse;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -87,7 +89,11 @@ public class VueAdresse extends VueMetier {
     structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
-      ctrl.removeAdresse(adresse);
+      try {
+        ctrl.removeAdresse(adresse);
+      } catch (SQLException e) {
+        RoManErreur.afficher(e);
+      }
     });
   }
 

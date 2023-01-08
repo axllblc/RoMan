@@ -2,20 +2,28 @@ package fr.roman.controleurs.metiers;
 
 import fr.roman.modeles.Commande;
 import fr.roman.vues.metiers.VueCommande;
-// import fr.roman.dao.DAOCommande;
+import fr.roman.dao.DAOCommande;
+
+import java.sql.SQLException;
 
 public class CtrlCommande {
 
   /**
-   * Instance de VueAdresse.
+   * Instance de VueCommande.
    */
   private final VueCommande vueCommande;
 
-  public CtrlCommande(VueCommande vueCommande) {
+  /**
+   * Instance DAOCommande.
+   */
+  private final DAOCommande daoCommande;
+
+  public CtrlCommande(VueCommande vueCommande) throws Exception {
     this.vueCommande = vueCommande;
+    daoCommande = new DAOCommande();
   }
 
-  public void removeCommande(Commande commande) {
-    //DAOCommande.delete(commande.getIdCommande);
+  public void removeCommande(Commande commande) throws SQLException {
+    daoCommande.delete(commande.getIdCommande());
   }
 }

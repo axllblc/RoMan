@@ -1,10 +1,12 @@
 package fr.roman.vues.metiers;
 
+import fr.roman.RoManErreur;
 import fr.roman.controleurs.metiers.CtrlCommande;
 import fr.roman.modeles.Commande;
 import fr.roman.modeles.Tournee;
 import javafx.scene.control.Label;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -106,7 +108,11 @@ public class VueCommande extends VueMetier {
     structure(labels, introduction);
 
     btnOui.setOnAction((event) -> {
-      ctrl.removeCommande(commande);
+      try {
+        ctrl.removeCommande(commande);
+      } catch (SQLException e) {
+        RoManErreur.afficher(e);
+      }
     });
 
 
