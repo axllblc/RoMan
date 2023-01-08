@@ -4,6 +4,7 @@ import fr.roman.RoManErreur;
 import fr.roman.controleurs.actions.ActionsTournees;
 import fr.roman.dao.DAOTournee;
 import fr.roman.modeles.Producteur;
+import fr.roman.modeles.Role;
 import fr.roman.modeles.Tournee;
 import fr.roman.vues.composants.BoutonAction;
 import fr.roman.vues.recherche.VueRecherche;
@@ -57,24 +58,25 @@ public class CtrlRechercheTournee extends CtrlRecherche<Tournee> {
    * menu contextuel du tableau), et les fonctions de callback exécutées lorsqu'ils sont actionnés.
    */
   protected void definirBoutonsActions() {
-    BoutonAction modifier = new BoutonAction("Gérer la tournée", () -> {
-      // TODO à implémenter
-    });
+    BoutonAction modifier = new BoutonAction("Modifier la tournée", () ->
+        ActionsTournees.modifierTournee(
+            vue.getTableau().getSelectionSimple(), Role.PRODUCTEUR
+        )
+    );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
       // TODO à implémenter
     });
-    BoutonAction nouveau = new BoutonAction("Nouvelle tournée", () -> {
-      // TODO à implémenter
-    });
-
+    BoutonAction nouveau = new BoutonAction("Nouvelle tournée", () ->
+        ActionsTournees.creerTournee(producteur, Role.PRODUCTEUR)
+    );
     BoutonAction afficher = new BoutonAction("Afficher la tournée", () ->
             ActionsTournees.afficherTournee(vue.getTableau()
                     .getSelectionSimple(), producteur.getUtilisateur()));
 
     // Définition des boutons affichés en bas de la vue
-    vue.setBoutons(List.of(modifier, supprimer, nouveau, afficher));
+    vue.setBoutons(List.of(afficher, modifier, supprimer, nouveau));
 
     // Définition des entrées du menu contextuel du tableau
-    vue.getTableau().setMenu(List.of(modifier, supprimer, afficher));
+    vue.getTableau().setMenu(List.of(afficher, modifier, supprimer));
   }
 }
