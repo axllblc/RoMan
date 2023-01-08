@@ -166,7 +166,6 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
             case MODIFICATION -> {  if(daoAdresse.update(getModele()))
                                         adresse = getModele();
                                  }
-
         }
         return adresse;
     }
