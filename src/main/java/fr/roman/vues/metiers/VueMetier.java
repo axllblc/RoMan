@@ -162,6 +162,7 @@ public abstract class VueMetier {
 
     Insets padding = new Insets(20);
 
+    introductionBox.getChildren().add(btnRetourAccueil);
     introductionBox.getChildren().add(introduction);
     // (int numLabel = 0; numLabel  < labels.length; numLabel++)
     for (Label label : labels) {
@@ -173,8 +174,9 @@ public abstract class VueMetier {
 
     // Gestion espacements + alignement des éléments
     introduction.setFont(new Font("Arial", 15));
-    introductionBox.setAlignment(Pos.TOP_CENTER);
+    introductionBox.setAlignment(Pos.CENTER_LEFT);
     introductionBox.setPadding(padding);
+    introductionBox.setSpacing(20);
 
     vbox.setSpacing(20);
     vbox.setPadding(padding);
@@ -198,6 +200,10 @@ public abstract class VueMetier {
 
     btnModifier.setMinWidth(100);
     btnModifier.setMinHeight(30);
+
+    btnRetourAccueil.setMinWidth(50);
+    btnRetourAccueil.setMinHeight(15);
+    btnRetourAccueil.setAlignment(Pos.TOP_LEFT);
 
     // Gestion scène
     stage.setScene(scene);
