@@ -1,6 +1,7 @@
 package fr.roman.controleurs.accueil;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionTournees;
 import fr.roman.controleurs.actions.ActionsCommandes;
 import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
@@ -20,6 +21,8 @@ import java.util.List;
  * Contrôleur de la vue <i>Tableau de bord</i> pour les producteurs.
  *
  * @see TableauDeBordProducteur
+ *
+ * @author Axel Leblanc
  */
 public class CtrlTabBordProducteur {
   private Producteur producteur;
@@ -57,7 +60,6 @@ public class CtrlTabBordProducteur {
       tableauTournees();
 
       // Activation de la sélection multiple
-      vue.getTableauTournees().autoriserSelectionMultiple(true);
       vue.getTableauCommandes().autoriserSelectionMultiple(true);
 
       // Menus contextuels des tableaux
@@ -138,7 +140,10 @@ public class CtrlTabBordProducteur {
       // TODO à implémenter
     });
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      Tournee selection = vue.getTableauTournees().getSelectionSimple();
+      if (ActionTournees.supprimer(selection)) {
+        vue.getTableauTournees().supprimer(selection);
+      }
     });
 
     vue.getTableauTournees().setMenu(List.of(modifier, supprimer));
