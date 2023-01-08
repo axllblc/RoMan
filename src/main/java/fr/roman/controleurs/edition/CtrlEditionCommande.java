@@ -37,9 +37,10 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
    * @param typeEdition Le type de contrôleur : création ou modification
    * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
    */
-  public CtrlEditionCommande(Commande commande, VueEdition vueEdition,
+  public CtrlEditionCommande(Utilisateur utilisateur,Commande commande, VueEdition vueEdition,
                              TypeEdition typeEdition, Role role) {
-    super(commande, vueEdition, typeEdition, role);
+    super(utilisateur, commande, vueEdition, typeEdition, role);
+    superSuite();
   }
   
   /**

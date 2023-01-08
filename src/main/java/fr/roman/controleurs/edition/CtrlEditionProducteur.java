@@ -40,8 +40,9 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
    * @param typeEdition Le type de contrôleur : création ou modification
    * @param role        Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
    */
-  public CtrlEditionProducteur(Producteur producteur, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
-    super(producteur, vueEdition, typeEdition, role);
+  public CtrlEditionProducteur(Utilisateur utilisateur, Producteur producteur, VueEdition vueEdition, TypeEdition typeEdition, Role role) throws Exception {
+    super(utilisateur, producteur, vueEdition, typeEdition, role);
+    superSuite();
   }
 
 

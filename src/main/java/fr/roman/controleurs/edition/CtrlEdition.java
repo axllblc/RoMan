@@ -3,6 +3,7 @@ package fr.roman.controleurs.edition;
 import fr.roman.modeles.ChampsModele;
 import fr.roman.modeles.Modele;
 import fr.roman.modeles.Role;
+import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.edition.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * @param <C> Une énumération de ses champs, qui étends {@link ChampsModele}
  */
 public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsModele> {
-
+    private final Utilisateur utilisateur;
     /**
      * Le type de controleur : création ou modification
      */
@@ -39,27 +40,32 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
 
     /**
      * Constructeur du contrôleur
-     * @param m Le métier dans lequel des stockés les informations de la vue (vide si typeEdition = CREATION)
-     * @param vueEdition La vue (d'édition) que la classe contrôle
+     *
+     * @param utilisateur L'objet de l'utilisateur courant
+     * @param m           Le métier dans lequel des stockés les informations de la vue (vide si typeEdition = CREATION)
+     * @param vueEdition  La vue (d'édition) que la classe contrôle
      * @param typeEdition Le type de contrôleur : création ou modification
-     * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
+     * @param role        Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
      */
-    CtrlEdition(M m, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
+    CtrlEdition(Utilisateur utilisateur, M m, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
+        this.utilisateur = utilisateur;
         this.modele = m;
         this.vueEdition = vueEdition;
         this.typeEdition = typeEdition;
         this.role = role;
+    }
 
+    public void superSuite() {
         vueEdition.setCtrl(this);
 
         champsFormulaire = new LinkedHashMap<>();
         /* L'implémentation LinkedHashMap a été choisie, car les nœuds sont dans l'ordre dans lequel
          * les champs ont été insérées. */
-
+    
         chargerChamps();
         accesChamps();
         getVueEdition().signalCtrlEdition(getChampsFormulaire());
-        getVueEdition().definirChamps(m.getClass().getSimpleName());
+        getVueEdition().definirChamps(getModele().getClass().getSimpleName());
     }
 
     /**

@@ -37,10 +37,11 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
    * @param typeEdition Le type de contrôleur : création ou modification
    * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
    */
-  public CtrlEditionVehicule(Vehicule Vehicule, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
-    super(Vehicule, vueEdition, typeEdition, role);
+  public CtrlEditionVehicule(Utilisateur utilisateur, Vehicule Vehicule, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
+    super(utilisateur, Vehicule, vueEdition, typeEdition, role);
+    superSuite();
   }
-  
+
   /**
    * Classe à implémenter qui construit les objets {@link Node} à mettre dans la vue,
    *  c.-à-d. les champs du formulaire (préremplis le cas échéant)
