@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Classe regroupant les actions possibles pour la gestion des commandes.
  */
-public class ActionsCommandes {
+public abstract class ActionsCommandes {
   /**
    * Supprimer de la base les commandes passées en paramètre.
    *

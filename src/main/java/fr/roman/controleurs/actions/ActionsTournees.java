@@ -8,7 +8,7 @@ import fr.roman.vues.Confirmation;
 /**
  * Classe regroupant les actions possibles pour la gestion des tournées.
  */
-public abstract class ActionTournees {
+public abstract class ActionsTournees {
   /**
    * Supprimer de la base la tournée passée en paramètre.
    *

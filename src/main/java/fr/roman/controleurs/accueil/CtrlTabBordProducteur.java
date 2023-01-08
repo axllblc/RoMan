@@ -1,8 +1,8 @@
 package fr.roman.controleurs.accueil;
 
 import fr.roman.RoManErreur;
-import fr.roman.controleurs.actions.ActionTournees;
 import fr.roman.controleurs.actions.ActionsCommandes;
+import fr.roman.controleurs.actions.ActionsTournees;
 import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
@@ -141,7 +141,7 @@ public class CtrlTabBordProducteur {
     });
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
       Tournee selection = vue.getTableauTournees().getSelectionSimple();
-      if (ActionTournees.supprimer(selection)) {
+      if (ActionsTournees.supprimer(selection)) {
         vue.getTableauTournees().supprimer(selection);
       }
     });

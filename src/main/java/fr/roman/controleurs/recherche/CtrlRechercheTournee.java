@@ -1,7 +1,7 @@
 package fr.roman.controleurs.recherche;
 
 import fr.roman.RoManErreur;
-import fr.roman.controleurs.actions.ActionTournees;
+import fr.roman.controleurs.actions.ActionsTournees;
 import fr.roman.dao.DAOTournee;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Tournee;
@@ -62,7 +62,7 @@ public class CtrlRechercheTournee extends CtrlRecherche<Tournee> {
     });
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
       Tournee selection = vue.getTableau().getSelectionSimple();
-      if (ActionTournees.supprimer(selection)) {
+      if (ActionsTournees.supprimer(selection)) {
         vue.getTableau().supprimer(selection);
       }
     });
