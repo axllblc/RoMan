@@ -10,7 +10,7 @@ import fr.roman.vues.edition.VueEdition;
 import fr.roman.vues.metiers.VueTournee;
 import fr.roman.dao.DAOTournee;
 import javafx.stage.Stage;
-import fr.roman.controleurs.edition.ctrlEditionTournee;
+import fr.roman.controleurs.edition.CtrlEditionTournee;
 
 import java.sql.SQLException;
 
@@ -43,7 +43,7 @@ public class CtrlTournee {
 
   public void modification(Tournee tournee, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    ctrlEditionTournee ctrl = new ctrlEditionTournee(tournee, vue, TypeEdition.MODIFICATION, role);
+    CtrlEditionTournee ctrl = new CtrlEditionTournee(tournee, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }
