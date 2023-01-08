@@ -1,11 +1,13 @@
 package fr.roman.modeles;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
 * Représente une adresse d'un producteur ou d'un client.
 */
 public class Adresse extends Modele {
-
-  private int idAdresse;
+  private final int idAdresse;
   private double[] coordonneesGPS;
   private String libelle;
   private int numeroVoie;
@@ -16,9 +18,10 @@ public class Adresse extends Modele {
   private String ville;
 
   /**
-   * Le constructeur par défaut de la classe Adresse.
+   * Constructeur sans paramètre de la classe {@link Adresse}.
    */
   public Adresse() {
+    idAdresse = 0;
   }
 
   /**
@@ -29,6 +32,8 @@ public class Adresse extends Modele {
    * @param libelle Le libellé de l'adresse
    * @param numeroVoie Le numéro de voie de l'adresse
    * @param complementNumero Le complément du numéro
+   * @param voie Le nom de la voie
+   * @param complementAdresse Le complément de l'adresse
    * @param codePostal Le code postal
    * @param ville La ville
    */
@@ -46,6 +51,11 @@ public class Adresse extends Modele {
     this.ville = ville;
   }
 
+  @Override
+  public int getId() {
+    return idAdresse;
+  }
+
   public int getIdAdresse() {
     return idAdresse;
   }
@@ -54,6 +64,12 @@ public class Adresse extends Modele {
     return coordonneesGPS;
   }
 
+  /**
+   * Permet de définir les coordonnées GPS d'une adresse.
+   *
+   * @param coordonneesGPS un tableau de 2 doubles : le premier est la coordonnée des abscisses
+   *                       (longitude), le second est celle des ordonnées (latitude)
+   */
   public void setCoordonneesGPS(double[] coordonneesGPS) {
     this.coordonneesGPS = coordonneesGPS;
   }
@@ -112,5 +128,101 @@ public class Adresse extends Modele {
 
   public void setVille(String ville) {
     this.ville = ville;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Adresse adresse = (Adresse) o;
+    return
+        numeroVoie == adresse.numeroVoie
+        && codePostal == adresse.codePostal
+        && Arrays.equals(coordonneesGPS, adresse.coordonneesGPS)
+        && Objects.equals(libelle, adresse.libelle)
+        && Objects.equals(complementNumero, adresse.complementNumero)
+        && Objects.equals(voie, adresse.voie)
+        && Objects.equals(complementAdresse, adresse.complementAdresse)
+        && Objects.equals(ville, adresse.ville);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = Objects.hash(
+        libelle, numeroVoie, complementNumero, voie, complementAdresse, codePostal, ville
+    );
+    result = 31 * result + Arrays.hashCode(coordonneesGPS);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Adresse{"
+        + "idAdresse=" + idAdresse
+        + ", coordonneesGPS=" + Arrays.toString(coordonneesGPS)
+        + ", libelle='" + libelle + '\''
+        + ", numeroVoie=" + numeroVoie
+        + ", complementNumero='" + complementNumero + '\''
+        + ", voie='" + voie + '\''
+        + ", complementAdresse='" + complementAdresse + '\''
+        + ", codePostal=" + codePostal
+        + ", ville='" + ville + '\''
+        + '}';
+  }
+
+  /**
+   * Retourne l'adresse postale sous la forme d'une chaîne de caractères.
+   *
+   * @param newline {@code true} pour activer les retours à la ligne
+   *
+   * @return Adresse postale sous la forme d'une chaîne de caractères
+   */
+  public String getAdressePostale(boolean newline) {
+    StringBuilder sb = new StringBuilder();
+
+    // Libellé (nom du destinataire)
+    if (getLibelle() != null && !getLibelle().equals("")) {
+      sb.append(getLibelle())
+          .append(newline ? "\n" : " – ");
+    }
+
+    // Numéro de voie et complément de numéro (ex : "bis")
+    sb.append(getNumeroVoie() != 0 ? getNumeroVoie() + " " : "");
+    if (getComplementNumero() != null && !getComplementNumero().equals("")) {
+      sb.append(getComplementNumero()).append(" ");
+    }
+
+    // Nom de la voie
+    sb.append(getVoie());
+
+    // Complément d'adresse (bâtiment, étage, etc.)
+    if (getComplementAdresse() != null && !getComplementAdresse().equals("")) {
+      sb.append(", ")
+          .append(getComplementAdresse());
+    }
+
+    sb.append(newline ? ",\n" : ", ");
+
+    // Code postal et ville
+    sb.append("%05d".formatted(getCodePostal()))
+        .append(" ")
+        .append(getVille());
+
+    return sb.toString();
+  }
+
+  /**
+   * Liste des champs de la table {@code Adresses} dans la base de données.
+   */
+  public enum Champs {
+    idAdresse,
+    coordonneesGPS,
+    libelle,
+    numeroVoie,
+    complementNumero,
+    voie,
+    complementAdresse,
+    codePostal,
+    ville
   }
 }

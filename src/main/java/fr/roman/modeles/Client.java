@@ -1,23 +1,24 @@
 package fr.roman.modeles;
 
+import java.util.Objects;
+
 /**
 * Représente un client de producteurs.
 */
 public class Client extends Modele {
-
-  private int idClient;
+  private final int idClient;
   private String nom;
-  private String prenom;
   private String tel;
-  private String mail;
-  private int siret;
+  private String email;
+  private String siret;
   private boolean particulier;
   private Adresse adresse;
 
   /**
-   * Constructeur par défaut de la classe Client.
+   * Constructeur sans paramètre de la classe {@link Client}.
    */
   public Client() {
+    idClient = 0;
   }
 
   /**
@@ -25,21 +26,26 @@ public class Client extends Modele {
    *
    * @param idClient L'identifiant du client dans la base.
    * @param nom Le nom du client.
-   * @param prenom Le prénom du client.
    * @param tel Le numéro de téléphone du client.
-   * @param mail L'adresse mail du client.
+   * @param email L'adresse mail du client.
+   * @param siret Le SIRET du Client s'il est particulier
+   * @param particulier Vrai si le client est particulier, faux sinon
    * @param adresse L'adresse du client.
    */
-  public Client(int idClient, String nom, String prenom, String tel, String mail,
-                int siret, boolean particulier, Adresse adresse) {
+  public Client(int idClient, String nom, String tel, String email, String siret,
+                boolean particulier, Adresse adresse) {
     this.idClient = idClient;
     this.nom = nom;
-    this.prenom = prenom;
     this.tel = tel;
-    this.mail = mail;
+    this.email = email;
     this.siret = siret;
     this.particulier = particulier;
     this.adresse = adresse;
+  }
+
+  @Override
+  public int getId() {
+    return idClient;
   }
 
   public int getIdClient() {
@@ -54,14 +60,6 @@ public class Client extends Modele {
     this.nom = nom;
   }
 
-  public String getPrenom() {
-    return prenom;
-  }
-
-  public void setPrenom(String prenom) {
-    this.prenom = prenom;
-  }
-
   public String getTel() {
     return tel;
   }
@@ -70,19 +68,19 @@ public class Client extends Modele {
     this.tel = tel;
   }
 
-  public String getMail() {
-    return mail;
+  public String getEmail() {
+    return email;
   }
 
-  public void setMail(String mail) {
-    this.mail = mail;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
-  public int getSiret() {
+  public String getSiret() {
     return siret;
   }
 
-  public void setSiret(int siret) {
+  public void setSiret(String siret) {
     this.siret = siret;
   }
 
@@ -100,5 +98,44 @@ public class Client extends Modele {
 
   public void setAdresse(Adresse adresse) {
     this.adresse = adresse;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Client client = (Client) o;
+    return
+        Objects.equals(siret, client.siret)
+        && particulier == client.particulier
+        && Objects.equals(nom, client.nom)
+        && Objects.equals(tel, client.tel)
+        && Objects.equals(email, client.email)
+        && Objects.equals(adresse, client.adresse);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(nom, tel, email, siret, particulier, adresse);
+  }
+
+  @Override
+  public String toString() {
+    return "Client{"
+        + "idClient=" + idClient
+        + ", nom='" + nom + '\''
+        + ", tel='" + tel + '\''
+        + ", mail='" + email + '\''
+        + ", siret=" + siret
+        + ", particulier=" + particulier
+        + ", adresse=" + adresse
+        + '}';
+  }
+
+  /**
+   * Liste des champs de la table {@code Clients} dans la base de données.
+   */
+  public enum Champs {
+    idClient, email, nom, particulier, siret, tel, idAdresse
   }
 }
