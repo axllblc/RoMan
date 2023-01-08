@@ -4,8 +4,11 @@ import fr.roman.modeles.Modele;
 import fr.roman.vues.composants.BoutonAction;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
@@ -19,6 +22,7 @@ import javafx.scene.control.TableView;
  * {@link #getTableau()}.</p>
  * <p>La collection d'objets métier ne peut pas contenir de doublons, c'est-à-dire des objets
  * métiers ayant le même identifiant (<i>cf.</i> {@link Modele#getId()}).</p>
+ * <p>La collection peut être filtrée à l'aide de la méthode ({@link #setFiltre(Predicate)}).</p>
  *
  * @param <T> Type des objets métier affichés dans le tableau.
  *
@@ -33,9 +37,22 @@ public abstract class Tableau<T extends Modele> {
    */
   private final TableView<T> tableau;
   /**
-   * Collection des objets métier affichés dans le tableau.
+   * Collection des objets métier affichés dans le tableau. (1)
    */
   protected final ObservableList<T> contenu;
+  /**
+   * Contenu du tableau, avec un filtrage. (2)
+   *
+   * @see #contenu
+   */
+  private final FilteredList<T> contenuAvecFiltre;
+  /**
+   * Contenu du tableau, avec un tri (après avoir appliqué un filtrage). (3)
+   *
+   * @see #contenu
+   * @see #contenuAvecFiltre
+   */
+  private final SortedList<T> contenuAvecTri;
   /**
    * Menu contextuel du tableau.
    */
@@ -52,9 +69,17 @@ public abstract class Tableau<T extends Modele> {
   public Tableau() {
     tableau = new TableView<>();
 
-    // Définition de la collection représentant le contenu du tableau
+    // Définition de la collection représentant le contenu du tableau. (1)
     contenu = FXCollections.observableArrayList();
-    tableau.setItems(contenu);
+    // Définition de la liste filtrée (FilteredList). (2)
+    // Initialement, tous les objets de la collection sont affichés.
+    contenuAvecFiltre = new FilteredList<>(contenu);
+    // Définition de la liste triée (SortedList). (3)
+    // Le comparateur de cette liste est lié à celui du tableau.
+    contenuAvecTri = new SortedList<>(contenuAvecFiltre);
+    contenuAvecTri.comparatorProperty().bind(tableau.comparatorProperty());
+    // Enfin, la collection est intégrée au tableau.
+    tableau.setItems(contenuAvecTri);
 
     // Définition du menu contextuel, appliqué sur les lignes du tableau
     menu = new ContextMenu();
@@ -186,6 +211,15 @@ public abstract class Tableau<T extends Modele> {
    */
   public void vider() {
     contenu.clear();
+  }
+
+  /**
+   * Définir le prédicat que les éléments de la collection devront satisfaire pour être affichés.
+   *
+   * @param predicat Le prédicat utilisé pour le filtrage.
+   */
+  public void setFiltre(Predicate<T> predicat) {
+    contenuAvecFiltre.setPredicate(predicat);
   }
 
   /**

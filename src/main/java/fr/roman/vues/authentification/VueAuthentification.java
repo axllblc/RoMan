@@ -132,9 +132,17 @@ public class VueAuthentification {
     vbox.getChildren().add(btnConnexion);
 
     // Définition du bouton de connexion comme bouton par défaut (il est ainsi actionné lorsque
-    // l'utilisateur appuie sur la touche Entrée) et ajout de son Event handler.
+    // l'utilisateur appuie sur la touche Entrée) et ajout de son Event handler. Le bouton est
+    // désactivé par défaut (il n'est activé que si un nom d'utilisateur est renseigné).
     btnConnexion.setDefaultButton(true);
     btnConnexion.setOnAction(event -> ctrl.verify());
+    btnConnexion.setDisable(true);
+
+    // Event handler du champ "identifiant"
+    textFieldIdentifiant.textProperty().addListener((observable, oldValue, newValue) -> {
+      // Bouton de connexion désactivé si le champ "identifiant" est vide ; il est activé sinon.
+      btnConnexion.setDisable(newValue.equals(""));
+    });
 
     // Gestion du Stage et affichage
     stage.setScene(scene);
