@@ -1,10 +1,10 @@
 package fr.roman.controleurs.actions;
 
 import fr.roman.RoManErreur;
-import fr.roman.controleurs.edition.CtrlEditionCommande;
+import fr.roman.controleurs.edition.CtrlEditionTournee;
 import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.dao.DAOProducteur;
-import fr.roman.modeles.Commande;
+import fr.roman.modeles.Tournee;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
- * Classe regroupant les actions possibles pour la gestion des commandes.
+ * Classe regroupant les actions possibles pour la gestion des tournées.
  */
-public abstract class ActionsCommandes {
-    public static void creerCommande(Utilisateur u){
+public abstract class ActionsTournees {
+    public static void creerTournee(Utilisateur u){
         try {
-            Commande commande = new Commande();
+            Tournee Tournee = new Tournee();
             if (u.getRole() == Role.PRODUCTEUR) {
                 DAOProducteur daoProducteur = new DAOProducteur();
                 LinkedHashMap<Producteur.Champs, String> critere = new LinkedHashMap<>();
@@ -27,23 +27,22 @@ public abstract class ActionsCommandes {
                 ArrayList<Producteur> prod = daoProducteur.find(critere);
                 if (!prod.isEmpty()){
                     Producteur producteur = prod.get(0);
-                    commande.setProducteur(producteur);
+                    Tournee.setProducteur(producteur);
                 }
                 else {
                     throw new Exception(new Throwable("Le producteur est inconnu"));
                 }
             }
             VueEdition vue = new VueEdition(TypeEdition.CREATION);
-            CtrlEditionCommande ctrl = new CtrlEditionCommande(commande, vue, TypeEdition.CREATION, u.getRole());
+            CtrlEditionTournee ctrl = new CtrlEditionTournee(Tournee, vue, TypeEdition.CREATION, u.getRole());
             vue.show();
         } catch (Exception e) {
             RoManErreur.afficher(e);
         }
     }
-    public static void modifierCommande(Commande commande, Role role){
+    public static void modifierTournee(Tournee Tournee, Role role){
         VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-        CtrlEditionCommande ctrl = new CtrlEditionCommande(commande, vue, TypeEdition.MODIFICATION, role);
+        CtrlEditionTournee ctrl = new CtrlEditionTournee(Tournee, vue, TypeEdition.MODIFICATION, role);
         vue.show();
     }
-
 }
