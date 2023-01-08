@@ -1,6 +1,7 @@
 package fr.roman.controleurs.accueil;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsCommandes;
 import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
@@ -120,7 +121,10 @@ public class CtrlTabBordProducteur {
       // TODO à implémenter
     });
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      List<Commande> selection = vue.getTableauCommandes().getSelectionMultiple();
+      if (ActionsCommandes.supprimer(selection)) {
+        vue.getTableauCommandes().supprimer(selection);
+      }
     });
 
     vue.getTableauCommandes().setMenu(List.of(modifier, supprimer));

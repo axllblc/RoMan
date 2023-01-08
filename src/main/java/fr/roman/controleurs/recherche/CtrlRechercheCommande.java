@@ -1,6 +1,7 @@
 package fr.roman.controleurs.recherche;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsCommandes;
 import fr.roman.dao.DAOCommande;
 import fr.roman.modeles.Commande;
 import fr.roman.modeles.Producteur;
@@ -42,6 +43,7 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
       criteres.put(Commande.Champs.idProducteur, String.valueOf(producteur.getId()));
       commandes = daoCommande.find(criteres);
       vue.getTableau().setContenu(commandes);
+      vue.getTableau().autoriserSelectionMultiple(true);
 
       definirBoutonsActions();
     } catch (Exception e) {
@@ -60,7 +62,10 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
       // TODO à implémenter
     });
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      List<Commande> selection = vue.getTableau().getSelectionMultiple();
+      if (ActionsCommandes.supprimer(selection)) {
+        vue.getTableau().supprimer(selection);
+      }
     });
     BoutonAction nouveau = new BoutonAction("Nouvelle commande", () -> {
       // TODO à implémenter
