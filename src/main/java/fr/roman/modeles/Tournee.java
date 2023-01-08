@@ -158,7 +158,7 @@ public class Tournee extends Modele {
     idTournee(true, false, false, false, false),
     horaireDebut, horaireFin,
     note(false, true, true, false, false),
-    estimationDuree, valide(false, false, false, false, false),
+    valide(false, false, false, false, false),
     idProducteur(false, false, false, true, false),
     idVehicule(false, true, true, true, false);
     private final boolean modifProd;
@@ -212,7 +212,7 @@ public class Tournee extends Modele {
     }
     @Override
     public boolean isNullable() {
-      return false;
+      return this.nullable;
     }
   }
 }

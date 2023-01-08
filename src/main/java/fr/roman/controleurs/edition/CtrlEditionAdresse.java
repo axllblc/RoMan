@@ -129,8 +129,6 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
             ville.setValeur(getModele().getVille());
         }
         getChampsFormulaire().put(Adresse.Champs.ville, ville);
-
-        // TODO: création de la vue.
     }
 
     /**

@@ -88,8 +88,6 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         }
         idProducteur.setSpinnerInt(0, 9999999,idPro);
         getChampsFormulaire().put(Vehicule.Champs.idProducteur, idProducteur);
-
-        // TODO : création de la vue.
     }
 
     /**

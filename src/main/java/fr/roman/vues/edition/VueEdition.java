@@ -306,8 +306,9 @@ public class VueEdition {
             Node c = this.composants.get(String.valueOf(signal.getKey()));
             if(c instanceof TextField){
                 if(!((TextField) c).getText().isEmpty()){
-                    value.setValeur(((TextField) c).getText());
+                    value.setValeur("");
                 }
+                value.setValeur(((TextField) c).getText());
             } else if(c instanceof CalendarTextField){
                 if(!((CalendarTextField) c).getCalendar().getAvailableCalendarTypes().isEmpty()) {
                     value.setCalendar(((CalendarTextField) c).getCalendar());

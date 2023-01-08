@@ -102,8 +102,6 @@ public class CtrlEditionClient extends CtrlEdition<Client, Client.Champs> {
         adresse.setSpinnerInt(0, 9999999, valeurInt);
         adresse.setRegex("\\d{1,50}");
         getChampsFormulaire().put(Client.Champs.idAdresse, adresse);
-
-        // TODO : création de la vue.
     }
 
     /**

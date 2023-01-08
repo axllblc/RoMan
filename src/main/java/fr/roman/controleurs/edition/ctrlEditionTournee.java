@@ -1,5 +1,6 @@
 package fr.roman.controleurs.edition;
 
+import fr.roman.RoManErreur;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
 import fr.roman.dao.DAOVehicule;
@@ -15,6 +16,15 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
   DAOVehicule daoVehicule;
   DAOProducteur daoProducteur;
 
+  {
+    try {
+      daoProducteur = new DAOProducteur();
+      daoVehicule = new DAOVehicule();
+      daoTournee = new DAOTournee();
+    } catch (Exception e) {
+      RoManErreur.afficher(e);
+    }
+  }
   /**
    * Constructeur du contrôleur
    *
@@ -30,6 +40,8 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
   @Override
   void chargerChamps() {
     boolean valeurBool;
+    int valeurInt;
+
     // idTournee
     TypeChamp idTournee = new TypeChamp(LibelleChamp.TEXTFIELD);
     idTournee.setRegex("\\d*");
@@ -73,34 +85,29 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     getChampsFormulaire().put(Tournee.Champs.horaireFin, horaireFin);
   
     // véhicule
-    TypeChamp vehicule = new TypeChamp(LibelleChamp.TEXTFIELD);
-    vehicule.setRegex("\\d*");
+    valeurInt = 0;
     if(getTypeEdition() == TypeEdition.MODIFICATION){
-      vehicule.setValeur(String.valueOf(getModele().getIdTournee()));
+      valeurInt = getModele().getVehicule().getIdVehicule();
     }
+    TypeChamp vehicule = new TypeChamp(LibelleChamp.SPINNERINT);
+    vehicule.setSpinnerInt(0, 9999999, valeurInt);
+    vehicule.setRegex("\\d{1,50}");
     getChampsFormulaire().put(Tournee.Champs.idVehicule, vehicule);
-
-    // TODO: estimationDuree
-    /*
-    TypeChamp estimationDuree = new TypeChamp(LibelleChamp.CALENDEARTEXTFIELD);
-    estimationDuree.setRegex("dd/MM/yyyy HH:mm");
-    if(getTypeEdition() == TypeEdition.MODIFICATION){
-      estimationDuree.setCalendar(getModele().getEstimationDuree());
-    }
-    getChampsFormulaire().put(Tournee.Champs.estimationDuree, estimationDuree);
-     */
-
+  
     // idProducteur
-    TypeChamp idProducteur = new TypeChamp(LibelleChamp.TEXTFIELD);
-    idProducteur.setRegex("\\d*");
+    valeurInt = 0;
     if(getTypeEdition() == TypeEdition.MODIFICATION){
-      idProducteur.setValeur(String.valueOf(getModele().getIdTournee()));
+      valeurInt = getModele().getIdTournee();
     }
+    TypeChamp idProducteur = new TypeChamp(LibelleChamp.SPINNERINT);
+    idProducteur.setSpinnerInt(0, 9999999, valeurInt);
+    idProducteur.setRegex("\\d{1,50}");
     getChampsFormulaire().put(Tournee.Champs.idProducteur, idProducteur);
   }
 
   @Override
   public Tournee validerSaisie() throws Exception {
+    getChampsFormulaire().forEach((x,y) -> System.out.println(x+" - "+y));
     // note
     getModele().setNote(getChampsFormulaire().get(Tournee.Champs.note).getValeur());
 
@@ -116,8 +123,6 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     // véhicule
     getModele().setVehicule(daoVehicule.findById(
             getChampsFormulaire().get(Tournee.Champs.idVehicule).getValeurInt()));
-
-    // TODO: estimationDuree
 
     // idProducteur
     getModele().setProducteur(daoProducteur.findById(
