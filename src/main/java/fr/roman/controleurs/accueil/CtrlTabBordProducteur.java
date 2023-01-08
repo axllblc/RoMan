@@ -1,6 +1,7 @@
 package fr.roman.controleurs.accueil;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsCommandes;
 import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
@@ -122,8 +123,11 @@ public class CtrlTabBordProducteur {
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
       // TODO à implémenter
     });
+    BoutonAction afficher = new BoutonAction("Afficher la commande", () ->
+            ActionsCommandes.afficherCommande(vue.getTableauCommandes()
+                    .getSelectionSimple(), producteur.getUtilisateur()));
 
-    vue.getTableauCommandes().setMenu(List.of(modifier, supprimer));
+    vue.getTableauCommandes().setMenu(List.of(modifier, supprimer, afficher));
   }
 
   /**
@@ -136,8 +140,11 @@ public class CtrlTabBordProducteur {
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
       // TODO à implémenter
     });
+    BoutonAction afficher = new BoutonAction("Afficher la tournée", ()
+            -> ActionsCommandes.afficherCommande(vue.getTableauCommandes()
+            .getSelectionSimple(), producteur.getUtilisateur()));
 
-    vue.getTableauTournees().setMenu(List.of(modifier, supprimer));
+    vue.getTableauTournees().setMenu(List.of(modifier, supprimer, afficher));
   }
 
   public void nouvelleCommande() {

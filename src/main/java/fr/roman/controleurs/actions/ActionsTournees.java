@@ -3,12 +3,11 @@ package fr.roman.controleurs.actions;
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.edition.CtrlEditionTournee;
 import fr.roman.controleurs.edition.TypeEdition;
+import fr.roman.controleurs.metiers.CtrlTournee;
 import fr.roman.dao.DAOProducteur;
-import fr.roman.modeles.Tournee;
-import fr.roman.modeles.Producteur;
-import fr.roman.modeles.Role;
-import fr.roman.modeles.Utilisateur;
+import fr.roman.modeles.*;
 import fr.roman.vues.edition.VueEdition;
+import fr.roman.vues.metiers.VueTournee;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -44,5 +43,14 @@ public abstract class ActionsTournees {
         VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
         CtrlEditionTournee ctrl = new CtrlEditionTournee(Tournee, vue, TypeEdition.MODIFICATION, role);
         vue.show();
+    }
+
+    public static void afficherTournee (Tournee tournee, Utilisateur utilisateur){
+        VueTournee vueTournee = new VueTournee(tournee, utilisateur);
+        try {
+            new CtrlTournee(vueTournee);
+        } catch (Exception e) {
+            RoManErreur.afficher(e);
+        }
     }
 }

@@ -3,12 +3,14 @@ package fr.roman.controleurs.actions;
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.edition.CtrlEditionCommande;
 import fr.roman.controleurs.edition.TypeEdition;
+import fr.roman.controleurs.metiers.CtrlCommande;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.modeles.Commande;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.edition.VueEdition;
+import fr.roman.vues.metiers.VueCommande;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -44,6 +46,15 @@ public abstract class ActionsCommandes {
         VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
         CtrlEditionCommande ctrl = new CtrlEditionCommande(commande, vue, TypeEdition.MODIFICATION, role);
         vue.show();
+    }
+
+    public static void afficherCommande(Commande commande, Utilisateur utilisateur){
+        VueCommande vueCommande = new VueCommande(commande, utilisateur);
+        try {
+            new CtrlCommande(vueCommande);
+        } catch (Exception e) {
+            RoManErreur.afficher(e);
+        }
     }
 
 }

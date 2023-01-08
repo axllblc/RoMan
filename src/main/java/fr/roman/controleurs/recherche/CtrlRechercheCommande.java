@@ -1,6 +1,7 @@
 package fr.roman.controleurs.recherche;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsCommandes;
 import fr.roman.dao.DAOCommande;
 import fr.roman.modeles.Commande;
 import fr.roman.modeles.Producteur;
@@ -65,11 +66,14 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
     BoutonAction nouveau = new BoutonAction("Nouvelle commande", () -> {
       // TODO à implémenter
     });
+    BoutonAction afficher = new BoutonAction("Afficher la commande", () ->
+            ActionsCommandes.afficherCommande(vue.getTableau()
+                    .getSelectionSimple(), producteur.getUtilisateur()));
 
     // Définition des boutons affichés en bas de la vue
-    vue.setBoutons(List.of(modifier, supprimer, nouveau));
+    vue.setBoutons(List.of(modifier, supprimer, nouveau, afficher));
 
     // Définition des entrées du menu contextuel du tableau
-    vue.getTableau().setMenu(List.of(modifier, supprimer));
+    vue.getTableau().setMenu(List.of(modifier, supprimer, afficher));
   }
 }

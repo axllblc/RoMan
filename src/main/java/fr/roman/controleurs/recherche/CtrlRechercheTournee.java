@@ -1,6 +1,7 @@
 package fr.roman.controleurs.recherche;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsTournees;
 import fr.roman.dao.DAOTournee;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Tournee;
@@ -66,10 +67,14 @@ public class CtrlRechercheTournee extends CtrlRecherche<Tournee> {
       // TODO à implémenter
     });
 
+    BoutonAction afficher = new BoutonAction("Afficher la tournée", () ->
+            ActionsTournees.afficherTournee(vue.getTableau()
+                    .getSelectionSimple(), producteur.getUtilisateur()));
+
     // Définition des boutons affichés en bas de la vue
-    vue.setBoutons(List.of(modifier, supprimer, nouveau));
+    vue.setBoutons(List.of(modifier, supprimer, nouveau, afficher));
 
     // Définition des entrées du menu contextuel du tableau
-    vue.getTableau().setMenu(List.of(modifier, supprimer));
+    vue.getTableau().setMenu(List.of(modifier, supprimer, afficher));
   }
 }
