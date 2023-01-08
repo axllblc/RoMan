@@ -1,0 +1,23 @@
+.node {
+  -fx-padding: 5px;
+  -fx-spacing: 5px;
+  -fx-pref-height: 0px;
+}
+
+.titre-section {
+  -fx-font-weight: bold;
+}
+
+.conteneur-btn {
+  -fx-alignment: center-right;
+  -fx-spacing: 5px;
+}
+
+.conteneur-btn > .button {
+  -fx-pref-height: 50px;
+  -fx-pref-width: 175px;
+}
+
+.separator {
+  visibility: hidden;
+}

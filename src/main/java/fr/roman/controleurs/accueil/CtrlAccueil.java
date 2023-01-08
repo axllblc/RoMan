@@ -1,13 +1,23 @@
 package fr.roman.controleurs.accueil;
 
+import fr.roman.RoManErreur;
+import fr.roman.controleurs.recherche.CtrlRechercheCommande;
+import fr.roman.controleurs.recherche.CtrlRechercheTournee;
+import fr.roman.dao.DAOProducteur;
 import fr.roman.modeles.ModuleApplication;
+import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Utilisateur;
-import fr.roman.vues.accueil.VueAccueil;
 import fr.roman.vues.VueIntegrable;
+import fr.roman.vues.accueil.TableauDeBordProducteur;
+import fr.roman.vues.accueil.VueAccueil;
+import fr.roman.vues.recherche.VueRechercheAdministrateur;
+import fr.roman.vues.recherche.VueRechercheClient;
+import fr.roman.vues.recherche.VueRechercheCommande;
+import fr.roman.vues.recherche.VueRechercheProducteur;
+import fr.roman.vues.recherche.VueRechercheTournee;
+import fr.roman.vues.recherche.VueRechercheVehicule;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 
 /**
  * Contrôleur correspondant à la vue <i>Accueil</i>. Celui-ci se charge de déterminer les modules
@@ -48,18 +58,25 @@ public class CtrlAccueil {
 
     vueAccueil.setCtrl(this);
 
-    // Instanciation des vues et contrôleurs
-    switch (utilisateur.getRole()) {
-      case ROOT:
-        modulesRoot();
-        // L'utilisateur ROOT hérite des privilèges de l'administrateur
-      case ADMINISTRATEUR:
-        modulesAdministrateur();
-        break;
-      case PRODUCTEUR:
-        modulesProducteur();
-        break;
-      default: throw new RuntimeException("Le rôle de l'utilisateur courant n'est pas valide.");
+    try {
+      // Instanciation des vues et contrôleurs
+      switch (utilisateur.getRole()) {
+        case ROOT:
+          modulesRoot();
+          // L'utilisateur ROOT hérite des privilèges de l'administrateur
+          //noinspection CheckStyle
+        case ADMINISTRATEUR:
+          modulesAdministrateur();
+          break;
+        case PRODUCTEUR:
+          modulesProducteur();
+          break;
+        default: throw new RuntimeException("Le rôle de l'utilisateur courant n'est pas valide.");
+      }
+    } catch (Exception e) {
+      RoManErreur.afficher(e);
+      e.printStackTrace();
+      System.exit(1);
     }
 
     vueAccueil.afficherInfosUtilisateur(utilisateur);
@@ -76,13 +93,8 @@ public class CtrlAccueil {
    */
   private void modulesRoot() {
     // Gestion des administrateurs
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.ADMINISTRATEURS, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des administrateurs (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.ADMINISTRATEURS, new VueRechercheAdministrateur());
   }
 
   /**
@@ -90,62 +102,39 @@ public class CtrlAccueil {
    */
   private void modulesAdministrateur() {
     // Gestion des producteurs
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.PRODUCTEURS, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des producteurs (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.PRODUCTEURS, new VueRechercheProducteur());
 
     // Gestion des clients
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.CLIENTS, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des clients (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.CLIENTS, new VueRechercheClient());
   }
 
   /**
    * Instanciation des vues et contrôleurs des modules pour un producteur.
    */
-  private void modulesProducteur() {
+  private void modulesProducteur() throws Exception {
+    // Obtention du producteur correspondant à l'utilisateur
+    DAOProducteur daoProducteur = new DAOProducteur();
+    Producteur producteur = daoProducteur.find(utilisateur);
+
     // Tableau de bord
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Tableau de bord (à implémenter)");
-      }
-    });
+    var tableauDeBordProducteur = new TableauDeBordProducteur(vueAccueil);
+    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, tableauDeBordProducteur);
+    new CtrlTabBordProducteur(utilisateur,  tableauDeBordProducteur);
 
     // Gestion des commandes
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.COMMANDES, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Commandes (à implémenter)");
-      }
-    });
+    VueRechercheCommande rechercheCommande = new VueRechercheCommande();
+    new CtrlRechercheCommande(producteur, rechercheCommande);
+    mapModuleVue.put(ModuleApplication.COMMANDES, rechercheCommande);
 
     // Gestion des tournées
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.TOURNEES, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Tournées (à implémenter)");
-      }
-    });
+    VueRechercheTournee rechercheTournee = new VueRechercheTournee();
+    new CtrlRechercheTournee(producteur, rechercheTournee);
+    mapModuleVue.put(ModuleApplication.TOURNEES, rechercheTournee);
 
     // Gestion des véhicules
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.VEHICULES, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des véhicules (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.VEHICULES, new VueRechercheVehicule());
   }
 }

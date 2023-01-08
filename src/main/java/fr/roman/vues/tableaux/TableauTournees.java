@@ -129,6 +129,33 @@ public class TableauTournees extends Tableau<Tournee> {
       }
     });
 
+    /* Colonne affichant le nombre de commandes. */
+    TableColumn<Tournee, Integer> colNbCommandes = new TableColumn<>("Nb. commandes");
+    colNbCommandes.setCellValueFactory(t ->
+        new ReadOnlyObjectWrapper<>(t.getValue().getNbCommandes())
+    );
+    colNbCommandes.setCellFactory(tableColumn -> new TextFieldTableCell<>() {
+      @Override
+      public void updateItem(Integer nbCommandes, boolean empty) {
+        super.updateItem(nbCommandes, empty);
+
+        if (!empty) {
+          setText(nbCommandes + " commandes");
+        }
+      }
+    });
+
+    /* Colonne affichant le poids total. */
+    TableColumn<Tournee, String> colPoidsTotal = new TableColumn<>("Poids total");
+    colPoidsTotal.setCellValueFactory(t ->
+        new ReadOnlyObjectWrapper<>("%03d / %03d kg".formatted(
+            t.getValue().getPoidsTotal(), t.getValue().getVehicule().getPoidsMax())
+            // Afficher "(!)" si le poids total dépasse le poids max du véhicule.
+            + ((t.getValue().getPoidsTotal() > t.getValue().getVehicule().getPoidsMax())
+              ? " (!)" : "")
+        )
+    );
+
     /* Colonne affichant le véhicule utilisé. */
     TableColumn<Tournee, String> colVehicule = new TableColumn<>("Véhicule");
     colVehicule.setCellValueFactory(t ->
@@ -136,7 +163,9 @@ public class TableauTournees extends Tableau<Tournee> {
     );
 
     // Insertion des colonnes définies ci-dessus
-    var colonnes = List.of(colValidite, colDate, colCreneau, colDuree, colVehicule);
+    var colonnes = List.of(
+        colValidite, colDate, colCreneau, colDuree, colNbCommandes, colPoidsTotal, colVehicule
+    );
     getTableau().getColumns().addAll(colonnes);
   }
 }
