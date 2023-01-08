@@ -78,7 +78,7 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     if(getTypeEdition() == TypeEdition.MODIFICATION){
       vehicule.setValeur(String.valueOf(getModele().getIdTournee()));
     }
-    getChampsFormulaire().put(Tournee.Champs.idVehicule, idTournee);
+    getChampsFormulaire().put(Tournee.Champs.idVehicule, vehicule);
 
     // TODO: estimationDuree
     /*
