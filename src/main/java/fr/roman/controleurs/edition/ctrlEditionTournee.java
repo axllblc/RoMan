@@ -4,13 +4,15 @@ import fr.roman.RoManErreur;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
 import fr.roman.dao.DAOVehicule;
-import fr.roman.modeles.Role;
-import fr.roman.modeles.Tournee;
+import fr.roman.modeles.*;
 import fr.roman.vues.edition.LibelleChamp;
 import fr.roman.vues.edition.TypeChamp;
 import fr.roman.vues.edition.VueEdition;
 
+import java.util.ArrayList;
+
 public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
+  private ArrayList<Commande> commandes = new ArrayList<>();
   // DAO nécessaire pour le fonctionnement du contrôleur
   DAOTournee daoTournee;
   DAOVehicule daoVehicule;
@@ -107,7 +109,8 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
 
   @Override
   public Tournee validerSaisie() throws Exception {
-    getChampsFormulaire().forEach((x,y) -> System.out.println(x+" - "+y));
+    verification();
+
     // note
     getModele().setNote(getChampsFormulaire().get(Tournee.Champs.note).getValeur());
 
@@ -132,8 +135,26 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     switch (getTypeEdition()){
       case CREATION -> tournee = daoTournee.insert(getModele());
       case MODIFICATION -> {  if(daoTournee.update(getModele())) tournee = getModele();}
-    
     }
     return tournee;
+  }
+  
+  private void verification() throws Exception {
+    boolean poids, temps;
+    // TODO: vérification du point de la tournée.
+    double poidsTotal = 0;
+    for(Commande c : this.commandes){
+      poidsTotal += c.getPoids();
+    }
+    Vehicule vehicule = daoVehicule.findById(
+            getChampsFormulaire().get(Tournee.Champs.idVehicule).getValeurInt());
+    poids = poidsTotal <= vehicule.getPoidsMax();
+
+    // TODO: vérification du temps de livraison.
+    temps = false;
+
+    // mise à jour du champ "valide" de la tournée
+    getChampsFormulaire()
+            .get(Tournee.Champs.valide).setValeurBool(poids && temps);
   }
 }
