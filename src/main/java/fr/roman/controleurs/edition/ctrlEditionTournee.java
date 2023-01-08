@@ -12,7 +12,8 @@ import fr.roman.vues.edition.VueEdition;
 import java.util.ArrayList;
 
 public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
-  private ArrayList<Commande> commandes = new ArrayList<>();
+  private final String BTN_VEHICULE = "Recherche véhicule";
+  private final ArrayList<Commande> commandes = new ArrayList<>();
   // DAO nécessaire pour le fonctionnement du contrôleur
   DAOTournee daoTournee;
   DAOVehicule daoVehicule;
@@ -76,8 +77,7 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
       horaireDebut.setCalendar(getModele().getHoraireDebut());
     }
     getChampsFormulaire().put(Tournee.Champs.horaireDebut, horaireDebut);
-  
-  
+
     // horaireFin
     TypeChamp horaireFin = new TypeChamp(LibelleChamp.CALENDEARTEXTFIELD);
     horaireFin.setRegex("dd/MM/yyyy HH:mm");
@@ -85,17 +85,18 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
       horaireFin.setCalendar(getModele().getHoraireFin());
     }
     getChampsFormulaire().put(Tournee.Champs.horaireFin, horaireFin);
-  
+
     // véhicule
     valeurInt = 0;
     if(getTypeEdition() == TypeEdition.MODIFICATION){
       valeurInt = getModele().getVehicule().getIdVehicule();
     }
-    TypeChamp vehicule = new TypeChamp(LibelleChamp.SPINNERINT);
-    vehicule.setSpinnerInt(0, 9999999, valeurInt);
-    vehicule.setRegex("\\d{1,50}");
+    TypeChamp vehicule = new TypeChamp(LibelleChamp.BUTTON);
+    vehicule.setValeurInt(valeurInt);
+    vehicule.setMaxInt(9999999);
+    vehicule.setValeur(BTN_VEHICULE);
     getChampsFormulaire().put(Tournee.Champs.idVehicule, vehicule);
-  
+
     // idProducteur
     valeurInt = 0;
     if(getTypeEdition() == TypeEdition.MODIFICATION){
@@ -156,5 +157,14 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     // mise à jour du champ "valide" de la tournée
     getChampsFormulaire()
             .get(Tournee.Champs.valide).setValeurBool(poids && temps);
+  }
+
+  @Override
+  public int action(String nom) {
+    if (nom.equals(BTN_VEHICULE)) {
+      // TODO: recherche véhicule
+      System.out.println(BTN_VEHICULE);
+    }
+    return getChampsFormulaire().get(Tournee.Champs.idVehicule).getValeurInt();
   }
 }

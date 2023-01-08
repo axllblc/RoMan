@@ -63,14 +63,14 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     }
 
     /**
-     * Classe à implémenter qui construit les objets {@link TypeChamp} à mettre dans la vue,
+     * Méthode à implémenter qui construit les objets {@link TypeChamp} à mettre dans la vue,
      *  c.-à-d. les champs du formulaire (préremplis le cas échéant)
      */
     abstract void chargerChamps();
 
     // accesChamps
     /**
-     * Classe permettant de restreindre l'accessibilité (la possibilité de modifier)
+     * Méthode permettant de restreindre l'accessibilité (la possibilité de modifier)
      *  les champs du formulaire selon le {@link Role rôle} de l'utilisateur
     */
     void accesChamps(){
@@ -85,18 +85,27 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     }
 
     /**
-     * Classe abstraite appelée par le bouton de validation du formulaire pour
+     * Méthode abstraite appelée par le bouton de validation du formulaire pour
      *  effectuer l'ajout ou la modification dans la base de données des champs renseignés/modifiés.
      * @return L'objet métier correspondant à ce qui a été ajouté dans la base de données
     */
     public abstract M validerSaisie() throws Exception;
-    
+
     /**
-     * Classe abstraite appelée par le bouton de retour du formulaire pour
+     * Méthode abstraite appelée par le bouton de retour du formulaire pour
      *  annuler la saisie.
      */
     public void annulerSaisie() {
     }
+
+    /**
+     * Méthode abstraite appelée par les boutons present dans les formulaires
+     * permettant de réaliser une action spécifique.
+     *
+     * @param nom du bouton sur lequel l'utilisateur a cliqué.
+     * @return un entier dépendamment de l'action mené.
+     */
+    public int action(String nom) { return 0;}
     public TypeEdition getTypeEdition() {
         return typeEdition;
     }
@@ -104,11 +113,11 @@ public abstract class CtrlEdition<M extends Modele, C extends Enum<?> & ChampsMo
     public VueEdition getVueEdition() {
         return vueEdition;
     }
-    
+
     public void setChampsFormulaire(Map<C, TypeChamp> champsFormulaire) {
         this.champsFormulaire = champsFormulaire;
     }
-    
+
     public M getModele() {
         return modele;
     }
