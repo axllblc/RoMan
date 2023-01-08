@@ -52,7 +52,6 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
   @Override
   public void chargerChamps() {
     int valeurInt;
-    boolean valeurBool;
 
     // idProducteur
     TypeChamp idProducteur = new TypeChamp(LibelleChamp.TEXTFIELD);
@@ -118,6 +117,8 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
   @Override
   public Producteur validerSaisie() throws Exception {
 
+    int idUser;
+
     // siret
     getModele().setSiret(getChampsFormulaire().get(Producteur.Champs.siret).getValeur());
 
@@ -137,11 +138,12 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
         getChampsFormulaire().get(Producteur.Champs.idUtilisateur).getValeurInt()));
 
     Producteur producteur = null;
-    Utilisateur utilisateur = null;
+    Utilisateur utilisateur = new Utilisateur();
+
     switch (getTypeEdition()) {
       case CREATION -> {
         producteur = daoProducteur.insert(getModele());
-        utilisateur = daoUtilisateur.insert(utilisateur);
+        utilisateur = daoUtilisateur.insert(getModele().getUtilisateur());
       }
       case MODIFICATION -> {
         if (daoProducteur.update(getModele())) {
