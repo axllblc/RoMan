@@ -65,7 +65,7 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
         // Si l'ajout a eu lieu, on retourne l'objet utilisateur avec son identifiant
         return new Tournee(rs.getInt(1), t.getHoraireDebut(), t.getHoraireFin(),
                 t.getEstimationDuree(), t.getNote(), t.isValide(), t.getProducteur(),
-                t.getVehicule());
+                t.getVehicule(), t.getNbCommandes(), t.getPoidsTotal());
       }
       // En cas d'échec de l'ajout
       throw new Exception(new Throwable("Erreur dans l'ajout d'une Tournée"));
@@ -179,7 +179,9 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
 
         tournees.add(new Tournee(rs.getInt("idTournee"), horaireDebut,
                 horaireFin, estimationDuree, rs.getString("note"),
-                rs.getBoolean("valide"), producteur, vehicule));
+                rs.getBoolean("valide"), producteur, vehicule, 
+                calculerNbCommande(rs.getInt("idTournee")), 
+                calculerPoidsTotal(rs.getInt("idTournee"))));
       }
       return tournees;
     }
@@ -203,5 +205,31 @@ public class DAOTournee extends DAO<Tournee, Tournee.Champs> {
       return null;
     }
     return resultatRecherche.get(0);
+  }
+
+  private int calculerPoidsTotal(int idTournee) throws Exception {
+    String sql = "SELECT SUM(poids) AS poidsTotal FROM commandes WHERE idTournee = ? GROUP BY (idTournee)";
+    // On fait une requête avec les critères de recherche
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      req.setInt(1, idTournee);
+      ResultSet rs = req.executeQuery();
+      if(rs.next()){
+        return rs.getInt("poidsTotal");
+      }
+      return 0;
+    }
+  }
+
+  private int calculerNbCommande(int idTournee) throws Exception {
+    String sql = "SELECT COUNT(poids) AS nbCommande FROM commandes WHERE idTournee = ? GROUP BY (idTournee)";
+    // On fait une requête avec les critères de recherche
+    try (PreparedStatement req = this.getCo().prepareStatement(sql)) {
+      req.setInt(1, idTournee);
+      ResultSet rs = req.executeQuery();
+      if(rs.next()){
+        return rs.getInt("nbCommande");
+      }
+      return 0;
+    }
   }
 }

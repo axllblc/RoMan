@@ -16,6 +16,8 @@ public class Tournee extends Modele {
   private boolean valide;
   private Producteur producteur;
   private Vehicule vehicule;
+  private int nbCommandes;
+  private int poidsTotal;
 
   /**
    * Constructeur sans paramètre de la classe {@link Tournee}.
@@ -25,7 +27,7 @@ public class Tournee extends Modele {
   }
 
   /**
-   * Constructeur de la classe Tournee.
+   * Constructeur de la classe Tournee (sans nbCommandes, poidsTotal).
    *
    * @param idTournee L'identifiant de la tournée dans la base.
    * @param horaireDebut Le début de la tournée.
@@ -48,6 +50,36 @@ public class Tournee extends Modele {
     this.valide = valide;
     this.producteur = producteur;
     this.vehicule = vehicule;
+  }
+
+  /**
+   * Constructeur de la classe Tournee.
+   *
+   * @param idTournee L'identifiant de la tournée dans la base.
+   * @param horaireDebut Le début de la tournée.
+   * @param horaireFin La fin de la tournée.
+   * @param estimationDuree La durée estimée de la tournée pour être effectuée.
+   * @param note La note associée à la tournée.
+   * @param valide La validité de la tournée. Une tournée est valide si les contraintes horaires
+   *               et les contraintes de poids sont vérifiées.
+   * @param producteur Le producteur responsable de cette tournée.
+   * @param vehicule Le véhicule utilisé pour effectuer la tournée.
+   * @param nbCommandes Le nombre total de commandes associées à la tournée.
+   * @param poidsTotal Le poids total des commandes associées à la tournée.
+   */
+  public Tournee(int idTournee, Calendar horaireDebut, Calendar horaireFin,
+                 Duration estimationDuree, String note, boolean valide, Producteur producteur,
+                 Vehicule vehicule, int nbCommandes, int poidsTotal) {
+    this.idTournee = idTournee;
+    this.horaireDebut = horaireDebut;
+    this.horaireFin = horaireFin;
+    this.estimationDuree = estimationDuree;
+    this.note = note;
+    this.valide = valide && (poidsTotal <= vehicule.getPoidsMax());
+    this.producteur = producteur;
+    this.vehicule = vehicule;
+    this.nbCommandes = nbCommandes;
+    this.poidsTotal = poidsTotal;
   }
 
   @Override
@@ -115,6 +147,22 @@ public class Tournee extends Modele {
     this.vehicule = vehicule;
   }
 
+  public int getNbCommandes() {
+    return nbCommandes;
+  }
+
+  public void setNbCommandes(int nbCommandes) {
+    this.nbCommandes = nbCommandes;
+  }
+
+  public int getPoidsTotal() {
+    return poidsTotal;
+  }
+
+  public void setPoidsTotal(int poidsTotal) {
+    this.poidsTotal = poidsTotal;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -127,13 +175,16 @@ public class Tournee extends Modele {
         && Objects.equals(estimationDuree, tournee.estimationDuree)
         && Objects.equals(note, tournee.note)
         && Objects.equals(producteur, tournee.producteur)
-        && Objects.equals(vehicule, tournee.vehicule);
+        && Objects.equals(vehicule, tournee.vehicule)
+        && Objects.equals(nbCommandes, tournee.nbCommandes)
+        && Objects.equals(poidsTotal, tournee.poidsTotal);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        horaireDebut, horaireFin, estimationDuree, note, valide, producteur, vehicule
+        horaireDebut, horaireFin, estimationDuree, note, valide, producteur, vehicule,
+        nbCommandes, poidsTotal
     );
   }
 
@@ -148,6 +199,8 @@ public class Tournee extends Modele {
         + ", valide=" + valide
         + ", producteur=" + producteur
         + ", vehicule=" + vehicule
+        + ", nbCommandes=" + nbCommandes
+        + ", poidsTotal=" + poidsTotal
         + '}';
   }
 
