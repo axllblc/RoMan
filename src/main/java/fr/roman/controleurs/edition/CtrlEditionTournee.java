@@ -11,7 +11,7 @@ import fr.roman.vues.edition.VueEdition;
 
 import java.util.ArrayList;
 
-public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
+public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
   private final String BTN_VEHICULE = "Recherche véhicule";
   private final ArrayList<Commande> commandes = new ArrayList<>();
   // DAO nécessaire pour le fonctionnement du contrôleur
@@ -36,7 +36,7 @@ public class ctrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
    * @param typeEdition Le type de contrôleur : création ou modification
    * @param role        Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
    */
-  public ctrlEditionTournee(Tournee tournee, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
+  public CtrlEditionTournee(Tournee tournee, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
     super(tournee, vueEdition, typeEdition, role);
   }
 

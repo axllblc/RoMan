@@ -168,7 +168,7 @@ public class VueEdition {
           // création d'une "checkbox"
                 this.composants.put(c.toString(), checkBox(t));
         case BUTTON ->
-          // création d'un ""
+          // création d'un "button"
                 this.composants.put(c.toString(), button(t));
         default -> throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
       }
