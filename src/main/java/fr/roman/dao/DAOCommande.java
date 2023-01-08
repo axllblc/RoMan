@@ -1,7 +1,6 @@
 package fr.roman.dao;
 
 import fr.roman.modeles.*;
-
 import java.sql.*;
 import java.util.*;
 
@@ -151,6 +150,40 @@ public class DAOCommande extends DAO<Commande, Commande.Champs> {
       return req.executeUpdate() == 1;
       // Sinon, on retourne false
     }
+  }
+
+  /**
+   * Suppression de plusieurs commandes dans la base.
+   *
+   * @param commandes Commandes à supprimer
+   * @return {@code true} si les commandes ont été supprimées {@code false} sinon.
+   * @throws SQLException Si la requête n'a pas pu avoir lieu
+   */
+  public boolean deleteAll(List<Commande> commandes) throws SQLException {
+    boolean statut = true;
+
+    try {
+      // Début d'une transaction
+      getCo().setAutoCommit(false);
+      for (Commande commande : commandes) {
+        statut = statut && delete(commande.getId());
+      }
+      // Si toutes les commandes ont été supprimées, la transaction est validée (commit), sinon
+      // elle est annulée (rollback)
+      if (statut) {
+        getCo().commit();
+      } else {
+        getCo().rollback();
+      }
+    } catch (SQLException e) {
+      // En cas de problème, la transaction est annulée
+      getCo().rollback();
+      throw e;
+    } finally {
+      getCo().setAutoCommit(true);
+    }
+
+    return statut;
   }
 
   /**
