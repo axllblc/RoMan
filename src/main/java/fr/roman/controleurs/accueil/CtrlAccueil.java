@@ -10,14 +10,14 @@ import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.VueIntegrable;
 import fr.roman.vues.accueil.TableauDeBordProducteur;
 import fr.roman.vues.accueil.VueAccueil;
+import fr.roman.vues.recherche.VueRechercheAdministrateur;
+import fr.roman.vues.recherche.VueRechercheClient;
 import fr.roman.vues.recherche.VueRechercheCommande;
+import fr.roman.vues.recherche.VueRechercheProducteur;
 import fr.roman.vues.recherche.VueRechercheTournee;
+import fr.roman.vues.recherche.VueRechercheVehicule;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-// Imports provisoires
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 
 /**
  * Contrôleur correspondant à la vue <i>Accueil</i>. Celui-ci se charge de déterminer les modules
@@ -64,6 +64,7 @@ public class CtrlAccueil {
         case ROOT:
           modulesRoot();
           // L'utilisateur ROOT hérite des privilèges de l'administrateur
+          //noinspection CheckStyle
         case ADMINISTRATEUR:
           modulesAdministrateur();
           break;
@@ -92,13 +93,8 @@ public class CtrlAccueil {
    */
   private void modulesRoot() {
     // Gestion des administrateurs
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.ADMINISTRATEURS, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des administrateurs (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.ADMINISTRATEURS, new VueRechercheAdministrateur());
   }
 
   /**
@@ -106,22 +102,12 @@ public class CtrlAccueil {
    */
   private void modulesAdministrateur() {
     // Gestion des producteurs
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.PRODUCTEURS, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des producteurs (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.PRODUCTEURS, new VueRechercheProducteur());
 
     // Gestion des clients
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.CLIENTS, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des clients (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.CLIENTS, new VueRechercheClient());
   }
 
   /**
@@ -148,12 +134,7 @@ public class CtrlAccueil {
     mapModuleVue.put(ModuleApplication.TOURNEES, rechercheTournee);
 
     // Gestion des véhicules
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.VEHICULES, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Gestion des véhicules (à implémenter)");
-      }
-    });
+    // TODO Vue et contrôleur à implémenter
+    mapModuleVue.put(ModuleApplication.VEHICULES, new VueRechercheVehicule());
   }
 }
