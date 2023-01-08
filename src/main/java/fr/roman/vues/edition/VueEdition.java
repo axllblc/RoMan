@@ -334,7 +334,7 @@ public class VueEdition {
     }
 
     /**
-     * Créer un {@link Stage} contenant la vue <i>Accueil</i> et l'afficher.
+     * Créer un {@link Stage} contenant la vue <i>Edition</i> et l'afficher.
      */
     public void show() {
         stage = new Stage();
