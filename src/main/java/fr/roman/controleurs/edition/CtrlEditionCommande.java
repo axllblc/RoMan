@@ -74,7 +74,8 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
       valeurDouble = getModele().getPoids();
     }
     TypeChamp poids = new TypeChamp(LibelleChamp.SPINNERDOUBLE);
-    poids.setSpinnerDouble(0., 255., valeurDouble);
+    poids.setSpinnerDouble(0., 9999., valeurDouble);
+    poids.setValeurDouble(valeurDouble);
     poids.setPlaceholder("en kg");
     getChampsFormulaire().put(Commande.Champs.poids, poids);
 
@@ -115,7 +116,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     TypeChamp dateInitiale = new TypeChamp(LibelleChamp.CALENDEARTEXTFIELD);
     dateInitiale.setRegex("dd/MM/yyyy");
     if(getTypeEdition() == TypeEdition.MODIFICATION){
-      dateInitiale.setCalendar(getModele().getHoraireDebut());
+      dateInitiale.setCalendar(getModele().getDateInitiale());
     }
     getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
 
