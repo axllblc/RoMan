@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.CalendarTimeTextField;
 
@@ -22,6 +23,7 @@ import java.util.*;
  * Classe qui définit la vue pour les contrôleurs d'édition (ajout ou modification de métiers)
  */
 public class VueEdition {
+    Stage stage;
     /**
      * Contrôleur de la vue <i>Edition</i>.
      */
@@ -29,7 +31,7 @@ public class VueEdition {
     /**
      * Le type de la vue : création ou modification
      */
-    private TypeEdition typeEdition;
+    private final TypeEdition typeEdition;
     /**
      * La scène contenant les éléments de la vue
      */
@@ -65,6 +67,7 @@ public class VueEdition {
      */
     private final Map<String, Node> composants = new LinkedHashMap<>();
     private Map<? extends ChampsModele, TypeChamp> signal = new LinkedHashMap<>();
+    private String nomMetier = "";
 
     /**
      * Construire la vue d'<i>édition</i>.
@@ -123,10 +126,11 @@ public class VueEdition {
     /**
      * Définir et ajouter les champs du formulaire qui seront affichés
      *
-     * @param label le nom du métier qui va être édité
+     * @param nomMetier le nom du métier qui va être édité
      */
-    public void definirChamps(String label) {
-        this.titre.setText(this.typeEdition.libelle + " : " + label);
+    public void definirChamps(String nomMetier) {
+        this.nomMetier = nomMetier;
+        this.titre.setText(this.typeEdition.libelle + " : " + nomMetier);
         this.composants.forEach((nom, noeud) -> formulaire.getChildren().addAll(new Label(nom),noeud));
     }
 
@@ -327,5 +331,19 @@ public class VueEdition {
                 value.setValeurBool(((CheckBox) c).isIndeterminate());
             }
         }
+    }
+
+    /**
+     * Créer un {@link Stage} contenant la vue <i>Accueil</i> et l'afficher.
+     */
+    public void show() {
+        stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle(this.typeEdition.libelle + " : " + nomMetier);
+
+        stage.setMinWidth(300);
+        stage.setMinHeight(800);
+
+        stage.show();
     }
 }
