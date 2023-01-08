@@ -30,7 +30,7 @@ public abstract class VueMetier {
   /**
    * Boutton redirigant l'utilisateur vers la vue de modification.
    */
-  private final Button btnModifier;
+  final Button btnModifier;
 
   /**
    * Boutton permettant de supprimer l'objet affiché à l'écran.
@@ -243,9 +243,7 @@ public abstract class VueMetier {
       }
     });
 
-    btnModifier.setOnAction((event) -> {
 
-    });
 
 
   }
@@ -272,5 +270,9 @@ public abstract class VueMetier {
     stage.setTitle("RoMan");
 
     stageRedirection.show();
+  }
+
+  public void close() {
+    stage.close();
   }
 }

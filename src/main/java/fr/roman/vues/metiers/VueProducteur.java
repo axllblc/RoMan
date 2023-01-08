@@ -97,6 +97,15 @@ public class VueProducteur extends VueMetier {
       redirectionAccueil();
     });
 
+    btnModifier.setOnAction((event) -> {
+      try {
+        close();
+        ctrl.modification(producteur);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
+
   }
 
   public void setCtrl(CtrlProducteur ctrl) {

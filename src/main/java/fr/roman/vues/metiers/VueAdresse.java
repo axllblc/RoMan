@@ -98,6 +98,15 @@ public class VueAdresse extends VueMetier {
       }
       redirectionAccueil();
     });
+
+    btnModifier.setOnAction((event) -> {
+      try {
+        close();
+        ctrl.modification(adresse);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
 

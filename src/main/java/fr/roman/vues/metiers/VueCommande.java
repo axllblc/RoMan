@@ -117,6 +117,15 @@ public class VueCommande extends VueMetier {
       redirectionAccueil();
     });
 
+    btnModifier.setOnAction((event) -> {
+      try {
+        close();
+        ctrl.modification(commande);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
+
 
 
   }

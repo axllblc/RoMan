@@ -108,6 +108,15 @@ public class VueTournee extends VueMetier {
       }
       redirectionAccueil();
     });
+
+    btnModifier.setOnAction((event) -> {
+      try {
+        close();
+        ctrl.modification(tournee);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
   public void setCtrl(CtrlTournee ctrl) {

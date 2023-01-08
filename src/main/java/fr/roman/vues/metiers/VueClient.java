@@ -83,6 +83,15 @@ public class VueClient extends VueMetier {
       }
       redirectionAccueil();
     });
+
+    btnModifier.setOnAction((event) -> {
+      try {
+        close();
+        ctrl.modification(client);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 
   public void setCtrl(CtrlClient ctrl) {

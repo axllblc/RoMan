@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 /**
  * Classe de l'objet vehicule, elle nous permettra de visualiser les objets de ce type
@@ -83,6 +84,15 @@ public class VueVehicule extends VueMetier {
         RoManErreur.afficher(e);
       }
       redirectionAccueil();
+    });
+
+    btnModifier.setOnAction((event) -> {
+      try {
+        close();
+        ctrl.modification(vehicule);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
     });
   }
 

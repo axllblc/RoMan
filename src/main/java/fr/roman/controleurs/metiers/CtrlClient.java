@@ -1,9 +1,14 @@
 package fr.roman.controleurs.metiers;
 
 
-import fr.roman.modeles.Client;
-import fr.roman.vues.metiers.VueClient;
+import fr.roman.controleurs.edition.CtrlEditionClient;
+import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.dao.DAOClient;
+import fr.roman.modeles.Client;
+import fr.roman.modeles.Role;
+import fr.roman.vues.edition.VueEdition;
+import fr.roman.vues.metiers.VueClient;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
@@ -19,15 +24,29 @@ public class CtrlClient {
    */
   private final DAOClient daoClient;
 
+  /**
+   * Stage de modification.
+   */
+  private final Stage primaryStage;
+
 
   public CtrlClient(VueClient vueClient) throws Exception {
 
     this.vueClient = vueClient;
     daoClient = new DAOClient();
+    primaryStage = new Stage();
 
   }
 
   public void removeClient(Client client) throws SQLException {
     daoClient.delete(client.getIdClient());
   }
+
+  public void modification(Client client) throws Exception {
+    VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
+    CtrlEditionClient ctrl = new CtrlEditionClient(client, vue, TypeEdition.MODIFICATION, Role.PRODUCTEUR);
+    primaryStage.setScene(vue.getScene());
+    primaryStage.show();
+  }
+
 }
