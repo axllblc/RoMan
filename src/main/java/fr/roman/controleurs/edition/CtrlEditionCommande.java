@@ -32,7 +32,6 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     /**
      * Constructeur du contrôleur
      * @param commande La commande dans laquelle des stockés les informations de la vue
-     *                 (vide si typeEdition = CREATION)
      * @param vueEdition La vue (d'édition) que la classe contrôle
      * @param typeEdition Le type de contrôleur : création ou modification
      * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
@@ -129,7 +128,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
 
         // producteur
         valeurInt = 0;
-        if(getTypeEdition() == TypeEdition.MODIFICATION) {
+        if(getTypeEdition() == TypeEdition.MODIFICATION || getRole() == Role.PRODUCTEUR) {
             valeurInt = getModele().getProducteur().getIdProducteur();
         }
         TypeChamp producteur = new TypeChamp(LibelleChamp.SPINNERINT);
