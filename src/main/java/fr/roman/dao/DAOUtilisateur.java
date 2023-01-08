@@ -149,10 +149,7 @@ public class DAOUtilisateur extends DAO<Utilisateur, Utilisateur.Champs> {
     if (u.getMdp() == null){
       throw new Exception("Mot de passe non renseigné");
     }
-    if ((u.getRole() == Role.PRODUCTEUR
-            && !(Thread.currentThread().getStackTrace()[2].getMethodName().equals("insert")))) {
-      throw new Exception("Ajout de compte utilisateur pour un producteur sans ajouter un objet producteur avant");
-    }
+
     // On vérifie que si on modifie le nom d'utilisateur, il n'existe pas déjà dans la base
     Utilisateur rechNomUti = findByNomUtilisateur(u.getNomUtilisateur());
     if (rechNomUti != null && rechNomUti.getIdUtilisateur() != u.getIdUtilisateur()){
