@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 public class VueAuthentification {
 
   /**
-   * Scene pricipale.
+   * {@link Scene} principale.
    */
   private final Scene scene;
 
@@ -27,12 +27,12 @@ public class VueAuthentification {
   private final Label labelConnexion;
 
   /**
-   * Label à afficher lorsque le/les champ(s) est/sont incorrrect(s).
+   * Label à afficher lorsque le/les champ(s) est/sont incorrect(s).
    */
   private final Label labelErreurConnexion;
 
   /**
-   * Champ à renseiger avec un mot de passe.
+   * Champ à renseigner avec un mot de passe.
    */
   private final PasswordField passwordField;
 
@@ -47,7 +47,7 @@ public class VueAuthentification {
   private final Button btnConnexion;
 
   /**
-   * Box contenant tout les élément de la scéne.
+   * Box contenant tous les éléments de la {@link Scene}.
    */
   private final VBox vbox;
 
@@ -61,36 +61,36 @@ public class VueAuthentification {
   private boolean erreurIdAdd;
 
   /**
-   * Stage auhentification
+   * {@link Stage} authentification.
    */
   private final Stage stageAuthentification;
 
 
   /**
-   * Constructeur de la classe elle permettra de mettre en place tout les éléments
-   * graphique de la fonction authentification.
+   * Constructeur de la classe. Elle permettra de mettre en place tous les éléments
+   * graphiques de la fonction authentification.
    *
-   * @param stage stage de la fonction start
+   * @param stage {@link Stage} de la fonction start
    */
   public VueAuthentification(Stage stage) {
-    // définition des éléments de la scéne
+    // Définition des éléments graphiques
     textFieldIdentifiant = new TextField();
     passwordField = new PasswordField();
     btnConnexion = new Button("Connexion");
     labelErreurConnexion = new Label("Champs incorrects");
     labelConnexion = new Label("Connexion");
     vbox = new VBox();
-    scene = new Scene(vbox);
     erreurIdAdd = false;
+    scene = new Scene(vbox);
     stageAuthentification = stage;
 
-    stuctureAuthentification(stageAuthentification);
+    structureAuthentification(stageAuthentification);
   }
 
   /**
    * Getter permettant d'obtenir la chaine de caractère entrée dans le champ identifiant.
    *
-   * @return revoie NomUtilisateur.
+   * @return NomUtilisateur.
    */
   public String getNomUtilisateur() {
     return textFieldIdentifiant.getText();
@@ -99,54 +99,49 @@ public class VueAuthentification {
   /**
    * Getter permettant d'obtenir la chaine de caractère entrée dans le champ password.
    *
-   * @return revoie Password.
+   * @return Password.
    */
   public String getPassword() {
     return passwordField.getText();
   }
 
   /**
-   * Permet de mettre en place les éléments de la scéne.
+   * Permet de mettre en place les éléments de la {@link Scene}.
    *
    * @param stage Stage de la partie Authentification.
    */
-  private void stuctureAuthentification(Stage stage) {
-
-    // Ajout chaine de caratère grisée dans les TextFields
+  private void structureAuthentification(Stage stage) {
+    // Ajout de prompt text dans les TextFields (pour donner des indications à l'utilisateur)
     textFieldIdentifiant.setPromptText("Identifiant");
     passwordField.setPromptText("Mot de passe");
 
-    // Gestion taille des éléments de la scène
+    // Gestion taille des éléments graphiques
     textFieldIdentifiant.setMaxWidth(200);
     passwordField.setMaxWidth(200);
     btnConnexion.setMaxWidth(200);
 
-    // Gestion espacements + alignement dans la box
+    // Gestion espacements + alignement dans la VBox
     vbox.setSpacing(10);
-    Insets padding = new Insets(20);
-    vbox.setPadding(padding);
+    vbox.setPadding(new Insets(20));
     vbox.setAlignment(Pos.CENTER);
 
-    // Ajout des éléments dans la scène
+    // Ajout des éléments dans la scène (Scene)
     vbox.getChildren().add(labelConnexion);
     vbox.getChildren().add(textFieldIdentifiant);
     vbox.getChildren().add(passwordField);
     vbox.getChildren().add(btnConnexion);
 
-    // Gestion scène
+    // Définition du bouton de connexion comme bouton par défaut (il est ainsi actionné lorsque
+    // l'utilisateur appuie sur la touche Entrée) et ajout de son Event handler.
+    btnConnexion.setDefaultButton(true);
+    btnConnexion.setOnAction(event -> ctrl.verify());
+
+    // Gestion du Stage et affichage
     stage.setScene(scene);
     stage.sizeToScene();
     stage.setResizable(false);
     stage.setTitle("RoMan");
-
-
-    // Affichage scène
     stage.show();
-
-    btnConnexion.setOnAction((event) -> {
-        ctrl.verify();
-    });
-
   }
 
   /**
@@ -166,15 +161,12 @@ public class VueAuthentification {
       vbox.getChildren().add(labelErreurConnexion);
       erreurIdAdd = true;
     }
+
+    // Le champ du mot de passe est vidé
     passwordField.setText("");
-
-
   }
 
   public void close() {
     stageAuthentification.close();
-
   }
-
-
 }
