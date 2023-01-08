@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.CalendarTimeTextField;
@@ -151,7 +152,10 @@ public class VueEdition {
                     this.composants.put(c.toString(), textField(t));
                 case SPINNERDOUBLE ->
                     // création d'un "spinner" de Double.
-                    this.composants.put(c.toString(), spinnerDouble(t));
+                        this.composants.put(c.toString(), spinnerDouble(t));
+                case DOUBLESPINNERDOUBLE ->
+                    // création d'un "spinner" de Double.
+                        this.composants.put(c.toString(), doubleSpinnerDouble(t));
                 case SPINNERINT ->
                     // création d'un "spinner" de Integer.
                     this.composants.put(c.toString(), spinnerInteger(t));
@@ -171,7 +175,7 @@ public class VueEdition {
 
     private Node textField(TypeChamp t) {
         TextField resultat = new TextField();
-        resultat.setDisable(t.isDiseble());
+        resultat.setDisable(t.isDisable());
         if(!t.getRegex().isEmpty()) {
             resultat.setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
@@ -189,10 +193,10 @@ public class VueEdition {
 
     private Node spinnerDouble(TypeChamp t) {
         Spinner<Double> resultat = new Spinner<>();
-        resultat.setDisable(t.isDiseble());
+        resultat.setDisable(t.isDisable());
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
-            .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getValeurDouble()));
+                .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getValeurDouble()));
         if(!t.getRegex().isEmpty()){
             resultat.getEditor().setTextFormatter(new TextFormatter<>(change -> {
                 if (!change.getControlNewText().matches(t.getRegex())) {
@@ -205,9 +209,48 @@ public class VueEdition {
         resultat.setTooltip(new Tooltip(t.getPlaceholder()));
         return resultat;
     }
+
+    private Node doubleSpinnerDouble(TypeChamp t) {
+        HBox conteneurDouble = new HBox();
+        Spinner<Double> longitude = new Spinner<>();
+        Spinner<Double> latitude = new Spinner<>();
+        conteneurDouble.getChildren().add(longitude);
+        conteneurDouble.getChildren().add(latitude);
+
+        longitude.setDisable(t.isDisable());
+        longitude.setEditable(true);
+        longitude.setValueFactory(new SpinnerValueFactory
+                .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getValeurDoubleTab1x2()[0]));
+        if(!t.getRegex().isEmpty()){
+            longitude.getEditor().setTextFormatter(new TextFormatter<>(change -> {
+                if (!change.getControlNewText().matches(t.getRegex())) {
+                    return null;
+                } else {
+                    return change;
+                }
+            }));
+        }
+
+        latitude.setDisable(t.isDisable());
+        latitude.setEditable(true);
+        latitude.setValueFactory(new SpinnerValueFactory
+                .DoubleSpinnerValueFactory(t.getMinDouble(), t.getMaxDouble(), t.getValeurDoubleTab1x2()[1]));
+        if(!t.getRegex().isEmpty()){
+            latitude.getEditor().setTextFormatter(new TextFormatter<>(change -> {
+                if (!change.getControlNewText().matches(t.getRegex())) {
+                    return null;
+                } else {
+                    return change;
+                }
+            }));
+        }
+
+
+        return conteneurDouble;
+    }
     private Node spinnerInteger(TypeChamp t) {
         Spinner<Integer> resultat = new Spinner<>();
-        resultat.setDisable(t.isDiseble());
+        resultat.setDisable(t.isDisable());
         resultat.setEditable(true);
         resultat.setValueFactory(new SpinnerValueFactory
             .IntegerSpinnerValueFactory(t.getMinInt(), t.getMaxInt(), t.getValeurInt()));
@@ -225,7 +268,7 @@ public class VueEdition {
 
     private Node calendarTimeTextField(TypeChamp t) {
         CalendarTimeTextField resultat = new CalendarTimeTextField();
-        resultat.setDisable(t.isDiseble());
+        resultat.setDisable(t.isDisable());
         resultat.setLocale(Locale.FRANCE);
         resultat.setMinuteStep(15);
         if(!(t.getRegex().isEmpty())){
@@ -239,7 +282,7 @@ public class VueEdition {
 
     public Node calendarTextField(TypeChamp t) {
         CalendarTextField resultat = new CalendarTextField();
-        resultat.setDisable(t.isDiseble());
+        resultat.setDisable(t.isDisable());
         resultat.setShowTime(true);
         resultat.autosize();
         resultat.setLocale(Locale.FRANCE);
@@ -252,7 +295,7 @@ public class VueEdition {
     }
     private Node checkBox(TypeChamp t) {
         CheckBox resultat = new CheckBox();
-        resultat.setDisable(t.isDiseble());
+        resultat.setDisable(t.isDisable());
         resultat.setSelected(t.isValeurBool());
         return resultat;
     }

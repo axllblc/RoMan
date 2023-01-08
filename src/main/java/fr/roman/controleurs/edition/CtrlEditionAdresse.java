@@ -51,12 +51,22 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
         getChampsFormulaire().put(Adresse.Champs.idAdresse, idAdresse);
 
         // coordonneesGPS
+        /*
         valeurDoubleTab1x2 = new double[]{};
         if(getTypeEdition() == TypeEdition.MODIFICATION){
             valeurDoubleTab1x2 = getModele().getCoordonneesGPS();
         }
         TypeChamp coordonneesGPS = new TypeChamp(LibelleChamp.TEXTFIELD);
         coordonneesGPS.setDoubleTab1x2(valeurDoubleTab1x2);
+        getChampsFormulaire().put(Adresse.Champs.coordonneesGPS, coordonneesGPS);
+        */
+
+        valeurDoubleTab1x2 = new double[]{};
+        if(getTypeEdition() == TypeEdition.MODIFICATION){
+            valeurDoubleTab1x2 = getModele().getCoordonneesGPS();
+        }
+        TypeChamp coordonneesGPS = new TypeChamp(LibelleChamp.DOUBLESPINNERDOUBLE);
+        coordonneesGPS.setDoubleSpinnerDouble(-180, 180, valeurDoubleTab1x2[0],valeurDoubleTab1x2[1]);
         getChampsFormulaire().put(Adresse.Champs.coordonneesGPS, coordonneesGPS);
 
         // libelle

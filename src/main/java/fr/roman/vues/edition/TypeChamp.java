@@ -50,6 +50,12 @@ public class TypeChamp {
     setMaxDouble(max);
     setValeurDouble(valeurInitial);
   }
+  public void setDoubleSpinnerDouble(double min,double max,double valeurInitial1,double valeurInitial2) {
+    System.err.println("min "+min+" max "+max+" valeurInitial "+valeurInitial1+valeurInitial2);
+    setMinDouble(min);
+    setMaxDouble(max);
+    setValeurDoubleTab1x2(new double[]{valeurInitial1,valeurInitial2});
+  }
 
   public void setSpinnerInt(int min,int max,int valeurInitial) {
     System.err.println("min "+min+" max "+max+" valeurInitial "+valeurInitial);
@@ -173,7 +179,7 @@ public class TypeChamp {
     this.calendar = calendar;
   }
 
-  public boolean isDiseble() {
+  public boolean isDisable() {
     return disable;
   }
 
