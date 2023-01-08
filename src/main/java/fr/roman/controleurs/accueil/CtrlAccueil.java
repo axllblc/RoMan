@@ -8,6 +8,7 @@ import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.VueIntegrable;
+import fr.roman.vues.accueil.TableauDeBordProducteur;
 import fr.roman.vues.accueil.VueAccueil;
 import fr.roman.vues.recherche.VueRechercheCommande;
 import fr.roman.vues.recherche.VueRechercheTournee;
@@ -132,13 +133,9 @@ public class CtrlAccueil {
     Producteur producteur = daoProducteur.find(utilisateur);
 
     // Tableau de bord
-    // TODO à implémenter
-    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, new VueIntegrable() {
-      @Override
-      public Node getNode() {
-        return new Label("Tableau de bord (à implémenter)");
-      }
-    });
+    var tableauDeBordProducteur = new TableauDeBordProducteur(vueAccueil);
+    mapModuleVue.put(ModuleApplication.TABLEAU_DE_BORD, tableauDeBordProducteur);
+    new CtrlTabBordProducteur(utilisateur,  tableauDeBordProducteur);
 
     // Gestion des commandes
     VueRechercheCommande rechercheCommande = new VueRechercheCommande();

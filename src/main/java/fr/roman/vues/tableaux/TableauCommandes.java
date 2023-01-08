@@ -171,5 +171,9 @@ public class TableauCommandes extends Tableau<Commande> {
     colDateInitiale.getColumns().addAll(List.of(colJourLivraison, colCreneauLivraison));
     colClient.getColumns().addAll(List.of(colNomClient, colAdresseClient));
     getTableau().getColumns().addAll(colonnes);
+
+    // Tri
+    colStatut.setSortType(TableColumn.SortType.DESCENDING);
+    getTableau().getSortOrder().add(colStatut);
   }
 }
