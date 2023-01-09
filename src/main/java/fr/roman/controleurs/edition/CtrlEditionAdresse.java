@@ -168,6 +168,7 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
                                         adresse = getModele();
                                  }
         }
+        getVueEdition().close();
         return adresse;
     }
 }

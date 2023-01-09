@@ -388,8 +388,14 @@ public class VueEdition {
     stage.setTitle(this.TYPE_EDITION.libelle + " : " + nomMetier);
 
     stage.setMinWidth(300);
-    stage.setMinHeight(800);
+    stage.setMinHeight(500);
 
     stage.show();
+  }
+
+  public void close(){
+    if(stage != null){
+      stage.close();
+    }
   }
 }
