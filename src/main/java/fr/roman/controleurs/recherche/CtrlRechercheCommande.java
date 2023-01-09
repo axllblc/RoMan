@@ -36,6 +36,8 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
     super(vue);
 
     this.producteur = producteur;
+
+    vue.getTableau().autoriserSelectionMultiple(true);
   }
 
   /**
@@ -49,14 +51,18 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
         )
     );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      List<Commande> selection = vue.getTableau().getSelectionMultiple();
+      if (ActionsCommandes.supprimer(selection)) {
+        vue.getTableau().supprimer(selection);
+      }
     });
     BoutonAction nouveau = new BoutonAction("Nouvelle commande", () ->
         ActionsCommandes.creerCommande(producteur, Role.PRODUCTEUR)
     );
     BoutonAction afficher = new BoutonAction("Afficher la commande", () ->
             ActionsCommandes.afficherCommande(vue.getTableau()
-                    .getSelectionSimple(), producteur.getUtilisateur()));
+                    .getSelectionSimple(), producteur.getUtilisateur())
+    );
 
     // Définition des boutons affichés en bas de la vue
     vue.setBoutons(List.of(afficher, modifier, supprimer, nouveau));

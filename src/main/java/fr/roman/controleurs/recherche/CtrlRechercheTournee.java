@@ -49,7 +49,10 @@ public class CtrlRechercheTournee extends CtrlRecherche<Tournee> {
         )
     );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      Tournee selection = vue.getTableau().getSelectionSimple();
+      if (ActionsTournees.supprimer(selection)) {
+        vue.getTableau().supprimer(selection);
+      }
     });
     BoutonAction nouveau = new BoutonAction("Nouvelle tournée", () ->
         ActionsTournees.creerTournee(producteur, Role.PRODUCTEUR)

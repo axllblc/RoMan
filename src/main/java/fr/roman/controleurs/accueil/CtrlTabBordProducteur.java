@@ -21,6 +21,8 @@ import java.util.List;
  * Contrôleur de la vue <i>Tableau de bord</i> pour les producteurs.
  *
  * @see TableauDeBordProducteur
+ *
+ * @author Axel Leblanc
  */
 public class CtrlTabBordProducteur {
   private Producteur producteur;
@@ -128,7 +130,10 @@ public class CtrlTabBordProducteur {
         )
     );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      List<Commande> selection = vue.getTableauCommandes().getSelectionMultiple();
+      if (ActionsCommandes.supprimer(selection)) {
+        vue.getTableauCommandes().supprimer(selection);
+      }
     });
     BoutonAction afficher = new BoutonAction("Afficher la commande", () ->
             ActionsCommandes.afficherCommande(vue.getTableauCommandes()
@@ -147,7 +152,10 @@ public class CtrlTabBordProducteur {
         )
     );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      Tournee selection = vue.getTableauTournees().getSelectionSimple();
+      if (ActionsTournees.supprimer(selection)) {
+        vue.getTableauTournees().supprimer(selection);
+      }
     });
     BoutonAction afficher = new BoutonAction("Afficher la tournée", ()
             -> ActionsCommandes.afficherCommande(vue.getTableauCommandes()
