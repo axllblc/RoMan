@@ -1,6 +1,8 @@
 package fr.roman.controleurs.accueil;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsCommandes;
+import fr.roman.controleurs.actions.ActionsTournees;
 import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
@@ -120,35 +122,45 @@ public class CtrlTabBordProducteur {
    * Ajout du menu contextuel du tableau des commandes.
    */
   private void menuCommandes() {
-    BoutonAction modifier = new BoutonAction("Modifier la commande", () -> {
-      // TODO à implémenter
-    });
+    BoutonAction modifier = new BoutonAction("Modifier la commande", () ->
+        ActionsCommandes.modifierCommande(
+            vue.getTableauCommandes().getSelectionSimple(), Role.PRODUCTEUR
+        )
+    );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
       // TODO à implémenter
     });
+    BoutonAction afficher = new BoutonAction("Afficher la commande", () ->
+            ActionsCommandes.afficherCommande(vue.getTableauCommandes()
+                    .getSelectionSimple(), producteur.getUtilisateur()));
 
-    vue.getTableauCommandes().setMenu(List.of(modifier, supprimer));
+    vue.getTableauCommandes().setMenu(List.of(afficher, modifier, supprimer));
   }
 
   /**
    * Ajout du menu contextuel du tableau des tournées.
    */
   private void menuTournees() {
-    BoutonAction modifier = new BoutonAction("Modifier la tournée", () -> {
-      // TODO à implémenter
-    });
+    BoutonAction modifier = new BoutonAction("Modifier la tournée", () ->
+        ActionsTournees.modifierTournee(
+            vue.getTableauTournees().getSelectionSimple(), Role.PRODUCTEUR
+        )
+    );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
       // TODO à implémenter
     });
+    BoutonAction afficher = new BoutonAction("Afficher la tournée", ()
+            -> ActionsCommandes.afficherCommande(vue.getTableauCommandes()
+            .getSelectionSimple(), producteur.getUtilisateur()));
 
-    vue.getTableauTournees().setMenu(List.of(modifier, supprimer));
+    vue.getTableauTournees().setMenu(List.of(afficher, modifier, supprimer));
   }
 
   public void nouvelleCommande() {
-    // TODO à implémenter
+    ActionsCommandes.creerCommande(producteur, Role.PRODUCTEUR);
   }
 
   public void nouvelleTournee() {
-    // TODO à implémenter
+    ActionsTournees.creerTournee(producteur, Role.PRODUCTEUR);
   }
 }
