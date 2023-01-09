@@ -99,6 +99,7 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     }
     TypeChamp vehicule = new TypeChamp(LibelleChamp.BUTTON);
     vehicule.setValeurInt(valeurInt);
+    vehicule.setMinInt(1);
     vehicule.setMaxInt(9999999);
     vehicule.setValeur(BTN_VEHICULE);
     getChampsFormulaire().put(Tournee.Champs.idVehicule, vehicule);
@@ -134,7 +135,7 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     // idProducteur
     getModele().setProducteur(daoProducteur.findById(
             getChampsFormulaire().get(Tournee.Champs.idProducteur).getValeurInt()));
-  
+
     Tournee tournee = null;
     switch (getTypeEdition()){
       case CREATION -> tournee = daoTournee.insert(getModele());
@@ -142,7 +143,7 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     }
     return tournee;
   }
-  
+
   private void verification() throws Exception {
     boolean poids, temps;
     // TODO: vérification du point de la tournée.

@@ -304,7 +304,7 @@ public class VueEdition {
   private Node button(TypeChamp t) {
     HBox resultat = new HBox();
     Node spinnerInteger = spinnerInteger(t);
-    spinnerInteger.setDisable(true);
+    spinnerInteger.setDisable(t.isDisable());
     Button btn = new Button();
     btn.setText(t.getValeur());
     btn.setOnAction((event) -> t.setValeurInt(ctrl.action(t.getValeur())));
@@ -314,6 +314,7 @@ public class VueEdition {
   public void actualiser() {
     for (Map.Entry<? extends ChampsModele, TypeChamp> signal : this.signal.entrySet()) {
       TypeChamp value = signal.getValue();
+      System.out.println(this.composants.get(String.valueOf(signal.getKey())));
       Node c = this.composants.get(String.valueOf(signal.getKey()));
       if(c instanceof TextField){
         if(!((TextField) c).getText().isEmpty()){
@@ -336,6 +337,8 @@ public class VueEdition {
         }
       } else if(c instanceof CheckBox){
         value.setValeurBool(((CheckBox) c).isIndeterminate());
+      } else if(c instanceof HBox){
+        value.setValeurInt(((Spinner<Integer>) (((HBox) c).getChildren().get(0))).getValue());
       }
     }
   }
