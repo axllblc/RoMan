@@ -133,7 +133,7 @@ public abstract class VueMetier {
     btnSupprimer = new Button("Supprimer");
     btnOui = new Button("Oui");
     btnNon = new Button("Non");
-    btnRetourAccueil = new Button("Accueil");
+    btnRetourAccueil = new Button("Fermer");
     validation = new Label("Voulez vous vraiment supprimer cet élément ? ");
     labelSuppressionEffectuee = new Label("L'élément à bien été supprimé");
     hbox = new HBox();
@@ -231,14 +231,9 @@ public abstract class VueMetier {
       }
     });
 
-
-
     btnRetourAccueil.setOnAction((event) -> {
-      // Instanciation et affichage de l'accueil
-      VueAccueil vueAccueil = new VueAccueil();
-      new CtrlAccueil(this.utilisateur, vueAccueil);
+      // Fermeture de la fenêtre
       stage.close();
-      vueAccueil.show();
     });
 
     btnNon.setOnAction((event) -> {
@@ -248,10 +243,6 @@ public abstract class VueMetier {
         validationIsDisable = true;
       }
     });
-
-
-
-
   }
 
   public void redirectionAccueil() {
