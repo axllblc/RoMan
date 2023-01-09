@@ -232,9 +232,8 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
         daoUtilisateur.update(user);
 
       }
-
-
     }
+    getVueEdition().close();
     return producteur;
   }
 }

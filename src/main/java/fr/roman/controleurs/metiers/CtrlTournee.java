@@ -40,7 +40,7 @@ public class CtrlTournee {
 
   public void modification(Tournee tournee, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionTournee ctrl = new CtrlEditionTournee(tournee, vue, TypeEdition.MODIFICATION, role);
+    CtrlEditionTournee ctrl = new CtrlEditionTournee(tournee.getProducteur().getUtilisateur(),tournee, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

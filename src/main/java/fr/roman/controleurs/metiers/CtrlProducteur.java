@@ -41,7 +41,7 @@ public class CtrlProducteur {
 
   public void modification(Producteur producteur, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionProducteur ctrl = new CtrlEditionProducteur(producteur, vue, TypeEdition.MODIFICATION, role);
+    CtrlEditionProducteur ctrl = new CtrlEditionProducteur(producteur.getUtilisateur(), producteur, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

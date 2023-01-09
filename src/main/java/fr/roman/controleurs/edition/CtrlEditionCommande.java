@@ -216,6 +216,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         commande = getModele();
       }
     }
+    getVueEdition().close();
     return commande;
   }
 

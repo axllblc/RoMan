@@ -141,6 +141,7 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
       case CREATION -> tournee = daoTournee.insert(getModele());
       case MODIFICATION -> {  if(daoTournee.update(getModele())) tournee = getModele();}
     }
+    getVueEdition().close();
     return tournee;
   }
 

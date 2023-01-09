@@ -34,7 +34,7 @@ public abstract class ActionsCommandes {
         commande.setProducteur(producteur);
       }
       VueEdition vue = new VueEdition(TypeEdition.CREATION);
-      new CtrlEditionCommande(commande, vue, TypeEdition.CREATION, role);
+      new CtrlEditionCommande(producteur.getUtilisateur(), commande, vue, TypeEdition.CREATION, role);
       vue.show();
     } catch (Exception e) {
       RoManErreur.afficher(e);
@@ -50,7 +50,7 @@ public abstract class ActionsCommandes {
    */
   public static void modifierCommande(Commande commande, Role role) {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    new CtrlEditionCommande(commande, vue, TypeEdition.MODIFICATION, role);
+    new CtrlEditionCommande(commande.getProducteur().getUtilisateur(), commande, vue, TypeEdition.MODIFICATION, role);
     vue.show();
   }
 

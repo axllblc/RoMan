@@ -356,4 +356,10 @@ public class VueEdition {
 
     stage.show();
   }
+
+  public void close(){
+    if(stage != null){
+      stage.close();
+    }
+  }
 }

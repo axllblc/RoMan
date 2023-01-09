@@ -141,6 +141,7 @@ public class CtrlEditionClient extends CtrlEdition<Client, Client.Champs> {
         client = getModele();
       }
     }
+    getVueEdition().close();
     return client;
   }
 

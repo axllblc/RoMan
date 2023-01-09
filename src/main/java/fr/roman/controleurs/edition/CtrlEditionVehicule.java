@@ -121,6 +121,7 @@ public class CtrlEditionVehicule extends CtrlEdition<Vehicule, Vehicule.Champs> 
         vehicule = getModele();
       }
     }
+    getVueEdition().close();
     return vehicule;
   }
   

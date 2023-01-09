@@ -102,7 +102,7 @@ public class VueAdresse extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(adresse, utilisateur.getRole());
+        ctrl.modification(utilisateur, adresse, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

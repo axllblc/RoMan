@@ -5,6 +5,7 @@ import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.dao.DAOAdresse;
 import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Role;
+import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.edition.VueEdition;
 import fr.roman.vues.metiers.VueAdresse;
 import javafx.stage.Stage;
@@ -40,9 +41,9 @@ public class CtrlAdresse {
     daoAdresse.delete(adresse.getIdAdresse());
   }
 
-  public void modification(Adresse adresse, Role role) throws Exception {
+  public void modification(Utilisateur u, Adresse adresse, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionAdresse ctrl = new CtrlEditionAdresse(adresse, vue, TypeEdition.MODIFICATION, role);
+    CtrlEditionAdresse ctrl = new CtrlEditionAdresse(u, adresse, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }
