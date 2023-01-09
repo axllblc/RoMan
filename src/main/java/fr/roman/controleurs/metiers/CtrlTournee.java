@@ -2,14 +2,13 @@ package fr.roman.controleurs.metiers;
 
 import fr.roman.controleurs.edition.CtrlEditionTournee;
 import fr.roman.controleurs.edition.TypeEdition;
+import fr.roman.dao.DAOTournee;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Tournee;
 import fr.roman.vues.edition.VueEdition;
 import fr.roman.vues.metiers.VueTournee;
-import fr.roman.dao.DAOTournee;
-import javafx.stage.Stage;
-
 import java.sql.SQLException;
+import javafx.stage.Stage;
 
 public class CtrlTournee {
 
@@ -19,7 +18,7 @@ public class CtrlTournee {
   private final VueTournee vueTournee;
 
   /**
-   * Instance DAOTournee
+   * Instance DAOTournee.
    */
   private final DAOTournee daoTournee;
 
@@ -40,7 +39,8 @@ public class CtrlTournee {
 
   public void modification(Tournee tournee, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionTournee ctrl = new CtrlEditionTournee(tournee, vue, TypeEdition.MODIFICATION, role);
+    new CtrlEditionTournee(tournee.getProducteur().getUtilisateur(), tournee, vue,
+        TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

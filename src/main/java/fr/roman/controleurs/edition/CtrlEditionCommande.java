@@ -29,27 +29,29 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     }
   }
 
-    /**
-     * Constructeur du contrôleur
-     * @param commande La commande dans laquelle des stockés les informations de la vue
-     * @param vueEdition La vue (d'édition) que la classe contrôle
-     * @param typeEdition Le type de contrôleur : création ou modification
-     * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
-     */
-    public CtrlEditionCommande(Commande commande, VueEdition vueEdition,
-                               TypeEdition typeEdition, Role role) {
-        super(commande, vueEdition, typeEdition, role);
-    }
-
-    /**
-     * Classe à implémenter qui construit les objets {@link TypeChamp} à mettre dans la vue,
-     *  c.-à-d. les champs du formulaire (préremplis le cas échéant)
-     */
-    @Override
-    public void chargerChamps() {
-        double valeurDouble;
-        int valeurInt;
-        boolean valeurBool;
+  /**
+   * Constructeur du contrôleur
+   * @param commande La commande dans laquelle des stockés les informations de la vue
+   *                 (vide si typeEdition = CREATION)
+   * @param vueEdition La vue (d'édition) que la classe contrôle
+   * @param typeEdition Le type de contrôleur : création ou modification
+   * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
+   */
+  public CtrlEditionCommande(Utilisateur utilisateur,Commande commande, VueEdition vueEdition,
+                             TypeEdition typeEdition, Role role) {
+    super(utilisateur, commande, vueEdition, typeEdition, role);
+    superSuite();
+  }
+  
+  /**
+   * Classe à implémenter qui construit les objets {@link TypeChamp} à mettre dans la vue,
+   *  c.-à-d. les champs du formulaire (préremplis le cas échéant)
+   */
+  @Override
+  public void chargerChamps() {
+    double valeurDouble;
+    int valeurInt;
+    boolean valeurBool;
 
     // idCommande
     TypeChamp idCommande = new TypeChamp(LibelleChamp.TEXTFIELD);
@@ -73,7 +75,8 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
       valeurDouble = getModele().getPoids();
     }
     TypeChamp poids = new TypeChamp(LibelleChamp.SPINNERDOUBLE);
-    poids.setSpinnerDouble(0., 255., valeurDouble);
+    poids.setSpinnerDouble(0., 9999., valeurDouble);
+    poids.setValeurDouble(valeurDouble);
     poids.setPlaceholder("en kg");
     getChampsFormulaire().put(Commande.Champs.poids, poids);
 
@@ -89,7 +92,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     TypeChamp horaireFin = new TypeChamp(LibelleChamp.CALENDEARTIMETEXTFIELD);
     horaireFin.setRegex("HH:mm");
     if(getTypeEdition() == TypeEdition.MODIFICATION){
-      horaireFin.setCalendar(getModele().getHoraireDebut());
+      horaireFin.setCalendar(getModele().getHoraireFin());
     }
     getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
 
@@ -114,7 +117,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     TypeChamp dateInitiale = new TypeChamp(LibelleChamp.CALENDEARTEXTFIELD);
     dateInitiale.setRegex("dd/MM/yyyy");
     if(getTypeEdition() == TypeEdition.MODIFICATION){
-      dateInitiale.setCalendar(getModele().getHoraireDebut());
+      dateInitiale.setCalendar(getModele().getDateInitiale());
     }
     getChampsFormulaire().put(Commande.Champs.dateInitiale, dateInitiale);
 
@@ -126,14 +129,14 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     }
     getChampsFormulaire().put(Commande.Champs.dateLivraison, dateLivraison);
 
-        // producteur
-        valeurInt = 0;
-        if(getTypeEdition() == TypeEdition.MODIFICATION || getRole() == Role.PRODUCTEUR) {
-            valeurInt = getModele().getProducteur().getIdProducteur();
-        }
-        TypeChamp producteur = new TypeChamp(LibelleChamp.SPINNERINT);
-        producteur.setSpinnerInt(0,9999999,valeurInt);
-        getChampsFormulaire().put(Commande.Champs.idProducteur, producteur);
+    // producteur
+    valeurInt = 0;
+    if(getTypeEdition() == TypeEdition.MODIFICATION) {
+      valeurInt = getModele().getProducteur().getIdProducteur();
+    }
+    TypeChamp producteur = new TypeChamp(LibelleChamp.SPINNERINT);
+    producteur.setSpinnerInt(0,9999999,valeurInt);
+    getChampsFormulaire().put(Commande.Champs.idProducteur, producteur);
 
     // client
     valeurInt = 0;
@@ -213,6 +216,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
         commande = getModele();
       }
     }
+    getVueEdition().close();
     return commande;
   }
 

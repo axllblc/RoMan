@@ -40,8 +40,9 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
    * @param typeEdition Le type de contrôleur : création ou modification
    * @param role        Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
    */
-  public CtrlEditionProducteur(Producteur producteur, VueEdition vueEdition, TypeEdition typeEdition, Role role) {
-    super(producteur, vueEdition, typeEdition, role);
+  public CtrlEditionProducteur(Utilisateur utilisateur, Producteur producteur, VueEdition vueEdition, TypeEdition typeEdition, Role role) throws Exception {
+    super(utilisateur, producteur, vueEdition, typeEdition, role);
+    superSuite();
   }
 
 
@@ -105,6 +106,57 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
     utilisateur.setRegex("\\d{1,50}");
     getChampsFormulaire().put(Producteur.Champs.idUtilisateur, utilisateur);
 
+    // nom utilisateur
+    TypeChamp nomUtilisateur = new TypeChamp(LibelleChamp.TEXTFIELD);
+    nomUtilisateur.setRegex(".{0,150}");
+    if (getTypeEdition() == TypeEdition.MODIFICATION) {
+      nomUtilisateur.setValeur(getModele().getUtilisateur().getNomUtilisateur());
+    }
+    getChampsFormulaire().put(Producteur.Champs.nomUtilisateur, nomUtilisateur);
+
+    //mdp
+    TypeChamp mdp = new TypeChamp(LibelleChamp.TEXTFIELD);
+    mdp.setRegex(".{0,150}");
+    if (getTypeEdition() == TypeEdition.MODIFICATION) {
+      mdp.setValeur(getModele().getUtilisateur().getMdp());
+    }
+    getChampsFormulaire().put(Producteur.Champs.mdp, mdp);
+
+    //nom
+    TypeChamp nom = new TypeChamp(LibelleChamp.TEXTFIELD);
+    nom.setRegex(".{0,150}");
+    if (getTypeEdition() == TypeEdition.MODIFICATION) {
+      nom.setValeur(getModele().getUtilisateur().getNom());
+    }
+    getChampsFormulaire().put(Producteur.Champs.nom, nom);
+
+    //prenom
+    TypeChamp prenom = new TypeChamp(LibelleChamp.TEXTFIELD);
+    prenom.setRegex(".{0,50}");
+    if (getTypeEdition() == TypeEdition.MODIFICATION) {
+      prenom.setValeur(getModele().getUtilisateur().getPrenom());
+    }
+    getChampsFormulaire().put(Producteur.Champs.prenom, prenom);
+
+
+    // email
+    TypeChamp email = new TypeChamp(LibelleChamp.TEXTFIELD);
+    if (getTypeEdition() == TypeEdition.MODIFICATION) {
+      email.setValeur(getModele().getUtilisateur().getEmail());
+    }
+    getChampsFormulaire().put(Producteur.Champs.email, email);
+
+
+    // role
+    TypeChamp role = new TypeChamp(LibelleChamp.TEXTFIELD);
+    if (getTypeEdition() == TypeEdition.MODIFICATION) {
+      role.setValeur(getModele().getUtilisateur().getRole().toString());
+    }
+    getChampsFormulaire().put(Producteur.Champs.role, role);
+
+
+
+
 
   }
 
@@ -133,26 +185,55 @@ public class CtrlEditionProducteur extends CtrlEdition<Producteur, Producteur.Ch
     getModele().setAdresse(daoAdresse.findById(
         getChampsFormulaire().get(Producteur.Champs.idAdresse).getValeurInt()));
 
-    // idUtilisateur
+    //idUtilisateurProducteur
     getModele().setUtilisateur(daoUtilisateur.findById(
         getChampsFormulaire().get(Producteur.Champs.idUtilisateur).getValeurInt()));
 
+
+    //nom utilisateur
+    getModele().getUtilisateur().setNomUtilisateur(
+        getChampsFormulaire().get(Producteur.Champs.nomUtilisateur).getValeur());
+
+    //mdp
+    getModele().getUtilisateur().setMdp(
+        getChampsFormulaire().get(Producteur.Champs.mdp).getValeur());
+
+    //nom
+    getModele().getUtilisateur().setNom(
+        getChampsFormulaire().get(Producteur.Champs.nom).getValeur());
+
+    //prenom
+    getModele().getUtilisateur().setPrenom(
+        getChampsFormulaire().get(Producteur.Champs.prenom).getValeur());
+
+    //email
+    getModele().getUtilisateur().setEmail(
+        getChampsFormulaire().get(Producteur.Champs.email).getValeur());
+
+    //role
+    getModele().getUtilisateur().setRole(Role.PRODUCTEUR);
+
+
     Producteur producteur = null;
-    Utilisateur utilisateur = new Utilisateur();
+    Utilisateur utilisateur = null;
 
     switch (getTypeEdition()) {
       case CREATION -> {
         producteur = daoProducteur.insert(getModele());
-        utilisateur = daoUtilisateur.insert(getModele().getUtilisateur());
       }
       case MODIFICATION -> {
+
         if (daoProducteur.update(getModele())) {
           producteur = getModele();
         }
+
+        Utilisateur user;
+        user = getModele().getUtilisateur();
+        daoUtilisateur.update(user);
+
       }
-
-
     }
+    getVueEdition().close();
     return producteur;
   }
 }

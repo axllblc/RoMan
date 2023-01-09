@@ -31,7 +31,7 @@ public abstract class ActionsTournees {
       Tournee tournee = new Tournee();
       tournee.setProducteur(producteur);
       VueEdition vue = new VueEdition(TypeEdition.CREATION);
-      new CtrlEditionTournee(tournee, vue, TypeEdition.CREATION, role);
+      new CtrlEditionTournee(producteur.getUtilisateur(), tournee, vue, TypeEdition.CREATION, role);
       vue.show();
     } catch (Exception e) {
       RoManErreur.afficher(e);
@@ -47,7 +47,11 @@ public abstract class ActionsTournees {
    */
   public static void modifierTournee(Tournee tournee, Role role) {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    new CtrlEditionTournee(tournee, vue, TypeEdition.MODIFICATION, role);
+    try {
+      new CtrlEditionTournee(tournee.getProducteur().getUtilisateur(), tournee, vue, TypeEdition.MODIFICATION, role);
+    } catch (Exception e) {
+      RoManErreur.afficher(e);
+    }
     vue.show();
   }
 

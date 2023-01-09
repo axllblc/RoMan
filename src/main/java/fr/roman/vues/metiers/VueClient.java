@@ -87,7 +87,7 @@ public class VueClient extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(client, utilisateur.getRole());
+        ctrl.modification(utilisateur, client, utilisateur.getRole());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

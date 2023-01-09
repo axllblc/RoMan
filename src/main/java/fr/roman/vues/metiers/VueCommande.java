@@ -1,13 +1,12 @@
 package fr.roman.vues.metiers;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsCommandes;
 import fr.roman.controleurs.metiers.CtrlCommande;
 import fr.roman.modeles.Commande;
-import fr.roman.modeles.Tournee;
 import fr.roman.modeles.Utilisateur;
 import javafx.scene.control.Label;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -82,18 +81,33 @@ public class VueCommande extends VueMetier {
     if (commande.isDefautLivraison()) {
       livraison = new Label("Livraison n'a pas été effectuée");
     } else {
-      livraison = new Label("Date Livraison : " + commande.getDateLivraison());
+      if(commande.getDateLivraison() != null){
+        livraison = new Label("Date Livraison : " + commande.getDateLivraison().getTime());
+      }
+      else{
+        livraison = new Label("Date Livraison : aucune");
+      }
     }
 
     libelle = new Label("Libellé : " + commande.getLibelle());
     poids = new Label("Poids : " + commande.getPoids());
-    horaireDebut = new Label("Horaire Début : " + commande.getHoraireDebut());
-    horaireFin = new Label("Horaire Fin : " + commande.getHoraireFin());
+    if(commande.getDateLivraison() != null) {
+      horaireDebut = new Label("Horaire Début : " + commande.getHoraireDebut().getTime());
+    }
+    else{
+      horaireDebut = new Label("Horaire Début : aucune");
+    }
+    if(commande.getDateLivraison() != null) {
+      horaireFin = new Label("Horaire Fin : " + commande.getHoraireDebut().getTime());
+    }
+    else{
+      horaireFin = new Label("Horaire Fin : aucune");
+    }
     notes = new Label("Notes : " + commande.getNote());
     producteur = new Label("Producteur : " + commande.getProducteur().getUtilisateur().getNom()
         + commande.getProducteur().getUtilisateur().getPrenom());
     client = new Label("Client : " + commande.getClient().getNom());
-    introduction = new Label("Information commmane : "  + commande.getLibelle());
+    introduction = new Label("Information commmande : "  + commande.getLibelle());
 
     labels = new ArrayList<>();
 
@@ -110,8 +124,11 @@ public class VueCommande extends VueMetier {
 
     btnOui.setOnAction((event) -> {
       try {
-        ctrl.removeCommande(commande);
-      } catch (SQLException e) {
+        ArrayList<Commande> commandes = new ArrayList<>();
+        commandes.add(commande);
+        ActionsCommandes.supprimer(commandes);
+        close();
+      } catch (Exception e) {
         RoManErreur.afficher(e);
       }
       redirectionAccueil();
@@ -120,9 +137,9 @@ public class VueCommande extends VueMetier {
     btnModifier.setOnAction((event) -> {
       try {
         close();
-        ctrl.modification(commande, utilisateur.getRole());
+        ActionsCommandes.modifierCommande(commande, utilisateur.getRole());
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        RoManErreur.afficher(e);
       }
     });
 

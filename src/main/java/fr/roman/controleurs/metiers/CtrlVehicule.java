@@ -43,7 +43,7 @@ public class CtrlVehicule {
 
   public void modification(Vehicule vehicule, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionVehicule ctrl = new CtrlEditionVehicule(vehicule, vue, TypeEdition.MODIFICATION, role);
+    CtrlEditionVehicule ctrl = new CtrlEditionVehicule(vehicule.getProducteur().getUtilisateur(), vehicule, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

@@ -128,7 +128,14 @@ public class Producteur extends Modele {
     nomEtablissement(false, false, true, false, false),
     tel,
     idAdresse(false, false, true, true, false),
-    idUtilisateur(false, false, true, true, false);
+    idUtilisateur(false, false, true, true, false),
+    nomUtilisateur(false, false, true, false, false),
+    mdp(false, true, true, false, false),
+    sel(false, false, false, false, false),
+    nom,
+    prenom,
+    email,
+    role(false, false, false, false, false);
 
     private final boolean modifProd;
     private final boolean modifAdmin;
@@ -165,6 +172,8 @@ public class Producteur extends Modele {
       nullable = true;
     }
 
+
+
     @Override
     public boolean isModifProd() {
       return this.modifProd;
@@ -190,4 +199,5 @@ public class Producteur extends Modele {
       return this.nullable;
     }
   }
+
 }

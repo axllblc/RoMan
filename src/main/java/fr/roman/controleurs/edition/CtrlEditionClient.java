@@ -31,9 +31,10 @@ public class CtrlEditionClient extends CtrlEdition<Client, Client.Champs> {
    * @param typeEdition Le type de contrôleur : création ou modification
    * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
    */
-  public CtrlEditionClient(Client Client, VueEdition vueEdition,
+  public CtrlEditionClient(Utilisateur utilisateur, Client Client, VueEdition vueEdition,
                            TypeEdition typeEdition, Role role) {
-    super(Client, vueEdition, typeEdition, role);
+    super(utilisateur, Client, vueEdition, typeEdition, role);
+    superSuite();
   }
 
   /**
@@ -140,6 +141,7 @@ public class CtrlEditionClient extends CtrlEdition<Client, Client.Champs> {
         client = getModele();
       }
     }
+    getVueEdition().close();
     return client;
   }
 

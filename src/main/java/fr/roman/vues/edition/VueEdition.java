@@ -4,14 +4,15 @@ import fr.roman.RoManErreur;
 import fr.roman.controleurs.edition.CtrlEdition;
 import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.modeles.ChampsModele;
+import fr.roman.modeles.Commande;
+import fr.roman.modeles.Vehicule;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.CalendarTimeTextField;
@@ -80,7 +81,7 @@ public class VueEdition {
     formulaire = new VBox();
     footer = new GridPane();
     btnValider = new Button("Valider");
-    btnRetour = new Button("Retour");
+    btnRetour = new Button("Annuler");
     structureEdition();
     // création des composants graphique
   }
@@ -107,7 +108,12 @@ public class VueEdition {
         RoManErreur.afficher(e);
       }
     });
-    btnRetour.setOnAction((event) -> ctrl.annulerSaisie());
+    btnRetour.setOnAction((event) -> {
+      ctrl.annulerSaisie();
+
+      // Fermeture de la fenêtre
+      stage.close();
+    });
     
     // Marges, espacement, alignement
     conteneur.setPadding(new Insets(15));
@@ -173,6 +179,12 @@ public class VueEdition {
         case BUTTON ->
           // création d'un "button"
                 this.composants.put(c.toString(), button(t));
+        case COMMANDE ->
+          //création d'un composant "commande"
+          this.composants.put(c.toString(), commande(t));
+        case VEHICULE ->
+          //création d'un composant "véhicule"
+          this.composants.put(c.toString(), vehicule(t));
         default -> throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
       }
     });
@@ -304,16 +316,44 @@ public class VueEdition {
   private Node button(TypeChamp t) {
     HBox resultat = new HBox();
     Node spinnerInteger = spinnerInteger(t);
-    spinnerInteger.setDisable(true);
+    spinnerInteger.setDisable(t.isDisable());
     Button btn = new Button();
     btn.setText(t.getValeur());
     btn.setOnAction((event) -> t.setValeurInt(ctrl.action(t.getValeur())));
     resultat.getChildren().addAll(spinnerInteger, btn);
     return resultat;
   }
+  private Node commande(TypeChamp t){
+    ArrayList<String> i = new ArrayList<>();
+    for(Commande c: t.getCommande()){
+      i.add(String.valueOf(c.getIdCommande()));
+    }
+    t.setIteam(i);
+    Node resultat = combox(t);
+    return resultat;
+  }
+  private Node vehicule(TypeChamp t){
+    ArrayList<String> i = new ArrayList<>();
+    for(Vehicule v: t.getVehicules()){
+      i.add(String.valueOf(v.getIdVehicule()));
+    }
+    t.setIteam(i);
+    Node resultat = combox(t);
+    return resultat;
+  }
+  private Node combox(TypeChamp t) {
+    ObservableList<String> items =
+            FXCollections.observableArrayList(
+                    t.getIteam()
+            );
+    ComboBox resultat = new ComboBox();
+    resultat.setItems(items);
+    return resultat;
+  }
   public void actualiser() {
     for (Map.Entry<? extends ChampsModele, TypeChamp> signal : this.signal.entrySet()) {
       TypeChamp value = signal.getValue();
+      System.out.println(this.composants.get(String.valueOf(signal.getKey())));
       Node c = this.composants.get(String.valueOf(signal.getKey()));
       if(c instanceof TextField){
         if(!((TextField) c).getText().isEmpty()){
@@ -336,6 +376,10 @@ public class VueEdition {
         }
       } else if(c instanceof CheckBox){
         value.setValeurBool(((CheckBox) c).isIndeterminate());
+      } else if(c instanceof HBox){
+        value.setValeurInt(((Spinner<Integer>) (((HBox) c).getChildren().get(0))).getValue());
+      } else if(c instanceof ComboBox){
+        value.setValeurInt(Integer.parseInt(((ComboBox) c).getValue().toString()));
       }
     }
   }
@@ -349,8 +393,14 @@ public class VueEdition {
     stage.setTitle(this.TYPE_EDITION.libelle + " : " + nomMetier);
 
     stage.setMinWidth(300);
-    stage.setMinHeight(800);
+    stage.setMinHeight(500);
 
     stage.show();
+  }
+
+  public void close(){
+    if(stage != null){
+      stage.close();
+    }
   }
 }

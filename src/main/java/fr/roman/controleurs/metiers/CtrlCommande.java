@@ -40,7 +40,7 @@ public class CtrlCommande {
 
   public void modification(Commande commande, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionCommande ctrl = new CtrlEditionCommande(commande, vue, TypeEdition.MODIFICATION, role);
+    CtrlEditionCommande ctrl = new CtrlEditionCommande(commande.getProducteur().getUtilisateur(), commande, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }

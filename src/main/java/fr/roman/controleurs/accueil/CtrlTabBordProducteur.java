@@ -157,9 +157,10 @@ public class CtrlTabBordProducteur {
         vue.getTableauTournees().supprimer(selection);
       }
     });
-    BoutonAction afficher = new BoutonAction("Afficher la tournée", ()
-            -> ActionsCommandes.afficherCommande(vue.getTableauCommandes()
-            .getSelectionSimple(), producteur.getUtilisateur()));
+    BoutonAction afficher = new BoutonAction("Afficher la tournée", () ->
+        ActionsCommandes.afficherCommande(vue.getTableauCommandes()
+            .getSelectionSimple(), producteur.getUtilisateur())
+    );
 
     vue.getTableauTournees().setMenu(List.of(afficher, modifier, supprimer));
   }

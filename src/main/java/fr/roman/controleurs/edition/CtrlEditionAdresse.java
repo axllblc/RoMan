@@ -29,9 +29,10 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
      * @param typeEdition Le type de contrôleur : création ou modification
      * @param role Le rôle de l'utilisateur qui verra la vue (cf {@link Role})
      */
-    public CtrlEditionAdresse(Adresse adresse, VueEdition vueEdition,
+    public CtrlEditionAdresse(Utilisateur utilisateur, Adresse adresse, VueEdition vueEdition,
                               TypeEdition typeEdition, Role role) {
-        super(adresse, vueEdition, typeEdition, role);
+        super(utilisateur, adresse, vueEdition, typeEdition, role);
+        superSuite();
     }
 
     /**
@@ -167,6 +168,7 @@ public class CtrlEditionAdresse extends CtrlEdition<Adresse, Adresse.Champs> {
                                         adresse = getModele();
                                  }
         }
+        getVueEdition().close();
         return adresse;
     }
 }

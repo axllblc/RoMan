@@ -6,6 +6,7 @@ import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.dao.DAOClient;
 import fr.roman.modeles.Client;
 import fr.roman.modeles.Role;
+import fr.roman.modeles.Utilisateur;
 import fr.roman.vues.edition.VueEdition;
 import fr.roman.vues.metiers.VueClient;
 import javafx.stage.Stage;
@@ -42,9 +43,9 @@ public class CtrlClient {
     daoClient.delete(client.getIdClient());
   }
 
-  public void modification(Client client, Role role) throws Exception {
+  public void modification(Utilisateur utilisateur, Client client, Role role) throws Exception {
     VueEdition vue = new VueEdition(TypeEdition.MODIFICATION);
-    CtrlEditionClient ctrl = new CtrlEditionClient(client, vue, TypeEdition.MODIFICATION, role);
+    CtrlEditionClient ctrl = new CtrlEditionClient(utilisateur, client, vue, TypeEdition.MODIFICATION, role);
     primaryStage.setScene(vue.getScene());
     primaryStage.show();
   }
