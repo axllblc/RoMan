@@ -77,13 +77,14 @@ public class VueTournee extends VueMetier {
     } else {
       valide = new Label("La tournée n'est pas valide");
     }
-    horaireDebut = new Label("Horaire Début : " + tournee.getHoraireDebut());
-    horaireFin = new Label("Horaire Fin : " + tournee.getHoraireFin());
-    dureeEstimee = new Label("Durée estimée : " + tournee.getEstimationDuree());
+    horaireDebut = new Label("Horaire Début : " + tournee.getHoraireDebut().getTime());
+    horaireFin = new Label("Horaire Fin : " + tournee.getHoraireFin().getTime());
+    dureeEstimee = new Label("Durée estimée : " + tournee.getEstimationDuree().toHours() + " : "
+        + tournee.getEstimationDuree().toMinutes() % 60);
     notes = new Label("Notes : " + tournee.getNote());
     producteur = new Label("Producteur : " + tournee.getProducteur().getUtilisateur().getNom()
     + tournee.getProducteur().getUtilisateur().getPrenom());
-    vehicule = new Label("Vehicule : " + tournee.getVehicule());
+    vehicule = new Label("Vehicule : " + tournee.getVehicule().getLibelle());
     introduction = new Label("Informations de la tournée de : "
         + tournee.getProducteur().getUtilisateur().getNom() + " "
         + tournee.getProducteur().getUtilisateur().getPrenom());
