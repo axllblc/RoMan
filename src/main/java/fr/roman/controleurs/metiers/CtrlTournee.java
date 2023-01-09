@@ -1,9 +1,7 @@
 package fr.roman.controleurs.metiers;
 
-import fr.roman.controleurs.edition.CtrlEditionAdresse;
+import fr.roman.controleurs.edition.CtrlEditionTournee;
 import fr.roman.controleurs.edition.TypeEdition;
-import fr.roman.dao.DAO;
-import fr.roman.modeles.Adresse;
 import fr.roman.modeles.Role;
 import fr.roman.modeles.Tournee;
 import fr.roman.vues.edition.VueEdition;

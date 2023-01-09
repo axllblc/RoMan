@@ -107,6 +107,12 @@ public class VueAccueil {
 
     // Empêcher la fermeture des onglets
     tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+    // Si possible, actualiser les vues lors du changement d'onglet
+    tabPane.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldTab, newTab) ->
+          ctrl.actualiserVues()
+    );
   }
 
   /**
