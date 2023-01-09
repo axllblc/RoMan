@@ -1,5 +1,9 @@
 package fr.roman.vues.edition;
 
+import fr.roman.modeles.Commande;
+import fr.roman.modeles.Vehicule;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -38,6 +42,9 @@ public class TypeChamp {
   private double[] initDoubleTab1x2, valeurDoubleTab1x2;
   private int minInt, maxInt, valeurInt;
   private Calendar calendar = null;
+  private ArrayList<Commande> commande;
+  private ArrayList<Vehicule> vehicules;
+  private ArrayList<String> iteam;
 
   public TypeChamp(LibelleChamp libelle) {
     this.libelle = libelle;
@@ -182,5 +189,28 @@ public class TypeChamp {
 
   public void setDisable(boolean disable) {
     this.disable = disable;
+  }
+
+  public ArrayList<Commande> getCommande() {
+    return commande;
+  }
+
+  public void setCommande(ArrayList<Commande> commande) {
+    this.commande = commande;
+  }
+
+  public ArrayList<Vehicule> getVehicules() {
+    return vehicules;
+  }
+
+  public void setVehicules(ArrayList<Vehicule> vehicules) {
+    this.vehicules = vehicules;
+  }
+  
+  public ArrayList<String> getIteam() {
+    return iteam;
+  }
+  public void setIteam(ArrayList<String> iteam) {
+    this.iteam = iteam;
   }
 }

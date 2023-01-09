@@ -2,6 +2,7 @@ package fr.roman.controleurs.edition;
 
 import fr.roman.RoManErreur;
 import fr.roman.controleurs.recherche.CtrlRechercheCommande;
+import fr.roman.dao.DAOCommande;
 import fr.roman.dao.DAOProducteur;
 import fr.roman.dao.DAOTournee;
 import fr.roman.dao.DAOVehicule;
@@ -12,22 +13,26 @@ import fr.roman.vues.edition.VueEdition;
 import fr.roman.vues.recherche.VueRechercheCommande;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
   private final String BTN_COMMANDE = "Recherche commande";
   private final String BTN_VEHICULE = "Recherche véhicule";
   private Producteur producteur;
-  private final ArrayList<Commande> commandes = new ArrayList<>();
+  private ArrayList<Commande> commandes = new ArrayList<>();
+  private ArrayList<Vehicule> vehicules = new ArrayList<>();
   // DAO nécessaire pour le fonctionnement du contrôleur
   DAOTournee daoTournee;
   DAOVehicule daoVehicule;
   DAOProducteur daoProducteur;
+  DAOCommande daoCommande;
 
   {
     try {
       daoProducteur = new DAOProducteur();
       daoVehicule = new DAOVehicule();
       daoTournee = new DAOTournee();
+      daoCommande = new DAOCommande();
     } catch (Exception e) {
       RoManErreur.afficher(e);
     }
@@ -43,6 +48,13 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
   public CtrlEditionTournee(Utilisateur utilisateur,Tournee tournee, VueEdition vueEdition, TypeEdition typeEdition, Role role) throws Exception {
     super(utilisateur, tournee, vueEdition, typeEdition, role);
     this.producteur = daoProducteur.find(utilisateur);
+    LinkedHashMap<Commande.Champs, String> criteresC = new LinkedHashMap<>();
+    criteresC.put(Commande.Champs.idProducteur, String.valueOf(producteur.getId()));
+    this.commandes = daoCommande.find(criteresC);
+    LinkedHashMap<Vehicule.Champs, String> criteresV = new LinkedHashMap<>();
+    criteresV.put(Vehicule.Champs.idProducteur, String.valueOf(producteur.getId()));
+    criteresV.put(Vehicule.Champs.idProducteur, String.valueOf(producteur.getId()));
+    this.vehicules = daoVehicule.find(criteresV);
     superSuite();
   }
 
@@ -97,11 +109,8 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     if(getTypeEdition() == TypeEdition.MODIFICATION){
       valeurInt = getModele().getVehicule().getIdVehicule();
     }
-    TypeChamp vehicule = new TypeChamp(LibelleChamp.BUTTON);
-    vehicule.setValeurInt(valeurInt);
-    vehicule.setMinInt(1);
-    vehicule.setMaxInt(9999999);
-    vehicule.setValeur(BTN_VEHICULE);
+    TypeChamp vehicule = new TypeChamp(LibelleChamp.VEHICULE);
+    vehicule.setVehicules(vehicules);
     getChampsFormulaire().put(Tournee.Champs.idVehicule, vehicule);
 
     // idProducteur
@@ -110,6 +119,11 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
     idProducteur.setSpinnerInt(0, 9999999, producteur.getId());
     idProducteur.setRegex("\\d{1,50}");
     getChampsFormulaire().put(Tournee.Champs.idProducteur, idProducteur);
+
+    // commande
+    TypeChamp commande = new TypeChamp(LibelleChamp.COMMANDE);
+    commande.setCommande(commandes);
+    getChampsFormulaire().put(Tournee.Champs.commande, commande);
   }
 
   @Override
@@ -145,8 +159,8 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
   }
 
   private void verification() throws Exception {
-    boolean poids, temps;
-    // TODO: vérification du point de la tournée.
+    // On ne vérifie que le poids total
+    boolean poids;
     if(getChampsFormulaire().get(Tournee.Champs.idVehicule).getValeurInt() == 0) {
       poids = false;
     } else {
@@ -159,12 +173,9 @@ public class CtrlEditionTournee extends CtrlEdition<Tournee, Tournee.Champs> {
       poids = poidsTotal <= vehicule.getPoidsMax();
     }
 
-    // TODO: vérification du temps de livraison.
-    temps = false;
-
     // mise à jour du champ "valide" de la tournée
     getChampsFormulaire()
-            .get(Tournee.Champs.valide).setValeurBool(poids && temps);
+            .get(Tournee.Champs.valide).setValeurBool(poids);
   }
 
   @Override

@@ -210,7 +210,7 @@ public class Tournee extends Modele {
   public enum Champs implements ChampsModele {
     idTournee(true, false, false, false, false),
     horaireDebut, horaireFin,
-    note(false, true, true, false, false),
+    commande, note(false, true, true, false, false),
     valide(false, false, false, false, false),
     idProducteur(false, false, false, true, false),
     idVehicule(false, true, true, true, false);

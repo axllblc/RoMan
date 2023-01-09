@@ -4,14 +4,15 @@ import fr.roman.RoManErreur;
 import fr.roman.controleurs.edition.CtrlEdition;
 import fr.roman.controleurs.edition.TypeEdition;
 import fr.roman.modeles.ChampsModele;
+import fr.roman.modeles.Commande;
+import fr.roman.modeles.Vehicule;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.CalendarTimeTextField;
@@ -173,6 +174,12 @@ public class VueEdition {
         case BUTTON ->
           // création d'un "button"
                 this.composants.put(c.toString(), button(t));
+        case COMMANDE ->
+          //création d'un composant "commande"
+          this.composants.put(c.toString(), commande(t));
+        case VEHICULE ->
+          //création d'un composant "véhicule"
+          this.composants.put(c.toString(), vehicule(t));
         default -> throw new RuntimeException("L'élément graphique" + t + " est inconnue.");
       }
     });
@@ -311,6 +318,33 @@ public class VueEdition {
     resultat.getChildren().addAll(spinnerInteger, btn);
     return resultat;
   }
+  private Node commande(TypeChamp t){
+    ArrayList<String> i = new ArrayList<>();
+    for(Commande c: t.getCommande()){
+      i.add(String.valueOf(c.getIdCommande()));
+    }
+    t.setIteam(i);
+    Node resultat = combox(t);
+    return resultat;
+  }
+  private Node vehicule(TypeChamp t){
+    ArrayList<String> i = new ArrayList<>();
+    for(Vehicule v: t.getVehicules()){
+      i.add(String.valueOf(v.getIdVehicule()));
+    }
+    t.setIteam(i);
+    Node resultat = combox(t);
+    return resultat;
+  }
+  private Node combox(TypeChamp t) {
+    ObservableList<String> items =
+            FXCollections.observableArrayList(
+                    t.getIteam()
+            );
+    ComboBox resultat = new ComboBox();
+    resultat.setItems(items);
+    return resultat;
+  }
   public void actualiser() {
     for (Map.Entry<? extends ChampsModele, TypeChamp> signal : this.signal.entrySet()) {
       TypeChamp value = signal.getValue();
@@ -339,6 +373,8 @@ public class VueEdition {
         value.setValeurBool(((CheckBox) c).isIndeterminate());
       } else if(c instanceof HBox){
         value.setValeurInt(((Spinner<Integer>) (((HBox) c).getChildren().get(0))).getValue());
+      } else if(c instanceof ComboBox){
+        value.setValeurInt(Integer.parseInt(((ComboBox) c).getValue().toString()));
       }
     }
   }
