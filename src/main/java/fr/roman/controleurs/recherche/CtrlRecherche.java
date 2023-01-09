@@ -19,4 +19,6 @@ public abstract class CtrlRecherche<T extends Modele> {
     this.vue = vue;
     vue.setCtrl(this);
   }
+
+  public abstract void actualiserVue();
 }

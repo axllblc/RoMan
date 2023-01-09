@@ -2,6 +2,7 @@ package fr.roman.vues.accueil;
 
 import fr.roman.controleurs.accueil.CtrlTabBordProducteur;
 import fr.roman.modeles.ModuleApplication;
+import fr.roman.vues.Actualisable;
 import fr.roman.vues.VueIntegrable;
 import fr.roman.vues.composants.FabriqueIcone;
 import fr.roman.vues.composants.Icone;
@@ -22,7 +23,7 @@ import javafx.scene.layout.VBox;
  *
  * @author Axel Leblanc
  */
-public class TableauDeBordProducteur implements VueIntegrable {
+public class TableauDeBordProducteur implements VueIntegrable, Actualisable {
   /**
    * URL de la feuille de styles (CSS) du tableau de bord.
    */
@@ -181,5 +182,10 @@ public class TableauDeBordProducteur implements VueIntegrable {
 
   public TableauTournees getTableauTournees() {
     return tableauTournees;
+  }
+
+  @Override
+  public void actualiser() {
+    ctrl.actualiserVue();
   }
 }

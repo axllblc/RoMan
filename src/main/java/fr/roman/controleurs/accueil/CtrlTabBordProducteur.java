@@ -51,17 +51,26 @@ public class CtrlTabBordProducteur {
         throw new RuntimeException("Le compte utilisateur n'est pas lié à un producteur.");
       }
 
-      // Remplissage des tableaux
-      tableauCommandes();
-      tableauTournees();
-
       // Activation de la sélection multiple
-      vue.getTableauTournees().autoriserSelectionMultiple(true);
       vue.getTableauCommandes().autoriserSelectionMultiple(true);
 
       // Menus contextuels des tableaux
       menuCommandes();
       menuTournees();
+    } catch (Exception e) {
+      RoManErreur.afficher(e);
+      e.printStackTrace();
+      System.exit(1);
+    }
+  }
+
+  /**
+   * Mettre à jour les données de la vue en remplissant les tableaux.
+   */
+  public void actualiserVue() {
+    try {
+      tableauCommandes();
+      tableauTournees();
     } catch (Exception e) {
       RoManErreur.afficher(e);
       e.printStackTrace();
@@ -106,11 +115,6 @@ public class CtrlTabBordProducteur {
     // Ajout des tournées au tableau
     vue.getTableauTournees().setContenu(tournees);
   }
-
-  /*
-   * Les actions du menu contextuel du tableau des commandes ne seront pas les mêmes que pour
-   * celles du menu du tableau des tournées.
-   */
 
   /**
    * Ajout du menu contextuel du tableau des commandes.

@@ -2,6 +2,7 @@ package fr.roman.vues.recherche;
 
 import fr.roman.controleurs.recherche.CtrlRechercheCommande;
 import fr.roman.modeles.Commande;
+import fr.roman.vues.Actualisable;
 import fr.roman.vues.tableaux.TableauCommandes;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ import javafx.scene.control.ToggleGroup;
  *
  * @author Axel Leblanc
  */
-public class VueRechercheCommande extends VueRecherche<Commande> {
+public class VueRechercheCommande extends VueRecherche<Commande> implements Actualisable {
   // Éléments graphiques pour le filtrage
   // - Statut de commande
   /**
@@ -80,6 +81,11 @@ public class VueRechercheCommande extends VueRecherche<Commande> {
     setTableau(new TableauCommandes());
 
     composantsFiltrage();
+  }
+
+  @Override
+  public void actualiser() {
+    ctrl.actualiserVue();
   }
 
   /**

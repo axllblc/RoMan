@@ -34,21 +34,6 @@ public class CtrlRechercheTournee extends CtrlRecherche<Tournee> {
     super(vue);
 
     this.producteur = producteur;
-
-    try {
-      // Obtention des tournées du producteur
-      DAOTournee daoTournee = new DAOTournee();
-      LinkedHashMap<Tournee.Champs, String> criteres = new LinkedHashMap<>();
-      criteres.put(Tournee.Champs.idProducteur, String.valueOf(producteur.getId()));
-      tournees = daoTournee.find(criteres);
-      vue.getTableau().setContenu(tournees);
-
-      definirBoutonsActions();
-    } catch (Exception e) {
-      RoManErreur.afficher(e);
-      e.printStackTrace();
-      System.exit(1);
-    }
   }
 
   /**
@@ -71,5 +56,23 @@ public class CtrlRechercheTournee extends CtrlRecherche<Tournee> {
 
     // Définition des entrées du menu contextuel du tableau
     vue.getTableau().setMenu(List.of(modifier, supprimer));
+  }
+
+  @Override
+  public void actualiserVue() {
+    try {
+      // Obtention des tournées du producteur
+      DAOTournee daoTournee = new DAOTournee();
+      LinkedHashMap<Tournee.Champs, String> criteres = new LinkedHashMap<>();
+      criteres.put(Tournee.Champs.idProducteur, String.valueOf(producteur.getId()));
+      tournees = daoTournee.find(criteres);
+      vue.getTableau().setContenu(tournees);
+
+      definirBoutonsActions();
+    } catch (Exception e) {
+      RoManErreur.afficher(e);
+      e.printStackTrace();
+      System.exit(1);
+    }
   }
 }
