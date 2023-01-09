@@ -317,7 +317,7 @@ public class Commande extends Modele {
     idCommande(true, false, false, false, false),
     dateInitiale(false, true, true, false, true),
     dateLivraison, defautLivraison, horaireDebut, horaireFin, libelle, note, poids,
-    idProducteur(false, true, true, false, false),
+    idProducteur(false, false, true, false, false),
     idTournee(false, true, true, false, true),
     idClient(false, true, true, false, false);
     private final boolean modifProd;
