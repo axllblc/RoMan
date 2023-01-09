@@ -92,7 +92,7 @@ public class CtrlEditionCommande extends CtrlEdition<Commande, Commande.Champs> 
     TypeChamp horaireFin = new TypeChamp(LibelleChamp.CALENDEARTIMETEXTFIELD);
     horaireFin.setRegex("HH:mm");
     if(getTypeEdition() == TypeEdition.MODIFICATION){
-      horaireFin.setCalendar(getModele().getHoraireDebut());
+      horaireFin.setCalendar(getModele().getHoraireFin());
     }
     getChampsFormulaire().put(Commande.Champs.horaireFin, horaireFin);
 
