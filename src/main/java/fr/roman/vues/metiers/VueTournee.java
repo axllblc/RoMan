@@ -1,12 +1,12 @@
 package fr.roman.vues.metiers;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsTournees;
 import fr.roman.controleurs.metiers.CtrlTournee;
 import fr.roman.modeles.Tournee;
 import fr.roman.modeles.Utilisateur;
 import javafx.scene.control.Label;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -103,8 +103,9 @@ public class VueTournee extends VueMetier {
 
     btnOui.setOnAction((event) -> {
       try {
-        ctrl.removeTournee(tournee);
-      } catch (SQLException e) {
+        ActionsTournees.supprimer(tournee);
+        close();
+      } catch (Exception e) {
         RoManErreur.afficher(e);
       }
       redirectionAccueil();
@@ -112,10 +113,10 @@ public class VueTournee extends VueMetier {
 
     btnModifier.setOnAction((event) -> {
       try {
+        ActionsTournees.modifierTournee(tournee, utilisateur.getRole());
         close();
-        ctrl.modification(tournee, utilisateur.getRole());
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        RoManErreur.afficher(e);
       }
     });
   }
