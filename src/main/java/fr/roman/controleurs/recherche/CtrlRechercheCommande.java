@@ -1,9 +1,11 @@
 package fr.roman.controleurs.recherche;
 
 import fr.roman.RoManErreur;
+import fr.roman.controleurs.actions.ActionsCommandes;
 import fr.roman.dao.DAOCommande;
 import fr.roman.modeles.Commande;
 import fr.roman.modeles.Producteur;
+import fr.roman.modeles.Role;
 import fr.roman.vues.composants.BoutonAction;
 import fr.roman.vues.recherche.VueRecherche;
 import fr.roman.vues.recherche.VueRechercheCommande;
@@ -34,6 +36,8 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
     super(vue);
 
     this.producteur = producteur;
+
+    vue.getTableau().autoriserSelectionMultiple(true);
   }
 
   /**
@@ -41,21 +45,30 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
    * menu contextuel du tableau), et les fonctions de callback exécutées lorsqu'ils sont actionnés.
    */
   protected void definirBoutonsActions() {
-    BoutonAction modifier = new BoutonAction("Modifier", () -> {
-      // TODO à implémenter
-    });
+    BoutonAction modifier = new BoutonAction("Modifier", () ->
+        ActionsCommandes.modifierCommande(
+            vue.getTableau().getSelectionSimple(), Role.PRODUCTEUR
+        )
+    );
     BoutonAction supprimer = new BoutonAction("Supprimer", () -> {
-      // TODO à implémenter
+      List<Commande> selection = vue.getTableau().getSelectionMultiple();
+      if (ActionsCommandes.supprimer(selection)) {
+        vue.getTableau().supprimer(selection);
+      }
     });
-    BoutonAction nouveau = new BoutonAction("Nouvelle commande", () -> {
-      // TODO à implémenter
-    });
+    BoutonAction nouveau = new BoutonAction("Nouvelle commande", () ->
+        ActionsCommandes.creerCommande(producteur, Role.PRODUCTEUR)
+    );
+    BoutonAction afficher = new BoutonAction("Afficher la commande", () ->
+            ActionsCommandes.afficherCommande(vue.getTableau()
+                    .getSelectionSimple(), producteur.getUtilisateur())
+    );
 
     // Définition des boutons affichés en bas de la vue
-    vue.setBoutons(List.of(modifier, supprimer, nouveau));
+    vue.setBoutons(List.of(afficher, modifier, supprimer, nouveau));
 
     // Définition des entrées du menu contextuel du tableau
-    vue.getTableau().setMenu(List.of(modifier, supprimer));
+    vue.getTableau().setMenu(List.of(afficher, modifier, supprimer));
   }
 
   @Override
