@@ -81,7 +81,7 @@ public class VueEdition {
     formulaire = new VBox();
     footer = new GridPane();
     btnValider = new Button("Valider");
-    btnRetour = new Button("Retour");
+    btnRetour = new Button("Annuler");
     structureEdition();
     // création des composants graphique
   }
@@ -108,7 +108,12 @@ public class VueEdition {
         RoManErreur.afficher(e);
       }
     });
-    btnRetour.setOnAction((event) -> ctrl.annulerSaisie());
+    btnRetour.setOnAction((event) -> {
+      ctrl.annulerSaisie();
+
+      // Fermeture de la fenêtre
+      stage.close();
+    });
     
     // Marges, espacement, alignement
     conteneur.setPadding(new Insets(15));
