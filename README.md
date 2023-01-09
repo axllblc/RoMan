@@ -24,7 +24,8 @@ Le projet a été testé avec MariaDB `10.4.*`, sous Windows 10/11 et macOS.
 
 ### Configuration de la base de données et connexion
 
-Créer une base de données (par exemple `roman`) et y importer le dump.
+Créer une base de données (par exemple `roman`) et y importer le dump fourni avec le jalon 3 (il
+contient la structure de la base, il n'est donc pas utile d'importer le DDL).
 Créer un utilisateur (par exemple `roman`) ayant les privilèges suivants sur l'ensemble des 
 tables de la base : 
 `SELECT, INSERT, UPDATE, DELETE`.
