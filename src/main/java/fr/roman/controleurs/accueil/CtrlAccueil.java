@@ -7,6 +7,7 @@ import fr.roman.dao.DAOProducteur;
 import fr.roman.modeles.ModuleApplication;
 import fr.roman.modeles.Producteur;
 import fr.roman.modeles.Utilisateur;
+import fr.roman.vues.Actualisable;
 import fr.roman.vues.VueIntegrable;
 import fr.roman.vues.accueil.TableauDeBordProducteur;
 import fr.roman.vues.accueil.VueAccueil;
@@ -83,11 +84,6 @@ public class CtrlAccueil {
     vueAccueil.afficherModules(mapModuleVue);
   }
 
-  /*
-   * ⚠️ Les implémentations de l'interface VueModuleAccueil sont provisoires. Des classes seront
-   * créées pour chaque vue.
-   */
-
   /**
    * Instanciation des vues et contrôleurs des modules pour l'utilisateur ROOT.
    */
@@ -136,5 +132,16 @@ public class CtrlAccueil {
     // Gestion des véhicules
     // TODO Vue et contrôleur à implémenter
     mapModuleVue.put(ModuleApplication.VEHICULES, new VueRechercheVehicule());
+  }
+
+  /**
+   * Actualiser les vues contenues dans l'accueil.
+   */
+  public void actualiserVues() {
+    for (VueIntegrable vue : mapModuleVue.values()) {
+      if (vue instanceof Actualisable) {
+        ((Actualisable) vue).actualiser();
+      }
+    }
   }
 }

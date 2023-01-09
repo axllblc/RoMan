@@ -34,21 +34,6 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
     super(vue);
 
     this.producteur = producteur;
-
-    try {
-      // Obtention des commandes du producteur
-      DAOCommande daoCommande = new DAOCommande();
-      LinkedHashMap<Commande.Champs, String> criteres = new LinkedHashMap<>();
-      criteres.put(Commande.Champs.idProducteur, String.valueOf(producteur.getId()));
-      commandes = daoCommande.find(criteres);
-      vue.getTableau().setContenu(commandes);
-
-      definirBoutonsActions();
-    } catch (Exception e) {
-      RoManErreur.afficher(e);
-      e.printStackTrace();
-      System.exit(1);
-    }
   }
 
   /**
@@ -71,5 +56,23 @@ public class CtrlRechercheCommande extends CtrlRecherche<Commande> {
 
     // Définition des entrées du menu contextuel du tableau
     vue.getTableau().setMenu(List.of(modifier, supprimer));
+  }
+
+  @Override
+  public void actualiserVue() {
+    try {
+      // Obtention des commandes du producteur
+      DAOCommande daoCommande = new DAOCommande();
+      LinkedHashMap<Commande.Champs, String> criteres = new LinkedHashMap<>();
+      criteres.put(Commande.Champs.idProducteur, String.valueOf(producteur.getId()));
+      commandes = daoCommande.find(criteres);
+      vue.getTableau().setContenu(commandes);
+
+      definirBoutonsActions();
+    } catch (Exception e) {
+      RoManErreur.afficher(e);
+      e.printStackTrace();
+      System.exit(1);
+    }
   }
 }
